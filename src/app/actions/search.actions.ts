@@ -3,7 +3,7 @@ import { AutocompleteResult } from '../shared/maps/autocomplete-result';
 import { LatLng } from '../shared/latlng.model';
 import { SearchQuery } from '../shared/search-query';
 import { TimeTarget } from '../shared/time-target';
-import { Trip } from '../shared/trip.model';
+import { Trip, StationInfo } from '../shared/trip.model';
 
 export enum SearchActionTypes {
   AutocompleteResultsError = '[Search] Autocomplete Results Error',
@@ -13,12 +13,14 @@ export enum SearchActionTypes {
   ChooseOriginLocation = '[Search] Choose Origin Location',
   ChooseDestinationLocation = '[Search] Choose Destination Location',
   ClearAutocompleteResults = '[Search] Clear Autocomplete Results',
+  FetchAllStations = '[Search] Fetch All Stations',
   FetchAutocompleteResults = '[Search] Fetch Autocomplete Results',
   FetchGeocodeOriginResult = '[Seach] Fetch Geocode Origin Result',
   FetchGeocodeDestinationResult = '[Seach] Fetch Geocode Destination Result',
   SaveAutocompleteResults = '[Search] Save Autocomplete Results',
   SaveGeocodeOriginResult = '[Search] Save Geocode Origin Result',
   SaveGeocodeDestinationResult = '[Search] Save Geocode Destination Result',
+  SaveStations = '[Search] Save Stations',
   SaveTrip = '[Search] Save Trip',
   SetSearchAddressType = '[Search] Set Search Address Type',
   TripSearchQuery = '[Search] Trip Search Query',
@@ -60,6 +62,10 @@ export class ClearAutocompleteResults implements Action {
   readonly type = SearchActionTypes.ClearAutocompleteResults;
 }
 
+export class FetchAllStations implements Action {
+  readonly type = SearchActionTypes.FetchAllStations;
+}
+
 export class FetchAutocompleteResults implements Action {
   readonly type = SearchActionTypes.FetchAutocompleteResults;
   constructor(public input: string) {}
@@ -90,6 +96,11 @@ export class SaveGeocodeDestinationResult implements Action {
   constructor(public latlng: LatLng) {}
 }
 
+export class SaveStations implements Action {
+  readonly type = SearchActionTypes.SaveStations;
+  constructor(public stations: StationInfo[]) {}
+}
+
 export class SaveTrip implements Action {
   readonly type = SearchActionTypes.SaveTrip;
   constructor(public trip: Trip) {}
@@ -108,7 +119,6 @@ export class TripSearchQuery implements Action {
 export class TripSearchQueryError implements Action {
   readonly type = SearchActionTypes.TripSearchQueryError;
   constructor(public error: any) {}
-
 }
 
 export type SearchActions = AutocompleteResultsError
@@ -118,12 +128,14 @@ export type SearchActions = AutocompleteResultsError
               | ChooseDestinationLocation
               | ChooseOriginLocation
               | ClearAutocompleteResults
+              | FetchAllStations
               | FetchAutocompleteResults
               | FetchGeocodeOriginResult
               | FetchGeocodeDestinationResult
               | SaveAutocompleteResults
               | SaveGeocodeOriginResult
               | SaveGeocodeDestinationResult
+              | SaveStations
               | SaveTrip
               | SetSearchAddressType
               | TripSearchQuery

@@ -9,7 +9,7 @@ import { cold, hot } from 'jasmine-marbles';
 describe('TripService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      { // TOOD: use HTTClientTestingModule ?
+      { // TODO: use HTTClientTestingModule ?
         provide: HttpClient,
         useValue: {
           get: () => {}
@@ -42,7 +42,7 @@ describe('TripService', () => {
     expect(filteredTrips).toBeObservable(expected);
   });
 
-  it('should make a request to fulfill a search query', () => {
+  xit('should make a request to fulfill a search query', () => {
     const service: TripService = TestBed.get(TripService);
     // TODO: what am I asserting?
 

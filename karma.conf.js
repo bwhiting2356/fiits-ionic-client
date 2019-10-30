@@ -10,7 +10,6 @@ module.exports = function (config) {
       './local-google-maps.js'
     ],
     plugins: [
-      
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),

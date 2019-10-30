@@ -4,7 +4,7 @@ import { LatLng } from '../shared/latlng.model';
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { State } from '.';
 import { TimeTarget } from '../shared/time-target';
-import { Trip } from '../shared/trip.model';
+import { Trip, StationInfo } from '../shared/trip.model';
 
 export interface SearchState {
   originAddress: string;
@@ -19,6 +19,8 @@ export interface SearchState {
   autocompleteDirty: boolean;
   geocodeFetching: boolean;
   searchQueryFetching: boolean;
+  stations: StationInfo[];
+  stationsFetching: boolean;
   trip: Trip;
   error: any;
   // TODO handle and test error
@@ -37,6 +39,8 @@ export const initialSearchState: SearchState = {
   autocompleteDirty: false,
   geocodeFetching: false,
   searchQueryFetching: false,
+  stations: undefined,
+  stationsFetching: false,
   trip: undefined,
   error: false
 };
@@ -70,6 +74,11 @@ export function searchReducer(state = initialSearchState, action: SearchActions)
         autocompleteDirty: false,
         searchAddressType: undefined,
       };
+    case SearchActionTypes.FetchAllStations:
+      return {
+        ...state,
+        stationsFetching: true
+      };
     case SearchActionTypes.FetchAutocompleteResults:
       return {
         ...state,
@@ -100,6 +109,12 @@ export function searchReducer(state = initialSearchState, action: SearchActions)
         ...state,
         destinationLatLng: action.latlng,
         geocodeFetching: false
+      };
+    case SearchActionTypes.SaveStations:
+      return {
+        ...state,
+        stations: action.stations,
+        stationsFetching: false
       };
     case SearchActionTypes.SaveTrip:
       return {

@@ -15,12 +15,15 @@ import {
   ChangeTime,
   TripSearchQuery,
   SaveTrip,
-  TripSearchQueryError
+  TripSearchQueryError,
+  SaveStations,
+  FetchAllStations
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
 import { mockTrips } from '../trips/mock-trips';
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
+import { StationInfo } from '../shared/trip.model';
 
 describe('Search Reducer', () => {
   describe('an unknown action', () => {
@@ -275,7 +278,7 @@ describe('Search Reducer', () => {
       ...initialSearchState,
       searchQueryFetching: true
     };
-    const action = new TripSearchQueryError("oops");
+    const action = new TripSearchQueryError('oops');
 
     const result = searchReducer(initialStateFetchingTrue, action);
 
@@ -284,5 +287,45 @@ describe('Search Reducer', () => {
       searchQueryFetching: false,
       error: 'oops'
     });
+
+    // TODO: do something with this error, maybe show a toast (ngrx effect for errors, app-wide?)
   });
+
+  it('should save the stations, set stations fetching to false', () => {
+    const initialStateFetchingTrue = {
+      ...initialSearchState,
+      stationsFetching: true
+    };
+    const stations: StationInfo[] = [{
+      id: 1,
+      capacity: 10,
+      currentInventory: 5,
+      address: 'one',
+      latLng: {
+          lat: 40.743647,
+          lng: -74.003238,
+      }
+    }];
+
+    const action = new SaveStations(stations);
+
+    const result = searchReducer(initialStateFetchingTrue, action);
+
+    expect(result).toEqual({
+      ...initialSearchState,
+      stations,
+      stationsFetching: false
+    });
+  });
+
+  it('should set stations fetching to true', () => {
+    const action = new FetchAllStations();
+
+    const result = searchReducer(initialSearchState, action);
+
+    expect(result).toEqual({
+      ...initialSearchState,
+      stationsFetching: true
+    });
+  })
 });

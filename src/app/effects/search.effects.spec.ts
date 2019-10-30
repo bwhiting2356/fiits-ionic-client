@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
-import { cold, hot } from 'jasmine-marbles';
+import { hot } from 'jasmine-marbles';
 
 import { SearchEffects } from './search.effects';
 import { AutocompleteService } from '../services/autocomplete.service';
@@ -15,12 +15,15 @@ import {
   FetchGeocodeDestinationResult,
   SaveGeocodeDestinationResult,
   TripSearchQuery,
-  SaveTrip
+  SaveTrip,
+  FetchAllStations,
+  SaveStations
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
 import { mockTrips } from '../../app/trips/mock-trips';
+import { mockStations } from '../../app/trips/mock-stations';
 import { SearchQuery } from '../shared/search-query';
-
+import { StationService } from '../services/station.service';
 
 describe('SearchEffects', () => {
   let actions$: Observable<any>;
@@ -47,6 +50,12 @@ describe('SearchEffects', () => {
           provide: TripService,
           useValue: {
             findBestTrip: () => of(mockTrips[0])
+          }
+        },
+        {
+          provide: StationService,
+          useValue: {
+            fetchAllStation$: () => of(mockStations)
           }
         }
       ]
@@ -94,6 +103,16 @@ describe('SearchEffects', () => {
     const expected = hot('--b', { b: completion });
     expect(effects.tripSearchQuery$).toBeObservable(expected);
   });
+
+  it('should return SaveStations on success', () => {
+    const action = new FetchAllStations();
+    const completion = new SaveStations(mockStations);
+
+    actions$ = hot('--a-', { a: action });
+    const expected = hot('--b', { b: completion });
+    expect(effects.fetchAllStation$).toBeObservable(expected);
+
+  })
 
   // it('should return SearchQuery error on error', () => {
   //   const action

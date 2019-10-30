@@ -3,10 +3,11 @@ import { MapsAPILoader } from '@agm/core';
 import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef } from '@angular/core';
 import { GestureHandling } from 'src/app/shared/maps/gesture-handling';
 
-import { LatLng, GoogleMap, Marker } from '@agm/core/services/google-maps-types';
+import { GoogleMap, Marker, InfoWindow } from '@agm/core/services/google-maps-types';
 import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
 import { DEFAULT_LOCATION } from 'src/app/shared/constants';
-import { Trip } from 'src/app/shared/trip.model';
+import { Trip, StationInfo } from 'src/app/shared/trip.model';
+import { LatLng } from 'src/app/shared/latlng.model';
 
 declare var google;
 
@@ -30,11 +31,11 @@ export class GoogleMapComponent implements OnInit, OnChanges {
   @Input() destinationAddress: string;
   @Input() trip: Trip;
 
-  @Input() stationList: any[];
+  @Input() stations: StationInfo[];
   @Input() collapsed = false; // this is only here to trigger change detection when the size changes
   map: GoogleMap;
-  stationMarkers: any[] = [];
-  openWindow: any | null;
+  stationMarkers: Marker[] = [];
+  openWindow: InfoWindow;
 
   constructor(private mapsAPILoader: MapsAPILoader) { }
 
@@ -44,6 +45,19 @@ export class GoogleMapComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.initMap();
+  }
+
+  addOrRemoveStationMarkers() {
+    if (this.stations && this.map.getZoom() >= 14) {
+      this.stations.forEach(station => {
+        const { address, latLng } = station;
+        const marker = this.addMarker(latLng, address, 'Station', true);
+        this.stationMarkers.push(marker);
+      });
+    } else {
+      this.stationMarkers.forEach(marker => marker.setMap(null));
+      this.stationMarkers = [];
+    }
   }
 
   async initMap() {
@@ -71,6 +85,8 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     if (this.destinationLatLng) {
       this.addMarker(this.destinationLatLng, this.destinationAddress, 'Destination');
     }
+
+    this.addOrRemoveStationMarkers();
 
     if (this.trip) {
       GoogleMapsUtil.renderWalkingPolyline(this.trip.walking1Directions.points, this.map);
@@ -102,17 +118,8 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     this.map.fitBounds(bounds);
   }
 
-  addMarker(position: LatLng, address: string, description: string, station = false): Marker {
-    const content = `
-      <h5>${description}:</h5>
-      <p> ${address}</p>
-    `;
-
-    const infoWindow = new google.maps.InfoWindow({
-      content
-    });
-
-    const markerOptions = {
+  createMarker(position: LatLng, station): Marker {
+    return new google.maps.Marker({
       position,
       map: this.map,
       icon: {
@@ -120,12 +127,24 @@ export class GoogleMapComponent implements OnInit, OnChanges {
           ? '/assets/imgs/station.svg'
           : '/assets/imgs/pin.svg'
       }
-    };
+    });
+  }
 
-    const marker = new google.maps.Marker(markerOptions);
+  createInfoWindow(address: string, description: string): InfoWindow {
+    const content = `
+      <h5>${description}:</h5>
+      <p>${address}</p>
+    `;
+    return new google.maps.InfoWindow({ content });
+  }
+
+  addMarker(position: LatLng, address: string, description: string, station = false): Marker {
+    const marker = this.createMarker(position, station);
+    const infoWindow = this.createInfoWindow(address, description);
+
     marker.addListener('click', () => {
       if (this.openWindow) {
-        this.openWindow.close(this.map);
+        this.openWindow.close();
       }
       this.openWindow = infoWindow;
       this.openWindow.open(this.map, marker);

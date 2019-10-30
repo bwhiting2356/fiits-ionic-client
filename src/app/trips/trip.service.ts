@@ -31,8 +31,6 @@ export class TripService {
           return tripDate > currentDate;
         } else if (direction === 'Past') {
           return tripDate <= currentDate;
-        } else {
-          return true;
         }
       }))
     );

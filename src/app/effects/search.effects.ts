@@ -12,7 +12,8 @@ import {
   TripSearchQuery,
   SaveTrip,
   SearchActions,
-  TripSearchQueryError
+  TripSearchQueryError,
+  SaveStations
 } from '../actions/search.actions';
 import { exhaustMap, map, catchError } from 'rxjs/operators';
 import { AutocompleteService } from '../services/autocomplete.service';
@@ -20,9 +21,8 @@ import { Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { GeocodeService } from '../services/geocode.service';
 import { TripService } from '../trips/trip.service';
+import { StationService } from '../services/station.service';
 
-
-// TODO: rename search effects?
 @Injectable()
 export class SearchEffects {
 
@@ -64,9 +64,17 @@ export class SearchEffects {
     catchError(error => of(new TripSearchQueryError(error)))
   );
 
+  @Effect()
+  fetchAllStation$: Observable<Action> = this.actions$.pipe(
+    ofType(SearchActionTypes.FetchAllStations),
+    exhaustMap(() => this.stationService.fetchAllStation$()),
+    map(stations => new SaveStations(stations))
+  );
+
   constructor(
     private actions$: Actions<SearchActions>,
     private geocodeService: GeocodeService,
     private tripService: TripService,
+    private stationService: StationService,
     private autocompleteService: AutocompleteService) {}
 }

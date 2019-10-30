@@ -45,8 +45,10 @@
           <ion-spinner id="spinner"></ion-spinner>
       </div>
       <app-google-map
+        
         id="map"
         [trip]="trip"
+        [stations]="stations | async"
         [originLatLng]="originLatLng | async" 
         [destinationLatLng]="destinationLatLng | async">
       </app-google-map>

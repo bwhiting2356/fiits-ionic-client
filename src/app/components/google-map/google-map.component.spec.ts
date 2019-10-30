@@ -3,12 +3,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GoogleMapComponent } from './google-map.component';
 import { MapsAPILoader } from '@agm/core';
-import { GoogleMap } from '@agm/core/services/google-maps-types';
+import { GoogleMap, Marker, InfoWindow, MapsEventListener } from '@agm/core/services/google-maps-types';
 
 import { mock } from 'ts-mockito';
 import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
 import { DEFAULT_LOCATION } from 'src/app/shared/constants';
 import { mockTrips } from 'src/app/trips/mock-trips';
+import { mockStations } from 'src/app/trips/mock-stations';
 
 declare var google;
 
@@ -95,7 +96,7 @@ describe('GoogleMapComponent', () => {
     component.trip.walking1Directions.points = mockPoints1;
     component.trip.walking2Directions.points = mockPoints2;
     component.trip.bicyclingDirections.points = mockPoints3;
-    component.map = mock<GoogleMap>(); ;
+    component.map = mock<GoogleMap>();
     await component.initMap();
     expect(GoogleMapsUtil.renderWalkingPolyline).toHaveBeenCalledWith(mockPoints1, component.map);
     expect(GoogleMapsUtil.renderWalkingPolyline).toHaveBeenCalledWith(mockPoints2, component.map);
@@ -184,5 +185,106 @@ describe('GoogleMapComponent', () => {
     spyOn(component, 'initMap');
     component.ngOnChanges();
     expect(component.initMap).toHaveBeenCalled();
+  });
+
+  it('should add or remmove station markers when initMap is called', async () => {
+    spyOn(component, 'addOrRemoveStationMarkers');
+    await component.initMap();
+    expect(component.addOrRemoveStationMarkers).toHaveBeenCalled();
   })
+
+  it('should add markers to the map for each station if zoom is greater than or equal to 14', () => {
+    component.stations = mockStations;
+    component.map = mock<GoogleMap>();
+  
+    component.map.getZoom = () => 15;
+    const mockMarker = mock<Marker>();
+    spyOn(component, 'addMarker').and.returnValue(mockMarker);
+
+    component.addOrRemoveStationMarkers();
+
+    expect(component.addMarker).toHaveBeenCalledWith(
+      mockStations[0].latLng,
+      mockStations[0].address,
+      'Station',
+      true
+    );
+    expect(component.stationMarkers).toEqual([mockMarker]);
+  });
+
+  it('should remove markers from the map if is less than 14', () => {
+    // TODO: why doesn't this actually work...
+    component.stations = mockStations;
+    component.map = mock<GoogleMap>();
+    const mockMarker = mock<Marker>();
+    component.stationMarkers = [mockMarker];
+    component.map.getZoom = () => 13;
+
+    spyOn(component, 'addMarker');
+    spyOn(mockMarker, 'setMap');
+
+    component.addOrRemoveStationMarkers();
+
+    expect(component.addMarker).not.toHaveBeenCalled();
+    expect(mockMarker.setMap).toHaveBeenCalledWith(null);
+    expect(component.stationMarkers).toEqual([]);
+  });
+
+  it('should create a new station icon marker at position', () => {
+    const latlng = { lat: 1, lng: 2 };
+    const marker = component.createMarker(latlng, true);
+    expect((marker as any).icon.url).toBe('/assets/imgs/station.svg');
+    expect((marker as any).position.lat()).toEqual(1);
+    expect((marker as any).position.lng()).toEqual(2);
+  });
+
+  it('should create a new pin icon marker at position', () => {
+    const latlng = { lat: 1, lng: 2 };
+    const marker = component.createMarker(latlng, false);
+    expect((marker as any).icon.url).toBe('/assets/imgs/pin.svg');
+    expect((marker as any).position.lat()).toEqual(1);
+    expect((marker as any).position.lng()).toEqual(2);
+  });
+
+  it('should create a new info window with the content', () => {
+    const infoWindow = component.createInfoWindow('123 Main Street', 'Origin');
+    expect(infoWindow.getContent()).toEqual(`
+      <h5>Origin:</h5>
+      <p>123 Main Street</p>
+    `);
+  })
+
+  it('should close existing open windows if a new info window is clicked', () => {
+    const openWindow = mock<InfoWindow>();
+    spyOn(openWindow, 'close');
+    component.openWindow = openWindow;
+    const mockMarker = mock<Marker>();
+    spyOn(component, 'createMarker').and.returnValue(mockMarker);
+    let storedClickHandler;
+    spyOn(mockMarker, 'addListener').and.callFake((_, callback) => {
+      storedClickHandler = callback;
+      return mock<MapsEventListener>();
+    });
+    component.addMarker({ lat: 1, lng: 2}, '123 Main Street', 'Station', true);
+    storedClickHandler();
+    expect(openWindow.close).toHaveBeenCalled();
+  });
+
+  it('should create a new info window an open it when the marker is clicked', () => {
+    const mockMap = mock<GoogleMap>()
+    component.map = mockMap;
+    const mockMarker = mock<Marker>();
+    const mockInfoWindow = mock<InfoWindow>();
+    spyOn(mockInfoWindow, 'open');
+    spyOn(component, 'createInfoWindow').and.returnValue(mockInfoWindow);
+    spyOn(component, 'createMarker').and.returnValue(mockMarker);
+    let storedClickHandler;
+    spyOn(mockMarker, 'addListener').and.callFake((_, callback) => {
+      storedClickHandler = callback;
+      return mock<MapsEventListener>();
+    });
+    component.addMarker({ lat: 1, lng: 2}, '123 Main Street', 'Station', true);
+    storedClickHandler();
+    expect(mockInfoWindow.open).toHaveBeenCalledWith(mockMap, mockMarker);
+  });
 });

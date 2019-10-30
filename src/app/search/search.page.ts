@@ -5,10 +5,10 @@ import { State } from '../reducers';
 import { LatLng } from '../shared/latlng.model';
 import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { SetSearchAddressType, SearchAddressType, ChangeTimeTarget, ChangeTime, TripSearchQuery } from '../actions/search.actions';
+import { SetSearchAddressType, SearchAddressType, ChangeTimeTarget, ChangeTime, TripSearchQuery, FetchAllStations } from '../actions/search.actions';
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
-import { Trip } from '../shared/trip.model';
+import { Trip, StationInfo } from '../shared/trip.model';
 import { ToastController } from '@ionic/angular';
 
 @Component({
@@ -26,6 +26,7 @@ export class SearchPage implements OnInit {
   showSpinner: Observable<boolean>;
   timeTarget: Observable<TimeTarget>;
   timeString: Observable<string>;
+  stations: Observable<StationInfo[]>;
   trip: Trip;
 
   selectOptionValues: { display: string, value: TimeTarget }[] = [
@@ -35,7 +36,7 @@ export class SearchPage implements OnInit {
 
   constructor(
     public toastController: ToastController,
-    private router: Router, 
+    private router: Router,
     private store: Store<State>) {
     this.originLatLng = store
       .select(state => state.search.originLatLng);
@@ -57,14 +58,19 @@ export class SearchPage implements OnInit {
       this.destinationLatLng,
       this.searchQueryFetching
     ]).pipe(
-      map(([origin, destination, searchQueryFetching]) =>  !origin || !destination || searchQueryFetching)
+      map(([origin, destination, searchQueryFetching]) =>  {
+        return !origin || !destination || searchQueryFetching;
+      })
     );
 
     this.showSpinner = combineLatest([
       this.searchQueryFetching,
       store.select(state => state.search.geocodeFetching),
+      store.select(state => state.search.stationsFetching)
     ]).pipe(
-      map(([searchQueryFetching, geocodeFetching]) => searchQueryFetching || geocodeFetching)
+      map(([searchQueryFetching, geocodeFetching, stationsFetching]) => {
+        return searchQueryFetching || geocodeFetching || stationsFetching;
+      })
     );
 
     this.timeTarget = store
@@ -76,22 +82,12 @@ export class SearchPage implements OnInit {
         map(time => time.toString())
       );
 
-      // remove this:
-    store.select(state => state.search.trip).subscribe(trip => {
-      this.trip = trip;
-    });
+    this.stations = store
+        .select(state => state.search.stations);
   }
 
   async ngOnInit() {
-    // setTimeout(async () => {
-    //   this.store.select(state => state).subscribe(async (state) => {
-    //     const toast = await this.toastController.create({
-    //       message: JSON.stringify(state),
-    //       duration: 10000
-    //     });
-    //     toast.present();
-    //   });
-    // }, 1000);
+    this.store.dispatch(new FetchAllStations());
   }
 
   // TODO: set minimum date to now, acounting for timezone?

@@ -5,15 +5,15 @@ import { SearchPage } from './search.page';
 import { Router } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
-import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
+import { mockStations } from '../../app/trips/mock-stations';
 import { State } from '../reducers';
 import { By } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
-import { SetSearchAddressType, ChangeTimeTarget, ChangeTime, TripSearchQuery } from '../actions/search.actions';
+import { SetSearchAddressType, ChangeTimeTarget, ChangeTime, TripSearchQuery, FetchAllStations } from '../actions/search.actions';
 import { initialSearchState } from '../reducers/search.reducer';
 import { TimeTarget } from '../shared/time-target';
-import { SearchQuery } from '../shared/search-query';
 import { cold } from 'jasmine-marbles';
+import { of } from 'rxjs';
 
 describe('SearchPage', () => {
   let component: SearchPage;
@@ -52,7 +52,34 @@ describe('SearchPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show spinner over map if geocoding is fetching', () => {
+  it('should dispatch an action to fetch all stations when the component loads', () => {
+    spyOn(store, 'dispatch');
+    (component as any).ngOnInit();
+
+    expect(store.dispatch).toHaveBeenCalledWith(new FetchAllStations());
+  });
+
+  it('should have the list of stations', () => {
+    store.setState({
+      search: {
+        ...initialState.search,
+        stations: mockStations
+      }
+    });
+
+    const expected = cold('a', { a: mockStations } );
+
+    expect(component.stations).toBeObservable(expected);
+  });
+
+  it('should render a spinner if showSpinner is true', () => {
+    component.showSpinner = of(true);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#spinner'))).toBeTruthy();
+
+  })
+
+  it('should set showSpinner true if geocoding is fetching', () => {
     store.setState({
       search: {
         ...initialState.search,
@@ -60,7 +87,32 @@ describe('SearchPage', () => {
       }
     });
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('#spinner'))).toBeTruthy();
+    const expected = cold('a', { a: true } );
+    expect(component.showSpinner).toBeObservable(expected);
+  });
+
+  it('should set showSpinner true if search query is fetching', () => {
+    store.setState({
+      search: {
+        ...initialState.search,
+        searchQueryFetching: true
+      }
+    });
+    fixture.detectChanges();
+    const expected = cold('a', { a: true } );
+    expect(component.showSpinner).toBeObservable(expected);
+  });
+
+  it('should show spinner over map if stations are fetching', () => {
+    store.setState({
+      search: {
+        ...initialState.search,
+        stationsFetching: true
+      }
+    });
+    fixture.detectChanges();
+    const expected = cold('a', { a: true } );
+    expect(component.showSpinner).toBeObservable(expected);
   });
 
   it('should navigate to address input, set searchAddressType to \'Origin\'', () => {
