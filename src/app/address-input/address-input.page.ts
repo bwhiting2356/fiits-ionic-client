@@ -74,10 +74,10 @@ export class AddressInputPage {
     this.searchAddressType.pipe(take(1))
       .subscribe(type => {
         if (type === 'Origin') {
-          this.store.dispatch(new ChooseOriginLocation(result));
+          this.store.dispatch(new ChooseOriginLocation(result.structured_formatting.main_text));
           this.store.dispatch(new FetchGeocodeOriginResult(result.structured_formatting.main_text));
         } else if (type === 'Destination') {
-          this.store.dispatch(new ChooseDestinationLocation(result));
+          this.store.dispatch(new ChooseDestinationLocation(result.structured_formatting.main_text));
           this.store.dispatch(new FetchGeocodeDestinationResult(result.structured_formatting.main_text));
         }
         this.navCtrl.back();

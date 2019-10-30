@@ -10,25 +10,39 @@ import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
 import { DEFAULT_LOCATION } from 'src/app/shared/constants';
 import { mockTrips } from 'src/app/trips/mock-trips';
 import { mockStations } from 'src/app/trips/mock-stations';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { State } from 'src/app/reducers';
+import { initialSearchState } from 'src/app/reducers/search.reducer';
+import { ChooseOriginLocation, ChooseDestinationLocation, SaveOriginLatLng, SaveDestinationLatLng } from 'src/app/actions/search.actions';
+import { Store } from '@ngrx/store';
 
 declare var google;
 
 describe('GoogleMapComponent', () => {
   let component: GoogleMapComponent;
   let fixture: ComponentFixture<GoogleMapComponent>;
+  let store: MockStore<State>;
+
+  const initialState: State = {
+    search: initialSearchState
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ GoogleMapComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [{
-        provide: MapsAPILoader,
-        useValue: {
-          load: () => Promise.resolve()
-        }
-      }]
+      providers: [
+        {
+          provide: MapsAPILoader,
+          useValue: {
+            load: () => Promise.resolve()
+          }
+        },
+        provideMockStore({ initialState })
+      ]
     })
     .compileComponents();
+    store = TestBed.get<Store<State>>(Store);
   }));
 
   beforeEach(() => {
@@ -118,7 +132,8 @@ describe('GoogleMapComponent', () => {
     expect(component.addMarker).toHaveBeenCalledWith(
       latlng,
       '123 Main Street',
-      'Origin'
+      'Origin',
+      false
     );
   });
 
@@ -131,7 +146,8 @@ describe('GoogleMapComponent', () => {
     expect(component.addMarker).toHaveBeenCalledWith(
       latlng,
       '576 Main Street',
-      'Destination'
+      'Destination',
+      false
     );
   });
 
@@ -196,7 +212,7 @@ describe('GoogleMapComponent', () => {
   it('should add markers to the map for each station if zoom is greater than or equal to 14', () => {
     component.stations = mockStations;
     component.map = mock<GoogleMap>();
-  
+
     component.map.getZoom = () => 15;
     const mockMarker = mock<Marker>();
     spyOn(component, 'addMarker').and.returnValue(mockMarker);
@@ -207,7 +223,8 @@ describe('GoogleMapComponent', () => {
       mockStations[0].latLng,
       mockStations[0].address,
       'Station',
-      true
+      true,
+      0
     );
     expect(component.stationMarkers).toEqual([mockMarker]);
   });
@@ -246,13 +263,50 @@ describe('GoogleMapComponent', () => {
     expect((marker as any).position.lng()).toEqual(2);
   });
 
-  it('should create a new info window with the content', () => {
-    const infoWindow = component.createInfoWindow('123 Main Street', 'Origin');
-    expect(infoWindow.getContent()).toEqual(`
-      <h5>Origin:</h5>
-      <p>123 Main Street</p>
-    `);
-  })
+  it('should create a new regular info window with the content', () => {
+    const infoWindow = component.createInfoWindow('123 Main Street', 'Origin', false);
+    expect(infoWindow.getContent()).toEqual(`<h5>Origin:</h5><p>123 Main Street</p>`);
+  });
+
+  it('should create a new station info window with the content', () => {
+    const infoWindow = component.createInfoWindow('123 Main Street', 'Station', true, 0);
+    // tslint:disable-next-line: no-trailing-whitespace
+    const actual: string = infoWindow.getContent() as string;
+    const expected =  `<h5>Station:</h5><p>123 Main Street</p>
+<ion-button expand="full" onclick="handleInfoWindowButtonClick('from', 0)">From this station</ion-button>
+<ion-button expand="full" onclick="handleInfoWindowButtonClick('to', 0)">To this station</ion-button>`;
+    expect(expected).toEqual(actual);
+  });
+
+  it('should dispatch an action to change search origin to this station, close the window', () => {
+    const openWindow = mock<InfoWindow>();
+    spyOn(openWindow, 'close');
+    component.openWindow = openWindow;
+    component.stations = mockStations;
+    spyOn(store, 'dispatch');
+    component.ngOnInit();
+
+    (window as any).handleInfoWindowButtonClick('to', 0);
+
+    expect(store.dispatch).toHaveBeenCalledWith(new ChooseDestinationLocation(mockStations[0].address));
+    expect(store.dispatch).toHaveBeenCalledWith(new SaveDestinationLatLng(mockStations[0].latLng));
+    expect(openWindow.close).toHaveBeenCalled();
+  });
+
+  it('should dispatch an action to change search origin to this station, close the window', () => {
+    const openWindow = mock<InfoWindow>();
+    spyOn(openWindow, 'close');
+    component.openWindow = openWindow;
+    component.stations = mockStations;
+    spyOn(store, 'dispatch');
+    component.ngOnInit();
+
+    (window as any).handleInfoWindowButtonClick('from', 0);
+
+    expect(store.dispatch).toHaveBeenCalledWith(new ChooseOriginLocation(mockStations[0].address));
+    expect(store.dispatch).toHaveBeenCalledWith(new SaveOriginLatLng(mockStations[0].latLng));
+    expect(openWindow.close).toHaveBeenCalled();
+  });
 
   it('should close existing open windows if a new info window is clicked', () => {
     const openWindow = mock<InfoWindow>();
@@ -287,4 +341,9 @@ describe('GoogleMapComponent', () => {
     storedClickHandler();
     expect(mockInfoWindow.open).toHaveBeenCalledWith(mockMap, mockMarker);
   });
+
+  it('should add the handleInfoWindowButtonClick function to the window object on init', () => {
+    component.ngOnInit();
+    expect((window as any).handleInfoWindowButtonClick).toEqual(component.handleInfoWindowButtonClick);
+  })
 });

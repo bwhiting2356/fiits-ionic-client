@@ -178,7 +178,7 @@ describe('AddressInputPage', () => {
 
     component.chooseLocation(mockAutocompleteResults[0]);
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new ChooseOriginLocation(mockAutocompleteResults[0]));
+      .toHaveBeenCalledWith(new ChooseOriginLocation(mockAutocompleteResults[0].structured_formatting.main_text));
     expect(store.dispatch)
       .toHaveBeenCalledWith(new FetchGeocodeOriginResult(mockAutocompleteResults[0].structured_formatting.main_text));
     expect(store.dispatch)
@@ -209,7 +209,7 @@ describe('AddressInputPage', () => {
     component.chooseLocation(mockAutocompleteResults[1]);
 
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new ChooseDestinationLocation(mockAutocompleteResults[1]));
+      .toHaveBeenCalledWith(new ChooseDestinationLocation(mockAutocompleteResults[1].structured_formatting.main_text));
     expect(store.dispatch)
       .toHaveBeenCalledWith(new FetchGeocodeDestinationResult(mockAutocompleteResults[1].structured_formatting.main_text));
     expect(store.dispatch)

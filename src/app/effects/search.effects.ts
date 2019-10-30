@@ -7,8 +7,8 @@ import {
   FetchAutocompleteResults,
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult,
-  SaveGeocodeOriginResult,
-  SaveGeocodeDestinationResult,
+  SaveOriginLatLng,
+  SaveDestinationLatLng,
   TripSearchQuery,
   SaveTrip,
   SearchActions,
@@ -41,7 +41,7 @@ export class SearchEffects {
     ofType(SearchActionTypes.FetchGeocodeOriginResult),
     map(action => action.address),
     exhaustMap(address => this.geocodeService.getLatLngFromAddress$(address)),
-    map(geocodeResult => new SaveGeocodeOriginResult(geocodeResult)),
+    map(geocodeResult => new SaveOriginLatLng(geocodeResult)),
     // TODO: error?
   );
 
@@ -50,7 +50,7 @@ export class SearchEffects {
     ofType(SearchActionTypes.FetchGeocodeDestinationResult),
     map(action => action.address),
     exhaustMap(address => this.geocodeService.getLatLngFromAddress$(address)),
-    map(geocodeResult => new SaveGeocodeDestinationResult(geocodeResult)),
+    map(geocodeResult => new SaveDestinationLatLng(geocodeResult)),
     // TODO: error?
     // catchError(err => console.error(`error ${err}`))
   );

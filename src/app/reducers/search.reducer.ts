@@ -60,12 +60,12 @@ export function searchReducer(state = initialSearchState, action: SearchActions)
     case SearchActionTypes.ChooseOriginLocation:
       return {
         ...state,
-        originAddress: action.autocompleteResult.structured_formatting.main_text 
+        originAddress: action.location
       };
     case SearchActionTypes.ChooseDestinationLocation:
       return {
         ...state,
-        destinationAddress: action.autocompleteResult.structured_formatting.main_text
+        destinationAddress: action.location
       };
     case SearchActionTypes.ClearAutocompleteResults:
       return {
@@ -98,13 +98,13 @@ export function searchReducer(state = initialSearchState, action: SearchActions)
         autocompleteResults: action.autocompleteResults,
         autocompleteFetching: false
       };
-    case SearchActionTypes.SaveGeocodeOriginResult:
+    case SearchActionTypes.SaveOriginLatLng:
       return {
         ...state,
         originLatLng: action.latlng,
         geocodeFetching: false
       };
-    case SearchActionTypes.SaveGeocodeDestinationResult:
+    case SearchActionTypes.SaveDestinationLatLng:
       return {
         ...state,
         destinationLatLng: action.latlng,

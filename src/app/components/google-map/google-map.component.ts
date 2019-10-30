@@ -8,6 +8,9 @@ import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
 import { DEFAULT_LOCATION } from 'src/app/shared/constants';
 import { Trip, StationInfo } from 'src/app/shared/trip.model';
 import { LatLng } from 'src/app/shared/latlng.model';
+import { Store } from '@ngrx/store';
+import { State } from 'src/app/reducers';
+import { ChooseOriginLocation, ChooseDestinationLocation, SaveOriginLatLng, SaveDestinationLatLng } from 'src/app/actions/search.actions';
 
 declare var google;
 
@@ -17,7 +20,7 @@ declare var google;
   styleUrls: ['./google-map.component.scss'],
 })
 export class GoogleMapComponent implements OnInit, OnChanges {
-  @ViewChild('mapContainer', {static: false}) mapContainer: ElementRef;
+  @ViewChild('mapContainer', { static: false }) mapContainer: ElementRef;
   @Input() zoom = 14;
   @Input() zoomControl = false;
   @Input() scrollWheel = true;
@@ -37,10 +40,13 @@ export class GoogleMapComponent implements OnInit, OnChanges {
   stationMarkers: Marker[] = [];
   openWindow: InfoWindow;
 
-  constructor(private mapsAPILoader: MapsAPILoader) { }
+  constructor(
+    private store: Store<State>,
+    private mapsAPILoader: MapsAPILoader) { }
 
   ngOnInit() {
     this.initMap();
+    (window as any).handleInfoWindowButtonClick = this.handleInfoWindowButtonClick;
   }
 
   ngOnChanges() {
@@ -49,9 +55,9 @@ export class GoogleMapComponent implements OnInit, OnChanges {
 
   addOrRemoveStationMarkers() {
     if (this.stations && this.map.getZoom() >= 14) {
-      this.stations.forEach(station => {
+      this.stations.forEach((station, i) => {
         const { address, latLng } = station;
-        const marker = this.addMarker(latLng, address, 'Station', true);
+        const marker = this.addMarker(latLng, address, 'Station', true, i);
         this.stationMarkers.push(marker);
       });
     } else {
@@ -80,10 +86,10 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     });
 
     if (this.originLatLng) {
-      this.addMarker(this.originLatLng, this.originAddress, 'Origin', );
+      this.addMarker(this.originLatLng, this.originAddress, 'Origin', false);
     }
     if (this.destinationLatLng) {
-      this.addMarker(this.destinationLatLng, this.destinationAddress, 'Destination');
+      this.addMarker(this.destinationLatLng, this.destinationAddress, 'Destination', false);
     }
 
     this.addOrRemoveStationMarkers();
@@ -130,17 +136,32 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     });
   }
 
-  createInfoWindow(address: string, description: string): InfoWindow {
-    const content = `
-      <h5>${description}:</h5>
-      <p>${address}</p>
-    `;
+  handleInfoWindowButtonClick = (direction: string, stationIndex: number) => {
+    const station: StationInfo = this.stations[stationIndex];
+    if (direction === 'from') {
+      this.store.dispatch(new ChooseOriginLocation(station.address));
+      this.store.dispatch(new SaveOriginLatLng(station.latLng));
+    } else { // direction === 'to'
+      this.store.dispatch(new ChooseDestinationLocation(station.address));
+      this.store.dispatch(new SaveDestinationLatLng(station.latLng));
+    }
+    this.openWindow.close();
+  }
+
+  createInfoWindow(address: string, description: string, station: boolean, stationIndex?: number): InfoWindow {
+    let content = `<h5>${description}:</h5><p>${address}</p>`;
+
+    if (station) {
+      content += `
+<ion-button expand="full" onclick="handleInfoWindowButtonClick('from', ${stationIndex})">From this station</ion-button>
+<ion-button expand="full" onclick="handleInfoWindowButtonClick('to', ${stationIndex})">To this station</ion-button>`;
+    };
     return new google.maps.InfoWindow({ content });
   }
 
-  addMarker(position: LatLng, address: string, description: string, station = false): Marker {
+  addMarker(position: LatLng, address: string, description: string, station: boolean, stationIndex?: number): Marker {
     const marker = this.createMarker(position, station);
-    const infoWindow = this.createInfoWindow(address, description);
+    const infoWindow = this.createInfoWindow(address, description, station, stationIndex);
 
     marker.addListener('click', () => {
       if (this.openWindow) {
@@ -151,7 +172,4 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     });
     return marker;
   }
-
-
-
 }

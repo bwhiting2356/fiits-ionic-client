@@ -18,8 +18,8 @@ export enum SearchActionTypes {
   FetchGeocodeOriginResult = '[Seach] Fetch Geocode Origin Result',
   FetchGeocodeDestinationResult = '[Seach] Fetch Geocode Destination Result',
   SaveAutocompleteResults = '[Search] Save Autocomplete Results',
-  SaveGeocodeOriginResult = '[Search] Save Geocode Origin Result',
-  SaveGeocodeDestinationResult = '[Search] Save Geocode Destination Result',
+  SaveOriginLatLng = '[Search] Save Origin LatLng',
+  SaveDestinationLatLng = '[Search] Save Destination LatLng',
   SaveStations = '[Search] Save Stations',
   SaveTrip = '[Search] Save Trip',
   SetSearchAddressType = '[Search] Set Search Address Type',
@@ -50,12 +50,12 @@ export class ChangeTimeTarget implements Action {
 
 export class ChooseOriginLocation implements Action {
   readonly type = SearchActionTypes.ChooseOriginLocation;
-  constructor(public autocompleteResult: AutocompleteResult) {}
+  constructor(public location: string) {}
 }
 
 export class ChooseDestinationLocation implements Action {
   readonly type = SearchActionTypes.ChooseDestinationLocation;
-  constructor(public autocompleteResult: AutocompleteResult) {}
+  constructor(public location: string) {}
 }
 
 export class ClearAutocompleteResults implements Action {
@@ -86,13 +86,13 @@ export class SaveAutocompleteResults implements Action {
   constructor(public autocompleteResults: AutocompleteResult[]) {}
 }
 
-export class SaveGeocodeOriginResult implements Action {
-  readonly type = SearchActionTypes.SaveGeocodeOriginResult;
+export class SaveOriginLatLng implements Action {
+  readonly type = SearchActionTypes.SaveOriginLatLng;
   constructor(public latlng: LatLng) {}
 }
 
-export class SaveGeocodeDestinationResult implements Action {
-  readonly type = SearchActionTypes.SaveGeocodeDestinationResult;
+export class SaveDestinationLatLng implements Action {
+  readonly type = SearchActionTypes.SaveDestinationLatLng;
   constructor(public latlng: LatLng) {}
 }
 
@@ -133,8 +133,8 @@ export type SearchActions = AutocompleteResultsError
               | FetchGeocodeOriginResult
               | FetchGeocodeDestinationResult
               | SaveAutocompleteResults
-              | SaveGeocodeOriginResult
-              | SaveGeocodeDestinationResult
+              | SaveOriginLatLng
+              | SaveDestinationLatLng
               | SaveStations
               | SaveTrip
               | SetSearchAddressType

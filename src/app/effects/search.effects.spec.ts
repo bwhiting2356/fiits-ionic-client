@@ -11,9 +11,9 @@ import {
   FetchAutocompleteResults,
   SaveAutocompleteResults,
   FetchGeocodeOriginResult,
-  SaveGeocodeOriginResult,
+  SaveOriginLatLng,
   FetchGeocodeDestinationResult,
-  SaveGeocodeDestinationResult,
+  SaveDestinationLatLng,
   TripSearchQuery,
   SaveTrip,
   FetchAllStations,
@@ -74,7 +74,7 @@ describe('SearchEffects', () => {
 
   it('should return SaveGeocodingOritinResult on success', () => {
     const action = new FetchGeocodeOriginResult('123 Main Street');
-    const completion = new SaveGeocodeOriginResult({ lat: 0, lng: 0});
+    const completion = new SaveOriginLatLng({ lat: 0, lng: 0});
     actions$ = hot('--a-', { a: action });
     const expected = hot('--b', { b: completion });
     expect(effects.fetchGeocodeOriginResult$).toBeObservable(expected);
@@ -82,7 +82,7 @@ describe('SearchEffects', () => {
 
   it('should return SaveGeocodingDestinationResult on success', () => {
     const action = new FetchGeocodeDestinationResult('123 Main Street');
-    const completion = new SaveGeocodeDestinationResult({ lat: 0, lng: 0});
+    const completion = new SaveDestinationLatLng({ lat: 0, lng: 0});
     actions$ = hot('--a-', { a: action });
     const expected = hot('--b', { b: completion });
     expect(effects.fetchGeocodeDestinationResult$).toBeObservable(expected);

@@ -7,8 +7,8 @@ import {
   FetchAutocompleteResults,
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult,
-  SaveGeocodeOriginResult,
-  SaveGeocodeDestinationResult,
+  SaveOriginLatLng,
+  SaveDestinationLatLng,
   SetSearchAddressType,
   SearchAddressType,
   ChangeTimeTarget,
@@ -38,7 +38,7 @@ describe('Search Reducer', () => {
 
   describe('search actions', () => {
     it('should set the origin location', () => {
-      const action = new ChooseOriginLocation(mockAutocompleteResults[0]);
+      const action = new ChooseOriginLocation(mockAutocompleteResults[0].structured_formatting.main_text);
 
       const result = searchReducer(initialSearchState, action);
 
@@ -49,7 +49,7 @@ describe('Search Reducer', () => {
     })
 
     it('should set the destination location', () => {
-      const action = new ChooseDestinationLocation(mockAutocompleteResults[1]);
+      const action = new ChooseDestinationLocation(mockAutocompleteResults[1].structured_formatting.main_text);
 
       const result = searchReducer(initialSearchState, action);
 
@@ -146,7 +146,7 @@ describe('Search Reducer', () => {
       });
     });
 
-    it('should set geocode fetching to false', () => {
+    it('should set geocode fetching to true when origin is fetching', () => {
       const action = new FetchGeocodeOriginResult('123 Main Street');
 
       const result = searchReducer(initialSearchState, action);
@@ -155,16 +155,26 @@ describe('Search Reducer', () => {
         ...initialSearchState,
         geocodeFetching: true
       });
-
     });
 
-    it('should save the origin geocode result, set geocode fetching to false', () => {
+    it('should set geocode fetching to true when destination is fetching', () => {
+      const action = new FetchGeocodeDestinationResult('123 Main Street');
+
+      const result = searchReducer(initialSearchState, action);
+
+      expect(result).toEqual({
+        ...initialSearchState,
+        geocodeFetching: true
+      });
+    });
+
+    it('should save the origin latlng, set geocode fetching to false', () => {
       const initialStateWithGeocodingFetching = {
         ...initialSearchState,
         geocodeFetching: true,
       };
-      
-      const action = new SaveGeocodeOriginResult({ lat: 0, lng: 0 });
+
+      const action = new SaveOriginLatLng({ lat: 0, lng: 0 });
 
       const result = searchReducer(initialStateWithGeocodingFetching, action);
 
@@ -175,13 +185,13 @@ describe('Search Reducer', () => {
       });
     });
 
-    it('should save the destination geocode result, set geocode fetching to flase', () => {
+    it('should save the destination latlng, set geocode fetching to flase', () => {
       const initialStateWithGeocodingFetching = {
         ...initialSearchState,
         geocodeFetching: true,
       };
 
-      const action = new SaveGeocodeDestinationResult({ lat: 0, lng: 0 });
+      const action = new SaveDestinationLatLng({ lat: 0, lng: 0 });
 
       const result = searchReducer(initialStateWithGeocodingFetching, action);
 
