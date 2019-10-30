@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Trip Details</ion-title>
+    <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div class="flex-container">
+      <div class="trip">
+        <ion-list>
+          <div>
+            <app-trip-info [trip]="trip"></app-trip-info>
+            <button
+              ion-button
+              block
+              [disabled]="disableButton"
+              (click)="backToSearch()">
+              Book this trip again
+            </button>
+          </div>
+        </ion-list>
+      </div>
+      <div class="map">
+        <!-- <collapse-icon (click)="toggleCollapse()" [collapsed]="collapsed"></collapse-icon> -->
+        <app-google-map [collapsed]="collapsed" [trip]="trip">
+        </app-google-map>
+      </div>
+    </div>
+</ion-content>

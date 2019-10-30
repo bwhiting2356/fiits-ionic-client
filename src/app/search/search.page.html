@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Search
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div id="search-container">
+    <div id="search">
+      <ion-item-group>
+        <ion-item button id="origin" detail (touchstart)="navigateToAddressInput('Origin')" (click)="navigateToAddressInput('Origin')">
+          <ion-label>Origin</ion-label>
+          <ion-input readonly placeholder="Enter Origin" [value]="originAddress | async"></ion-input>
+        </ion-item>
+        <ion-item button id="destination" detail (touchstart)="navigateToAddressInput('Destination')" (click)="navigateToAddressInput('Destination')">
+          <ion-label>Destination</ion-label>
+          <ion-input readonly placeholder="Enter Destination" [value]="destinationAddress | async"></ion-input>
+        </ion-item>
+        <div ion-item class="time-container-mobile">
+          <ion-select
+            [value]="selectOptionValues[0]"
+            (ionChange)="timeTargetChange($event)"
+
+            interface="action-sheet"
+            class="ion-float-left">
+            <ion-select-option [value]="selectOptionValues[0]">{{ selectOptionValues[0].display }}</ion-select-option>
+            <ion-select-option [value]="selectOptionValues[1]">{{ selectOptionValues[1].display }}</ion-select-option>
+          </ion-select>
+          <ion-datetime
+            [value]="timeString | async"
+            (ionChange)="timeChange($event)"
+            displayFormat="h:mm A MMM DD"
+            class="ion-float-right">
+          </ion-datetime>
+        </div>
+      </ion-item-group>
+    </div>
+    
+    <div id="map-container">
+      <div id="spinner-overlay" *ngIf="showSpinner | async">
+          <ion-spinner id="spinner"></ion-spinner>
+      </div>
+      <app-google-map
+        id="map"
+        [trip]="trip"
+        [originLatLng]="originLatLng | async" 
+        [destinationLatLng]="destinationLatLng | async">
+      </app-google-map>
+    </div>
+    <ion-button expand="block" [disabled]='rentalButtonDisabled | async' (click)="findBikeRentals()">
+        <span *ngIf="!(searchQueryFetching | async); else fetching">Find bike rentals</span>
+        <ng-template #fetching>
+            <span>Finding your best route...</span>
+        </ng-template>
+    </ion-button>
+  </div>
+</ion-content>

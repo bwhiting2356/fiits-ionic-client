@@ -1,0 +1,21 @@
+<ion-card>
+    <div class="map">
+        <app-google-map
+          [trip]="trip"
+          [zoomControl]="false"
+          [fullscreenControl]="false"
+          [gestureHandling]="'none'"></app-google-map>
+      </div>
+
+  <ion-card-content>
+    <h4>
+      <span class="title">Completed Trip</span>
+      <span class="miles-minutes">{{ totalDistance | distance }} &#8226; {{ totalDuration | time }}</span>
+    </h4>
+    <p>
+      <span class="date-time">{{ trip.departureTime | date: 'M/yy' }} {{ trip.departureTime | date:'h:mm a'}} - {{ trip.arrivalTime | date:'h:mm a'}}</span>
+      <span class="price">{{ totalPrice | currency }}</span>
+    </p>
+
+  </ion-card-content>
+</ion-card>

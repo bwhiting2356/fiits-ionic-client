@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ searchAddressType | async }}</ion-title>
+    <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-input #input id="address-input" autofocus [placeholder]="placeholderText | async" (input)="inputChange($event)"></ion-input>
+  </ion-item>
+  <ion-item id="fetching" *ngIf="(autocompleteFetching | async)">Fetching results...</ion-item>
+  <ion-item id="no-results" *ngIf='(showNoResults | async)'>No addresses found for this search</ion-item>
+  <ion-list id="autocomplete-results">
+    <ion-item *ngFor="let result of autocompleteResults | async" (click)="chooseLocation(result)">
+        <ion-icon name="pin" slot="start"></ion-icon>
+        <ion-label>
+            <ion-text>
+              <h2>{{ result.structured_formatting.main_text }}</h2>
+            </ion-text>
+            <p>{{ result.structured_formatting.secondary_text }}</p>
+          </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

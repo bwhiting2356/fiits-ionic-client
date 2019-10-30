@@ -1,0 +1,174 @@
+$search-bar-height: 100px;
+$travel-info-height: 45px;
+
+app-trip-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background-color: white;
+  margin: auto;
+
+  .container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .trip-details {
+    display: grid;
+    grid-template-columns: 90px 20px 1fr 50px;
+  }
+
+  .trip-details.top {
+    grid-template-areas: "departureTime     originIcon           originAddress       .";
+
+    #departureTime {  grid-area: departureTime;  }
+    #originIcon {  grid-area: originIcon;  }
+    #originAddress { grid-area: originAddress }
+
+  }
+
+  .trip-details.middle {
+
+    &.collapsed {
+      height: 0;
+      overflow: hidden;
+    }
+
+    padding-top: 5px;
+    grid-template-rows: $travel-info-height auto auto $travel-info-height auto auto $travel-info-height;
+    grid-template-areas:
+      ".                 walkingDots1         walkingTravelInfo1  ."
+      "reservation1Time  bikeReservationLine  reservation1Desc    reservation1Price"
+      ".                 bikeReservationLine  reservation1Address ."
+      ".                 bikeReservationLine  bikeTravelInfo      bikePrice"
+      "reservation2Time  bikeReservationLine  reservation2Desc    reservation2Price"
+      ".                 bikeReservationLine  reservation2Address ."
+      ".                 walkingDots2         walkingTravelInfo2  .";
+
+    #walkingDots1 { grid-area: walkingDots1 }
+    #walkingTravelInfo1 { grid-area: walkingTravelInfo1 }
+    #bikeReservationLine { grid-area: bikeReservationLine }
+    #reservation1Time { grid-area: reservation1Time }
+    #reservation1Desc { grid-area: reservation1Desc }
+    #reservation1Price { grid-area: reservation1Price }
+    #reservation1Address { grid-area: reservation1Address }
+    .collapseIcon { grid-area: collapseIcon }
+    #bikeTravelInfo { grid-area: bikeTravelInfo }
+    #bikePrice { grid-area: bikePrice }
+    #reservation2Time { grid-area: reservation2Time }
+    #reservation2Desc { grid-area: reservation2Desc }
+    #reservation2Price { grid-area: reservation2Price }
+    #reservation2Address { grid-area: reservation2Address }
+    #walkingDots2 { grid-area: walkingDots2 }
+    #walkingTravelInfo2 { grid-area: walkingTravelInfo2 }
+
+
+    #bikeReservationLine {
+      position: relative;
+      width: 16px;
+      height: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+
+      .bicyclingPolyline {
+        fill: var(--ionic-color-primary); // blue; // map_get($colors, 'bicyclingLine');
+        stroke: darkblue; // map_get($colors, 'bicyclingBorder')
+      }
+    }
+  }
+
+  .trip-details.bottom {
+    grid-template-areas: "arrivalTime       destinationIcon      destinationAddress  infoIcon";
+
+    #arrivalTime {  grid-area: arrivalTime;  }
+    #destinationIcon {  grid-area: destinationIcon;  }
+    #destinationAddress { grid-area: destinationAddress }
+    #infoIcon { grid-area: infoIcon }
+
+  }
+
+  .price,
+  #infoIcon {
+    display: flex;
+    font-weight: 500;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+
+  #infoIcon {
+    cursor: pointer;
+    font-size: 1.5em;
+    justify-content: flex-end;
+  }
+
+  .time {
+    display: flex;
+    font-weight: 500;
+    align-items: center;
+    justify-content: left;
+  }
+
+  .icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-right: 5px;
+  }
+
+  .address,
+  .reservation,
+  .travel-info {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+
+  .address {
+    font-weight: 400;
+  }
+  .reservation {
+    font-weight: 600;
+  }
+
+  .travel-info {
+    display: flex;
+    align-items: center;
+    font-style: italic;
+    color: grey; // map_get($colors, 'travelInfoColor')
+
+    ion-icon {
+      font-size: 1.5em;
+      margin-right: 5px;
+    }
+  }
+
+  // ********** summary **********
+
+  .summary {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid black;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+
+    #travel-time {
+      align-self: flex-start;
+      text-align: left;
+      width: 100px;
+    }
+
+    #travel-distance {
+      flex-grow: 1;
+    }
+
+    #total-cost {
+      align-self: flex-end;
+      width: 150px;
+      text-align: right;
+    }
+  }
+}

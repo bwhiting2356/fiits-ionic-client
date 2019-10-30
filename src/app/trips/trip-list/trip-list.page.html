@@ -1,0 +1,14 @@
+<ion-content>
+    <ion-text *ngIf="(trips | async).length == 0">
+        <h3>No trips</h3>
+      </ion-text>
+    <ion-list>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-xs="12" size-md="4" size-lg="3" *ngFor="let trip of trips | async; let i = index">
+              <app-trip-card [trip]="trip" [routerLink]="['/trip-details', i]"></app-trip-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
+</ion-content>
