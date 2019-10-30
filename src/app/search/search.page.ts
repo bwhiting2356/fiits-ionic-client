@@ -75,6 +75,7 @@ export class SearchPage implements OnInit {
 
     this.timeTarget = store
       .select(state => state.search.timeTarget);
+      // TODO is nothing actually reading this value?
 
     this.timeString = store
       .select(state => state.search.time)
