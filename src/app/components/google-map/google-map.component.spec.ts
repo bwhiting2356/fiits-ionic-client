@@ -1,21 +1,25 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { GoogleMapComponent } from './google-map.component';
+import { Store } from '@ngrx/store';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { MapsAPILoader } from '@agm/core';
 import { GoogleMap, Marker, InfoWindow, MapsEventListener } from '@agm/core/services/google-maps-types';
-
 import { mock } from 'ts-mockito';
+
 import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
 import { DEFAULT_LOCATION } from 'src/app/shared/constants';
 import { mockTrips } from 'src/app/trips/mock-trips';
 import { mockStations } from 'src/app/trips/mock-stations';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { State } from 'src/app/reducers';
 import { initialSearchState } from 'src/app/reducers/search.reducer';
-import { ChooseOriginLocation, ChooseDestinationLocation, SaveOriginLatLng, SaveDestinationLatLng } from 'src/app/actions/search.actions';
-import { Store } from '@ngrx/store';
+import {
+  ChooseOriginLocation,
+  ChooseDestinationLocation,
+  SaveOriginLatLng,
+  SaveDestinationLatLng
+} from 'src/app/actions/search.actions';
 
+import { GoogleMapComponent } from './google-map.component';
 declare var google;
 
 describe('GoogleMapComponent', () => {

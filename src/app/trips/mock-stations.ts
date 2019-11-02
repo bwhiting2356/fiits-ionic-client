@@ -10,4 +10,3 @@ export const mockStations: StationInfo[] = [{
         lng: -74.003238,
     }
 }];
-  

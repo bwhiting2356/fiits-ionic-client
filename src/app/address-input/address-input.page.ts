@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, IonInput } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, combineLatest } from 'rxjs';
@@ -9,12 +9,12 @@ import {
   ChooseOriginLocation,
   ChooseDestinationLocation,
   FetchAutocompleteResults,
-  ClearAutocompleteResults,
+  ClearAutocompleteResults, 
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult,
   SearchAddressType
 } from '../actions/search.actions';
-import { capitalize } from '../shared/util/util';
+
 import { AutocompleteResult } from '../shared/maps/autocomplete-result';
 
 @Component({

@@ -13,7 +13,9 @@ import {
   SaveTrip,
   SearchActions,
   TripSearchQueryError,
-  SaveStations
+  SaveStations,
+  FetchAllStationsError,
+  GeocodeError
 } from '../actions/search.actions';
 import { exhaustMap, map, catchError } from 'rxjs/operators';
 import { AutocompleteService } from '../services/autocomplete.service';
@@ -33,7 +35,6 @@ export class SearchEffects {
     exhaustMap(input => this.autocompleteService.getPlacePredictions$(input)),
     map(autocompleteResults => new SaveAutocompleteResults(autocompleteResults)),
     catchError(error => of(new AutocompleteResultsError(error)))
-    // TODO: debounce?
   );
 
   @Effect()
@@ -42,7 +43,7 @@ export class SearchEffects {
     map(action => action.address),
     exhaustMap(address => this.geocodeService.getLatLngFromAddress$(address)),
     map(geocodeResult => new SaveOriginLatLng(geocodeResult)),
-    // TODO: error?
+    catchError(error => of(new GeocodeError(error)))
   );
 
   @Effect()
@@ -51,8 +52,7 @@ export class SearchEffects {
     map(action => action.address),
     exhaustMap(address => this.geocodeService.getLatLngFromAddress$(address)),
     map(geocodeResult => new SaveDestinationLatLng(geocodeResult)),
-    // TODO: error?
-    // catchError(err => console.error(`error ${err}`))
+    catchError(error => of(new GeocodeError(error)))
   );
 
   @Effect()
@@ -68,7 +68,8 @@ export class SearchEffects {
   fetchAllStation$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.FetchAllStations),
     exhaustMap(() => this.stationService.fetchAllStation$()),
-    map(stations => new SaveStations(stations))
+    map(stations => new SaveStations(stations)),
+    catchError(error => of(new FetchAllStationsError(error)))
   );
 
   constructor(

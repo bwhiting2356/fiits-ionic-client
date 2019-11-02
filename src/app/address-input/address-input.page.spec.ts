@@ -1,17 +1,18 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NavController, IonInput } from '@ionic/angular';
+import { of } from 'rxjs';
+import { cold } from 'jasmine-marbles';
+import { Store } from '@ngrx/store';
+
+import { By } from '@angular/platform-browser';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
 
 import { AddressInputPage } from './address-input.page';
 import { AutocompleteService } from '../services/autocomplete.service';
-
-import { By } from '@angular/platform-browser';
-import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
-import { NavController, IonInput } from '@ionic/angular';
-import { of } from 'rxjs';
 import { State } from '../reducers';
 import { initialSearchState } from '../reducers/search.reducer';
-import { Store } from '@ngrx/store';
 import {
   FetchAutocompleteResults,
   ChooseOriginLocation,
@@ -20,7 +21,6 @@ import {
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult
 } from '../actions/search.actions';
-import { cold } from 'jasmine-marbles';
 
 describe('AddressInputPage', () => {
   let component: AddressInputPage;
@@ -74,7 +74,7 @@ describe('AddressInputPage', () => {
 
   it('should not show the no-results text if there are results', () => {
     expect(fixture.debugElement.query(By.css('#no-results'))).toBeFalsy();
-  })
+  });
 
   it('should render a list item for each autocomplete result', () => {
     store.setState({

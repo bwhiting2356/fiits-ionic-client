@@ -23,6 +23,7 @@ import { reducers, metaReducers } from './reducers';
 
 
 import { SearchEffects } from './effects/search.effects';
+import { ErrorEffects } from './effects/error.effects';
 // import { environment } from '../environments/environment';
 
 @NgModule({
@@ -51,7 +52,7 @@ import { SearchEffects } from './effects/search.effects';
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([SearchEffects]),
+    EffectsModule.forRoot([SearchEffects, ErrorEffects]),
   ],
   providers: [
     StatusBar,

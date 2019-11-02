@@ -1,16 +1,24 @@
 import { MapsAPILoader } from '@agm/core';
-
 import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef } from '@angular/core';
-import { GestureHandling } from 'src/app/shared/maps/gesture-handling';
+
+import { Store } from '@ngrx/store';
+
 
 import { GoogleMap, Marker, InfoWindow } from '@agm/core/services/google-maps-types';
+
+import { GestureHandling } from 'src/app/shared/maps/gesture-handling';
 import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
 import { DEFAULT_LOCATION } from 'src/app/shared/constants';
 import { Trip, StationInfo } from 'src/app/shared/trip.model';
 import { LatLng } from 'src/app/shared/latlng.model';
-import { Store } from '@ngrx/store';
+
 import { State } from 'src/app/reducers';
-import { ChooseOriginLocation, ChooseDestinationLocation, SaveOriginLatLng, SaveDestinationLatLng } from 'src/app/actions/search.actions';
+import {
+  ChooseOriginLocation,
+  ChooseDestinationLocation,
+  SaveOriginLatLng,
+  SaveDestinationLatLng
+} from 'src/app/actions/search.actions';
 
 declare var google;
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { of, Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Trip } from '../shared/trip.model';
 import { mockTrips } from './mock-trips';
 import { SearchQuery } from '../shared/search-query';
@@ -15,8 +15,7 @@ export class TripService {
   constructor(private http: HttpClient) { }
 
   findBestTrip(searchQuery: SearchQuery): Observable<Trip> {
-    return this.http.post<Trip>(this.TRIP_API_URL, searchQuery)
-      .pipe(catchError((error: any) => throwError(error.json())));
+    return this.http.post<Trip>(this.TRIP_API_URL, searchQuery);
   }
 
   getTrips(): Observable<Trip[]> {

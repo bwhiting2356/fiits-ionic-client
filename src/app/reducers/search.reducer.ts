@@ -79,6 +79,12 @@ export function searchReducer(state = initialSearchState, action: SearchActions)
         ...state,
         stationsFetching: true
       };
+    case SearchActionTypes.FetchAllStationsError:
+      return {
+        ...state,
+        stationsFetching: false,
+        error: action.error
+      };
     case SearchActionTypes.FetchAutocompleteResults:
       return {
         ...state,
@@ -91,6 +97,13 @@ export function searchReducer(state = initialSearchState, action: SearchActions)
       return {
         ...state,
         geocodeFetching: true
+      };
+
+    case SearchActionTypes.GeocodeError:
+      return {
+        ...state,
+        geocodeFetching: false,
+        error: action.error
       };
     case SearchActionTypes.SaveAutocompleteResults:
       return {

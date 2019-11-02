@@ -1,21 +1,17 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { mockTrips } from './mock-trips';
 
 import { TripService } from './trip.service';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { cold, hot } from 'jasmine-marbles';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClient } from '@angular/common/http';
+import { hot } from 'jasmine-marbles';
+import { SearchQuery } from '../shared/search-query';
 
 describe('TripService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      { // TODO: use HTTClientTestingModule ?
-        provide: HttpClient,
-        useValue: {
-          get: () => {}
-        }
-      }
-    ]
+    imports: [HttpClientTestingModule],
+    providers: [TripService]
   }));
 
   it('should be created', () => {
@@ -42,9 +38,27 @@ describe('TripService', () => {
     expect(filteredTrips).toBeObservable(expected);
   });
 
-  xit('should make a request to fulfill a search query', () => {
-    const service: TripService = TestBed.get(TripService);
-    // TODO: what am I asserting?
+  it('should make a request for the search query', inject(
+    [HttpTestingController, TripService],
+    (httpMock: HttpTestingController, tripService: TripService) => {
+      const seachQuery: SearchQuery = {
+        originLatLng: { lat: 1, lng: 1 },
+        originAddress: '123 Main Street',
+        destinationLatLng: { lat: 0, lng: 0 },
+        destinationAddress: '576 Main Street',
+        timeTarget: 'ARRIVE_BY',
+        time: new Date(),
+      };
 
-  })
+      tripService.findBestTrip(seachQuery).subscribe(stations => {
+        expect(stations).toEqual(mockTrips[0]);
+      });
+
+      const mockReq = httpMock.expectOne(tripService.TRIP_API_URL);
+      expect(mockReq.cancelled).toBeFalsy();
+      expect(mockReq.request.responseType).toEqual('json');
+      mockReq.flush(mockTrips[0]);
+
+      httpMock.verify();
+  }));
 });

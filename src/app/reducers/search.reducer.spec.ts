@@ -17,7 +17,9 @@ import {
   SaveTrip,
   TripSearchQueryError,
   SaveStations,
-  FetchAllStations
+  FetchAllStations,
+  FetchAllStationsError,
+  GeocodeError
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
 import { mockTrips } from '../trips/mock-trips';
@@ -202,6 +204,24 @@ describe('Search Reducer', () => {
       });
     });
 
+    it('should set geocode fetching to false, save the error', () => {
+      const initialStateWithGeocodingFetching = {
+        ...initialSearchState,
+        geocodeFetching: true,
+      };
+
+      const action = new GeocodeError('oops');
+
+      const result = searchReducer(initialStateWithGeocodingFetching, action);
+
+      expect(result).toEqual({
+        ...initialSearchState,
+        geocodeFetching: false,
+        error: 'oops'
+      });
+
+    });
+
     it('should change the search time target to ARRIVE_BY', () => {
       const initialStateWithDepartAt = {
         ...initialSearchState,
@@ -337,5 +357,17 @@ describe('Search Reducer', () => {
       ...initialSearchState,
       stationsFetching: true
     });
-  })
+  });
+
+  it('should save the error and set stations fetching to false', () => {
+    const action = new FetchAllStationsError('oops');
+
+    const result = searchReducer(initialSearchState, action);
+
+    expect(result).toEqual({
+      ...initialSearchState,
+      stationsFetching: false,
+      error: 'oops'
+    });
+  });
 });

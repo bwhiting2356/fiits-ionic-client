@@ -13,7 +13,4 @@ export class StationService {
   fetchAllStation$() {
     return this.http.get<StationInfo[]>(this.STATION_API_URL);
   }
-
-
-
 }

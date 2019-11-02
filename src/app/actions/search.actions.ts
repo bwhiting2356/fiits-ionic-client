@@ -14,9 +14,11 @@ export enum SearchActionTypes {
   ChooseDestinationLocation = '[Search] Choose Destination Location',
   ClearAutocompleteResults = '[Search] Clear Autocomplete Results',
   FetchAllStations = '[Search] Fetch All Stations',
+  FetchAllStationsError = '[Search] Fetch All Stations Error',
   FetchAutocompleteResults = '[Search] Fetch Autocomplete Results',
   FetchGeocodeOriginResult = '[Seach] Fetch Geocode Origin Result',
   FetchGeocodeDestinationResult = '[Seach] Fetch Geocode Destination Result',
+  GeocodeError = '[Search] Geocode Error',
   SaveAutocompleteResults = '[Search] Save Autocomplete Results',
   SaveOriginLatLng = '[Search] Save Origin LatLng',
   SaveDestinationLatLng = '[Search] Save Destination LatLng',
@@ -66,6 +68,11 @@ export class FetchAllStations implements Action {
   readonly type = SearchActionTypes.FetchAllStations;
 }
 
+export class FetchAllStationsError implements Action {
+  readonly type = SearchActionTypes.FetchAllStationsError;
+  constructor(public error: any) {}
+}
+
 export class FetchAutocompleteResults implements Action {
   readonly type = SearchActionTypes.FetchAutocompleteResults;
   constructor(public input: string) {}
@@ -79,6 +86,11 @@ export class FetchGeocodeOriginResult implements Action {
 export class FetchGeocodeDestinationResult implements Action {
   readonly type = SearchActionTypes.FetchGeocodeDestinationResult;
   constructor(public address: string) {}
+}
+
+export class GeocodeError implements Action {
+  readonly type = SearchActionTypes.GeocodeError;
+  constructor(public error: any) {}
 }
 
 export class SaveAutocompleteResults implements Action {
@@ -129,9 +141,11 @@ export type SearchActions = AutocompleteResultsError
               | ChooseOriginLocation
               | ClearAutocompleteResults
               | FetchAllStations
+              | FetchAllStationsError
               | FetchAutocompleteResults
               | FetchGeocodeOriginResult
               | FetchGeocodeDestinationResult
+              | GeocodeError
               | SaveAutocompleteResults
               | SaveOriginLatLng
               | SaveDestinationLatLng
