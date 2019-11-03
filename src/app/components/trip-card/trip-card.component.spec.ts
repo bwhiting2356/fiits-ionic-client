@@ -13,8 +13,8 @@ describe('TripCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TripCardComponent ],
-      imports: [ PipesModule ],
+      declarations: [TripCardComponent],
+      imports: [PipesModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
@@ -31,24 +31,6 @@ describe('TripCardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should calculate the total duration', () => {
-    component.trip = mockTrips[0];
-    const duration = component.totalDuration;
-    expect(duration).toBe(10763);
-  });
-
-  it('should calculate the total distance', () => {
-    component.trip = mockTrips[0];
-    const duration = component.totalDistance;
-    expect(duration).toBe(15632);
-  });
-
-  it('should calculate the total price', () => {
-    component.trip = mockTrips[0];
-    const duration = component.totalPrice;
-    expect(duration).toBe(0.3);
-  });
-
   it('should render date and departure/arrival times', () => {
     expect(fixture.debugElement.query(By.css('.date-time'))
       .nativeElement.innerText).toBe('12/18 1:00 PM - 1:01 PM');;
@@ -61,7 +43,7 @@ describe('TripCardComponent', () => {
 
   it('should render miles and minutes', () => {
     expect(fixture.debugElement.query(By.css('.miles-minutes'))
-      .nativeElement.innerText).toBe('2 mi • 2 h');
+      .nativeElement.innerText).toBe('3.0 mi • 2 hr 59 min');
   });
 
   xit('should render the trips status', () => {

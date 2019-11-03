@@ -1,3 +1,21 @@
-app-trip-info {
-    height: 400px;
+// app-trip-info {
+//     height: 400px;
+//     display: flex;
+//     height: 100%;
+//     width: 100%;
+//     flex-direction: column;
+// }
+
+#trip-info-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+
+    app-google-map {
+        width: 100%;
+        min-height: 80px;
+        height: 50%;
+        flex-grow: 1;
+    }
 }

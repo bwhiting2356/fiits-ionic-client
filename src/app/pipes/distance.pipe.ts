@@ -6,13 +6,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class DistancePipe implements PipeTransform {
 
   transform(feet: number): any {
-    const miles = Math.floor(feet / 5280);
-    if (miles < 1) {
-      return `${feet} ft`;
+    if (feet < 1000) {
+      return `${feet.toFixed(0)} ft`;
     } else {
-      return `${miles} mi`
+      return `${Number(feet / 5280).toFixed(1)} mi`;
     }
-    
   }
 
 }

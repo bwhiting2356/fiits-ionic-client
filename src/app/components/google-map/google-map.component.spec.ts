@@ -121,11 +121,20 @@ describe('GoogleMapComponent', () => {
     expect(GoogleMapsUtil.renderBicyclingPolyline).toHaveBeenCalledWith(mockPoints3, component.map);
   });
 
-  it('should not call fitBounds when initMap is called if there are no origin and destination', async () => {
+  it('should call fitBounds when initMap is called if there is a trip', async () => {
+    spyOn(component, 'fitBounds');
+    component.trip = mockTrips[0];
+    await component.initMap();
+    expect(component.fitBounds).toHaveBeenCalled();
+  });
+
+  it('should not call fitBounds when initMap is called if there are no origin, destination, or trip', async () => {
     spyOn(component, 'fitBounds');
     await component.initMap();
     expect(component.fitBounds).not.toHaveBeenCalled();
   });
+
+
 
   it('should call addMarker with the originLatLng when initMap is called', async () => {
     spyOn(component, 'addMarker');
@@ -137,6 +146,24 @@ describe('GoogleMapComponent', () => {
       latlng,
       '123 Main Street',
       'Origin',
+      false
+    );
+  });
+
+  it('should call addMarker with the trip originLatLng when initMap is called', async () => {
+    spyOn(component, 'addMarker');
+    component.trip = mockTrips[0];
+    await component.initMap();
+    expect(component.addMarker).toHaveBeenCalledWith(
+      mockTrips[0].originLatLng,
+      mockTrips[0].originAddress,
+      'Origin',
+      false
+    );
+    expect(component.addMarker).toHaveBeenCalledWith(
+      mockTrips[0].destinationLatLng,
+      mockTrips[0].destinationAddress,
+      'Destination',
       false
     );
   });
@@ -160,7 +187,10 @@ describe('GoogleMapComponent', () => {
     spyOn(component.map, 'fitBounds');
     component.fitBounds();
     const expectedBounds = new google.maps.LatLngBounds();
-    expect(component.map.fitBounds).toHaveBeenCalledWith(expectedBounds);
+    expect(component.map.fitBounds).toHaveBeenCalledWith(
+      expectedBounds,
+      { top: 10, bottom: 10, left: 10, right: 10}
+    );
   });
 
   it('should have extended the bounds with originLatLng if they are present', () => {
@@ -172,7 +202,10 @@ describe('GoogleMapComponent', () => {
     spyOn(component.map, 'fitBounds');
     component.originLatLng = new google.maps.LatLng(1, 1);
     component.fitBounds();
-    expect(component.map.fitBounds).toHaveBeenCalledWith(expectedBounds);
+    expect(component.map.fitBounds).toHaveBeenCalledWith(
+      expectedBounds,
+      { top: 10, bottom: 10, left: 10, right: 10}
+  );
   });
 
   it('should have extended the bounds with destinationLatLng if they are present', () => {
@@ -184,7 +217,10 @@ describe('GoogleMapComponent', () => {
     spyOn(component.map, 'fitBounds');
     component.destinationLatLng = new google.maps.LatLng(1, 1);
     component.fitBounds();
-    expect(component.map.fitBounds).toHaveBeenCalledWith(expectedBounds);
+    expect(component.map.fitBounds).toHaveBeenCalledWith(
+      expectedBounds,
+      { top: 10, bottom: 10, left: 10, right: 10}
+    );
   });
 
   it('should add a marker to the map', () => {
@@ -207,7 +243,7 @@ describe('GoogleMapComponent', () => {
     expect(component.initMap).toHaveBeenCalled();
   });
 
-  it('should add or remmove station markers when initMap is called', async () => {
+  it('should add or remove station markers when initMap is called', async () => {
     spyOn(component, 'addOrRemoveStationMarkers');
     await component.initMap();
     expect(component.addOrRemoveStationMarkers).toHaveBeenCalled();
@@ -230,7 +266,55 @@ describe('GoogleMapComponent', () => {
       true,
       0
     );
-    expect(component.stationMarkers).toEqual([mockMarker]);
+    expect(component.addMarker).toHaveBeenCalledWith(
+      mockStations[1].latLng,
+      mockStations[1].address,
+      'Station',
+      true,
+      1
+    );
+    expect(component.stationMarkers).toEqual([mockMarker, mockMarker]);
+  });
+
+  it('should create a new instance of a google maps map object', () => {
+    expect(component.createNewMap()).toBeTruthy();
+  });
+
+  it('should add addOrRemoveStationMarkers as an event listener to the map object\'s zoom event', async () => {
+    let storedZoomHandler;
+    const mockMap = mock<GoogleMap>();
+    mockMap.addListener = (_, callback) => {
+      storedZoomHandler = callback;
+      return mock<MapsEventListener>();
+    };
+    spyOn(component, 'createNewMap').and.returnValue(mockMap);
+    await component.initMap();
+    expect(storedZoomHandler).toEqual(component.addOrRemoveStationMarkers);
+  });
+
+  it('should not add a station marker if the location is the same as the origin or destination', () => {
+    component.map = mock<GoogleMap>();
+    component.map.getZoom = () => 15;
+    component.stations = mockStations;
+    component.originLatLng = mockStations[0].latLng;
+    spyOn(component, 'addMarker');
+
+    component.addOrRemoveStationMarkers();
+    expect(component.addMarker).toHaveBeenCalledWith(
+      mockStations[1].latLng,
+      mockStations[1].address,
+      'Station',
+      true,
+      1
+    );
+
+    expect(component.addMarker).not.toHaveBeenCalledWith(
+      mockStations[0].latLng,
+      mockStations[0].address,
+      'Station',
+      true,
+      0
+    );
   });
 
   it('should remove markers from the map if is less than 14', () => {

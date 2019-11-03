@@ -17,13 +17,14 @@ import {
   FetchAllStationsError,
   GeocodeError
 } from '../actions/search.actions';
-import { exhaustMap, map, catchError } from 'rxjs/operators';
+import { exhaustMap, map, catchError, tap } from 'rxjs/operators';
 import { AutocompleteService } from '../services/autocomplete.service';
 import { Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { GeocodeService } from '../services/geocode.service';
 import { TripService } from '../trips/trip.service';
 import { StationService } from '../services/station.service';
+import { NavController } from '@ionic/angular';
 
 @Injectable()
 export class SearchEffects {
@@ -60,6 +61,7 @@ export class SearchEffects {
     ofType(SearchActionTypes.TripSearchQuery),
     map(action => action.searchQuery),
     exhaustMap(searchQuery => this.tripService.findBestTrip(searchQuery)),
+    tap(() => this.navCtrl.navigateForward('/trip-details')),
     map(trip => new SaveTrip(trip)),
     catchError(error => of(new TripSearchQueryError(error)))
   );
@@ -77,5 +79,6 @@ export class SearchEffects {
     private geocodeService: GeocodeService,
     private tripService: TripService,
     private stationService: StationService,
-    private autocompleteService: AutocompleteService) {}
+    private autocompleteService: AutocompleteService,
+    private navCtrl: NavController) {}
 }

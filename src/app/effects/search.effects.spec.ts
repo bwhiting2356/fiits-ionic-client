@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
 import { hot, cold } from 'jasmine-marbles';
@@ -28,6 +28,7 @@ import { mockTrips } from '../../app/trips/mock-trips';
 import { mockStations } from '../../app/trips/mock-stations';
 import { SearchQuery } from '../shared/search-query';
 import { StationService } from '../services/station.service';
+import { NavController } from '@ionic/angular';
 
 describe('SearchEffects success', () => {
   let actions$: Observable<any>;
@@ -61,6 +62,12 @@ describe('SearchEffects success', () => {
           useValue: {
             fetchAllStation$: () => of(mockStations)
           }
+        },
+        {
+          provide: NavController,
+          useValue: {
+            navigateForward: () => {}
+          }
         }
       ]
     });
@@ -92,7 +99,7 @@ describe('SearchEffects success', () => {
     expect(effects.fetchGeocodeDestinationResult$).toBeObservable(expected);
   });
 
-  it('should return SaveTrip on success', () => {
+  it('should return SaveTrip on success, navigate to trip details', () => {
     const seachQuery: SearchQuery = {
       originLatLng: { lat: 1, lng: 1 },
       originAddress: '123 Main Street',
@@ -105,8 +112,31 @@ describe('SearchEffects success', () => {
     const completion = new SaveTrip(mockTrips[0]);
     actions$ = hot('--a-', { a: action });
     const expected = hot('--b', { b: completion });
+
     expect(effects.tripSearchQuery$).toBeObservable(expected);
   });
+
+  it('should return SaveTrip on success, navigate to trip details', inject(
+    [NavController, SearchEffects],
+    async (navCtrl: NavController, searchEffects: SearchEffects) => {
+        spyOn(navCtrl, 'navigateForward');
+
+        const seachQuery: SearchQuery = {
+          originLatLng: { lat: 1, lng: 1 },
+          originAddress: '123 Main Street',
+          destinationLatLng: { lat: 0, lng: 0 },
+          destinationAddress: '576 Main Street',
+          timeTarget: 'ARRIVE_BY',
+          time: new Date(),
+        };
+        const action = new TripSearchQuery(seachQuery);
+        const completion = new SaveTrip(mockTrips[0]);
+        actions$ = hot('--a-', { a: action });
+        const expected = hot('--b', { b: completion });
+
+        expect(searchEffects.tripSearchQuery$).toBeObservable(expected);
+        expect(navCtrl.navigateForward).toHaveBeenCalledWith('/trip-details');
+  }));
 
   it('should return SaveStations on success', () => {
     const action = new FetchAllStations();
@@ -152,6 +182,12 @@ describe('SearchEffects errors', () => {
           provide: StationService,
           useValue: {
             fetchAllStation$: () => errorResponse
+          }
+        },
+        {
+          provide: NavController,
+          useValue: {
+            navigateForward: () => {}
           }
         }
       ]

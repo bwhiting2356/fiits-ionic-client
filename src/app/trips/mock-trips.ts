@@ -779,7 +779,7 @@ export const mockTrips: Trip[] = [
                     lng: -74.003238,
                 }
             },
-            price: -0.45,
+            price: -4.45,
             time: '2018-12-30T21:06:29.000+0000',
             reservationType: 'DROPOFF',
         },

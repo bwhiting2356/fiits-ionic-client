@@ -24,7 +24,7 @@ export interface ReservationInfo {
     station: StationInfo;
 }
 
-export interface Trip {
+export class Trip {
     originLatLng: LatLng;
     originAddress: string;
     departureTime: string;
@@ -38,4 +38,4 @@ export interface Trip {
     destinationAddress: string;
     arrivalTime: string;
     status: string;
-  }
+}

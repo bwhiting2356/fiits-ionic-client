@@ -27,7 +27,7 @@ export class SearchPage implements OnInit {
   timeTarget: Observable<TimeTarget>;
   timeString: Observable<string>;
   stations: Observable<StationInfo[]>;
-  trip: Trip;
+  // trip: Trip;
 
   selectOptionValues: { display: string, value: TimeTarget }[] = [
     { display: 'Depart at', value: 'DEPART_AT'},

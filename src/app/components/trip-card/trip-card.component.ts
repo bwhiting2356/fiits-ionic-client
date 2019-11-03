@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Trip } from 'src/app/shared/trip.model';
+import { totalTripPrice, totalTripDuration, totalTripDistance } from 'src/app/shared/util/util';
 
 @Component({
   selector: 'app-trip-card',
@@ -14,20 +15,14 @@ export class TripCardComponent implements OnInit {
   ngOnInit() {}
 
   get totalPrice(): number {
-    return this.trip.startReservation.price
-            + this.trip.endReservation.price
-            + this.trip.rentalPrice;
+    return totalTripPrice(this.trip);
   }
 
   get totalDuration(): number {
-    return this.trip.bicyclingDirections.seconds
-            + this.trip.walking1Directions.seconds
-            + this.trip.walking2Directions.seconds;
+    return totalTripDuration(this.trip);
   }
 
   get totalDistance(): number {
-    return this.trip.walking2Directions.feet
-            + this.trip.walking1Directions.feet
-            + this.trip.bicyclingDirections.feet;
+    return totalTripDistance(this.trip);
   }
 }

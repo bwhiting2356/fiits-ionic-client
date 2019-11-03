@@ -61,12 +61,14 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     this.initMap();
   }
 
-  addOrRemoveStationMarkers() {
+  addOrRemoveStationMarkers = () => {
     if (this.stations && this.map.getZoom() >= 14) {
       this.stations.forEach((station, i) => {
         const { address, latLng } = station;
-        const marker = this.addMarker(latLng, address, 'Station', true, i);
-        this.stationMarkers.push(marker);
+        if (latLng !== this.originLatLng && latLng !== this.destinationLatLng) {
+          const marker = this.addMarker(latLng, address, 'Station', true, i);
+          this.stationMarkers.push(marker);
+        }
       });
     } else {
       this.stationMarkers.forEach(marker => marker.setMap(null));
@@ -74,9 +76,8 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     }
   }
 
-  async initMap() {
-    await this.mapsAPILoader.load();
-    this.map = new google.maps.Map(this.mapContainer.nativeElement, {
+  createNewMap() {
+    return new google.maps.Map(this.mapContainer.nativeElement, {
       zoom: this.zoom,
       maxZoom: 16,
       center: this.center || new google.maps.LatLng(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng),
@@ -93,11 +94,22 @@ export class GoogleMapComponent implements OnInit, OnChanges {
       ]
     });
 
-    if (this.originLatLng) {
-      this.addMarker(this.originLatLng, this.originAddress, 'Origin', false);
-    }
-    if (this.destinationLatLng) {
-      this.addMarker(this.destinationLatLng, this.destinationAddress, 'Destination', false);
+  }
+
+  async initMap() {
+    await this.mapsAPILoader.load();
+    this.map = this.createNewMap();
+
+    if (this.trip) {
+      this.addMarker(this.trip.originLatLng, this.trip.originAddress, 'Origin', false);
+      this.addMarker(this.trip.destinationLatLng, this.trip.destinationAddress, 'Destination', false);
+    } else {
+      if (this.originLatLng) {
+        this.addMarker(this.originLatLng, this.originAddress, 'Origin', false);
+      }
+      if (this.destinationLatLng) {
+        this.addMarker(this.destinationLatLng, this.destinationAddress, 'Destination', false);
+      }
     }
 
     this.addOrRemoveStationMarkers();
@@ -106,13 +118,13 @@ export class GoogleMapComponent implements OnInit, OnChanges {
       GoogleMapsUtil.renderWalkingPolyline(this.trip.walking1Directions.points, this.map);
       GoogleMapsUtil.renderWalkingPolyline(this.trip.walking2Directions.points, this.map);
       GoogleMapsUtil.renderBicyclingPolyline(this.trip.bicyclingDirections.points, this.map);
-
-      // TODO: add station markers?
     }
 
     if (this.originLatLng || this.destinationLatLng || this.trip) {
       this.fitBounds();
     }
+
+    this.map.addListener('zoom_changed', this.addOrRemoveStationMarkers);
   }
 
   fitBounds() {
@@ -129,7 +141,7 @@ export class GoogleMapComponent implements OnInit, OnChanges {
       this.trip.bicyclingDirections.points.forEach(point => bounds.extend(point))
     }
 
-    this.map.fitBounds(bounds);
+    this.map.fitBounds(bounds, { top: 10, bottom: 10, right: 10, left: 10 });
   }
 
   createMarker(position: LatLng, station): Marker {
@@ -156,14 +168,14 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     this.openWindow.close();
   }
 
-  createInfoWindow(address: string, description: string, station: boolean, stationIndex?: number): InfoWindow {
+    createInfoWindow(address: string, description: string, station: boolean, stationIndex?: number): InfoWindow {
     let content = `<h5>${description}:</h5><p>${address}</p>`;
 
     if (station) {
       content += `
 <ion-button expand="full" onclick="handleInfoWindowButtonClick('from', ${stationIndex})">From this station</ion-button>
 <ion-button expand="full" onclick="handleInfoWindowButtonClick('to', ${stationIndex})">To this station</ion-button>`;
-    };
+    }
     return new google.maps.InfoWindow({ content });
   }
 

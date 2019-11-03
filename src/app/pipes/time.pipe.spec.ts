@@ -6,12 +6,6 @@ describe('TimePipe', () => {
     expect(pipe).toBeTruthy();
   });
 
-  it('should display seconds if it\'s less than a minute', () => {
-    const pipe = new TimePipe();
-    const display = pipe.transform(20);
-    expect(display).toBe('20 sec');
-  })
-
   it('should display minutes if it\'s less than an hour', () => {
     const pipe = new TimePipe();
     const display = pipe.transform(300);
@@ -27,12 +21,12 @@ describe('TimePipe', () => {
   it('should display hours if it\'s more than an hour', () => {
     const pipe = new TimePipe();
     const display = pipe.transform(3600);
-    expect(display).toBe('1 h');
+    expect(display).toBe('1 hr');
   });
 
-  it('should display hours rounded down', () => {
+  it('should display hours and minutes', () => {
     const pipe = new TimePipe();
     const display = pipe.transform(3754);
-    expect(display).toBe('1 h');
+    expect(display).toBe('1 hr 3 min');
   });
 });

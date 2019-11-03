@@ -1,111 +1,93 @@
-<div class="container">
-    <!--TODO: add info button for more information about pricing -->
-  
-    <div class="trip-details top">
-      <!-- ROW -->
-      <div id="departureTime" class="time">{{ trip.departureTime | date:"h:mm a" }}</div>
-      <div id="originIcon" class="icon">
-        <img src="assets/imgs/pin.svg" alt="">
+<ion-grid>
+  <ion-row>
+    <ion-col size="3" class="no-right-padding" id="departure-time">{{ trip.departureTime | date:"h:mm a" }}</ion-col>
+    <ion-col size="1" class="center-icons"><img src="assets/imgs/pin.svg" alt=""></ion-col>
+    <ion-col size="8" class="no-right-padding bold-text" id="origin-address">{{ trip.originAddress }}</ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="3" class="no-right-padding"></ion-col>
+    <ion-col size="1" class="center-icons">
+      <div class="dot-container">
+          <img src="assets/imgs/walk-dot.svg" alt="">
+          <img src="assets/imgs/walk-dot.svg" alt="">
+          <img src="assets/imgs/walk-dot.svg" alt="">
       </div>
-      <div id="originAddress" class="address">{{ trip.origin.address }}</div>
-  
-    </div>
-  
-  
-    <div class="trip-details middle" [class.collapsed]="collapsed">
-  
-      <!-- ROW -->
-      <div id="walkingDots1" class="icon">
-        <img
-          *ngFor="let i of [1, 2, 3]"
-          src="assets/imgs/walk-dot.svg" alt="">
+    </ion-col>
+    <ion-col size="8" class="no-right-padding">
+        <ion-row class="travel-instructions">
+          <ion-col size="1"><ion-icon name="walk"></ion-icon></ion-col>
+          <ion-col>
+              <div id="walking-1-time">Walk {{ trip.walking1Directions.seconds | time }}</div>&nbsp;<div id="walking-1-distance">({{ trip.walking1Directions.feet | distance }})</div>
+          </ion-col>
+        </ion-row>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="3" class="no-right-padding" id="start-reservation-time">{{ trip.startReservation.time | date:"h:mm a" }}</ion-col>
+    <ion-col size="1" class="center-icons station-icon">
+      <img id="station-1" src="assets/imgs/station.svg" alt="">
+    </ion-col>
+    <ion-col size="5" class="no-right-padding bold-text">Bike Pickup Reservation</ion-col>
+    <ion-col size="3" class="ion-text-end" id="start-reservation-price">
+      <ion-text [color]="textColor(trip.startReservation.price  )">{{ trip.startReservation.price | currency }}</ion-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="3" class="no-right-padding"></ion-col>
+    <ion-col size="1" class="center-icons">
+      <div id="bicycling-line"></div>
+    </ion-col>
+    <ion-col size="5" class="no-right-padding">
+      <ion-row class="travel-instructions bike">
+        <ion-col size="1"><ion-icon name="bicycle"></ion-icon></ion-col>
+        <ion-col>
+            <div id="bicycling-time">Ride {{ trip.bicyclingDirections.seconds | time }}</div>&nbsp;<div id="bicycling-distance"> ({{ trip.bicyclingDirections.feet | distance }})</div>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+    <ion-col size="3" class="ion-text-end" id="rental-price">
+      <ion-text [color]="textColor(trip.rentalPrice)">{{ trip.rentalPrice | currency }}</ion-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="3" class="no-right-padding" id="end-reservation-time">{{ trip.endReservation.time | date:"h:mm a" }}</ion-col>
+    <ion-col size="1" class="center-icons station-icon">
+      <img id="station-1" src="assets/imgs/station.svg" alt="">
+    </ion-col>
+    <ion-col size="5" class="no-right-padding bold-text">Bike Dropoff Reservation</ion-col>
+    <ion-col size="3" class="ion-text-end no-left-padding" id="end-reservation-price">
+      <ion-text [color]="textColor(trip.endReservation.price)">{{ trip.endReservation.price | currency }}</ion-text>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="3" class="time-col"></ion-col>
+    <ion-col size="1" class="center-icons">
+      <div class="dot-container">
+        <img src="assets/imgs/walk-dot.svg" alt="">
+        <img src="assets/imgs/walk-dot.svg" alt="">
+        <img src="assets/imgs/walk-dot.svg" alt="">
       </div>
-  
-      <!-- ROW -->
-      <div id="walkingTravelInfo1" class="travel-info">
-        <ion-icon name="walk"></ion-icon>
-        <span>Walk {{ trip.walking1Travel.seconds | time }} ({{ trip.walking1Travel.feet | distance }})</span>
-      </div>
-  
-      <!-- ROW -->
-      <div id="reservation1Time" class="time">{{ trip.stationStart.time | date:"h:mm a" }}</div>
-      <div id="bikeReservationLine" class="icon">
-        <img id="station-1" src="assets/imgs/station.svg" alt="">
-        <!-- bicycline polyline svg -->
-        <svg id="bike-line" width="10px" height="60px" viewBox="0 0 10 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <defs>
-            <rect id="path-1" x="183" y="81" width="10" height="60" rx="1"></rect>
-          </defs>
-          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-183.000000, -81.000000)">
-            <g class="bicyclingPolyline">
-              <use fill-rule="evenodd" xlink:href="#path-1"></use>
-              <rect stroke-width="1" x="183.5" y="81.5" width="9" height="59" rx="1"></rect>
-            </g>
-          </g>
-        </svg>
-        <!-- /svg -->
-        <img id="station-2" src="assets/imgs/station.svg" alt="">
-      </div>
-      <div id="reservation1Desc" class="reservation">Bike pickup reservation</div>
-      <div id="reservation1Address" class="address">{{ trip.stationStart.address}}</div>
-      <div
-        id="reservation1Price"
-        class="price"
-        [ngClass]="{positive: trip.stationStart.price > 0}">
-        {{ trip.stationStart.price | currency:'USD' }}
-      </div>
-  
-      <!-- ROW -->
-      <div id="bikeTravelInfo" class="travel-info">
-        <ion-icon name="bicycle"></ion-icon>
-        <span>Ride {{ trip.bicyclingTravel.seconds | time }} ({{ trip.bicyclingTravel.feet | distance }})</span>
-      </div>
-      <div
-        id="bikePrice"
-        class="price"
-        [ngClass]="{positive: trip.bicyclingTravel.price > 0}">
-        {{ trip.bicyclingTravel.price | currency:'USD' }}</div>
-  
-      <!-- ROW -->
-      <div id="reservation2Time" class="time">{{ trip.stationEnd.time | date:'h:mm a'}}</div>
-      <div id="reservation2Desc" class="reservation">Bike dropoff reservation</div>
-      <div id="reservation2Address" class="address">{{ trip.stationEnd.address }}</div>
-      <div
-        id="reservation2Price"
-        class="price"
-        [ngClass]="{positive: trip.stationEnd.price > 0}">
-        {{ trip.stationEnd.price | currency:'USD' }}
-      </div>
-  
-      <!-- ROW -->
-      <div id="walkingDots2" class="icon">
-        <img
-          *ngFor="let i of [1, 2, 3]"
-          src="assets/imgs/walk-dot.svg" alt="">
-      </div>
-      <div id="walkingTravelInfo2" class="travel-info">
-        <ion-icon name="walk"></ion-icon>
-        <span>Walk {{ trip.walking2Travel.seconds | time }} ({{ trip.walking2Travel.feet  | distance }})</span>
-      </div>
-    </div>
-  
-    <div class="trip-details bottom">
-      <div id="arrivalTime" class="time">{{ trip.arrivalTime | date:'h:mm a'}}</div>
-      <div id="destinationIcon" class="icon">
-        <img src="assets/imgs/pin.svg" alt="">
-      </div>
-      <div id="destinationAddress" class="address">{{ trip.destination.address }}</div>
-      <div id="infoIcon" (click)="openInfoPopover()">
-        <ion-icon name="ios-information-circle-outline">
-        </ion-icon>
-      </div>
-    </div>
-  
-    <div class="summary">
-      <span id="travel-time">{{ trip.totalSeconds | time }}</span>
-      <span id="travel-distance">{{ trip.totalFeet | distance }}</span>
-      <span id="total-cost">
-        {{ trip.priceMessage }}: <span [ngClass]="{ positive: trip.totalPrice > 0}">{{ trip.totalPrice | currency:'USD' }}</span>
-      </span>
-    </div>
-  </div>
+    </ion-col>
+    <ion-col size="8" class="no-right-padding">
+      <ion-row class="travel-instructions">
+        <ion-col size="1"><ion-icon name="walk"></ion-icon></ion-col>
+        <ion-col>
+          <div id="walking-2-time">Walk {{ trip.walking2Directions.seconds | time }}</div>&nbsp;<div id="walking-2-distance">({{ trip.walking2Directions.feet | distance }})</div>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="3" class="no-right-padding" id="arrival-time">{{ trip.arrivalTime | date:"h:mm a" }}</ion-col>
+    <ion-col size="1" class="center-icons"><img src="assets/imgs/pin.svg" alt=""></ion-col>
+    <ion-col size="8" class="no-right-padding bold-text" id="destination-address">{{ trip.destinationAddress }}</ion-col>
+  </ion-row>
+  <ion-row id="bottom-row">
+    <ion-col size="3" class="no-right-padding" id="total-duration">{{ totalDuration | time }}</ion-col>
+    <ion-col size="1"></ion-col>
+    <ion-col size="2" class="no-right-padding" id="total-distance">{{ totalDistance | distance }}</ion-col>
+    <ion-col size="6" class="ion-text-end" id="total-price">
+      <ion-text class="bold-text">{{ priceMessage }}:</ion-text>&nbsp;
+      <ion-text [color]="textColor(totalPrice)">{{ totalPrice | currency }}</ion-text></ion-col>
+  </ion-row>
+</ion-grid>
