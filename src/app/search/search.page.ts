@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
 import { LatLng } from '../shared/latlng.model';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import {
   SetSearchAddressType,
@@ -71,7 +71,7 @@ export class SearchPage implements OnInit {
     this.showSpinner = combineLatest([
       this.searchQueryFetching,
       store.select(state => state.search.geocodeFetching),
-      store.select(state => state.search.stationsFetching)
+      store.select(state => state.search.stationsFetching),
     ]).pipe(
       map(([searchQueryFetching, geocodeFetching, stationsFetching]) => {
         return searchQueryFetching || geocodeFetching || stationsFetching;
@@ -108,7 +108,6 @@ export class SearchPage implements OnInit {
   }
 
   findBikeRentals() {
-    
     this.store.pipe(
       take(1),
       map(state => state.search),

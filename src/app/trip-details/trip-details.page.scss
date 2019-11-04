@@ -11,11 +11,13 @@
     height: 100%;
     width: 100%;
     flex-direction: column;
+    justify-content: flex-end;
 
-    app-google-map {
+    app-google-map, #placeholder {
         width: 100%;
         min-height: 80px;
         height: 50%;
         flex-grow: 1;
+        background-color: #E5E3DF;
     }
 }

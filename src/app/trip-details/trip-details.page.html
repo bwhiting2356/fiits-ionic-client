@@ -9,10 +9,16 @@
 
 <ion-content>
     <div id="trip-info-container">
+      
       <app-google-map 
+        *ngIf="showMap; else placeholder"
         [fullscreenControl]="false"
         [trip]="trip | async">
       </app-google-map>
+      <ng-template #placeholder>
+          <div id="placeholder"></div>
+      </ng-template>
+
       <app-trip-info [trip]="trip | async"></app-trip-info>
       <ion-button expand="block">
           <span>Book this trip</span>

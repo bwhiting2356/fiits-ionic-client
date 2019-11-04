@@ -13,7 +13,7 @@ import { SetSearchAddressType, ChangeTimeTarget, ChangeTime, TripSearchQuery, Fe
 import { initialSearchState } from '../reducers/search.reducer';
 import { TimeTarget } from '../shared/time-target';
 import { cold } from 'jasmine-marbles';
-import { of } from 'rxjs';
+import { of, BehaviorSubject } from 'rxjs';
 
 describe('SearchPage', () => {
   let component: SearchPage;

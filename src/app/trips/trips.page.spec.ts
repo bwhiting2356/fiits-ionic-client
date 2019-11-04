@@ -13,12 +13,14 @@ describe('TripsPage', () => {
     TestBed.configureTestingModule({
       declarations: [ TripsPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [{
-        provide: Router,
-        useValue: {
-           url: 'trips/upcoming'
+      providers: [
+        {
+          provide: Router,
+          useValue: {
+            url: 'trips/upcoming'
+          }
         }
-      }]
+      ]
     })
     .compileComponents();
   }));

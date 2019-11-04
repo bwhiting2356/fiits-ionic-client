@@ -50,6 +50,9 @@
         [originLatLng]="originLatLng | async" 
         [destinationLatLng]="destinationLatLng | async">
       </app-google-map>
+      <ng-template #placeholder>
+          <div id="placeholder"></div>
+      </ng-template>
     </div>
     <ion-button expand="block" [disabled]='rentalButtonDisabled | async' (click)="findBikeRentals()">
         <span *ngIf="!(searchQueryFetching | async); else fetching">Find bike rentals</span>
