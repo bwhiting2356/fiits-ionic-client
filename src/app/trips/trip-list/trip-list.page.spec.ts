@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 
 import { TripListPage } from './trip-list.page';
 import { Router } from '@angular/router';
-import { TripService } from '../trip.service';
+import { TripService } from '../../services/trip.service';
 import { mockTrips } from '../mock-trips';
 import { of } from 'rxjs';
 

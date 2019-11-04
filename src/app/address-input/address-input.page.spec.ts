@@ -12,7 +12,7 @@ import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-result
 import { AddressInputPage } from './address-input.page';
 import { AutocompleteService } from '../services/autocomplete.service';
 import { State } from '../reducers';
-import { initialSearchState } from '../reducers/search.reducer';
+import { initialState } from '../reducers';
 import {
   FetchAutocompleteResults,
   ChooseOriginLocation,
@@ -21,15 +21,12 @@ import {
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult
 } from '../actions/search.actions';
+import { initialSearchState } from '../reducers/search.reducer';
 
 describe('AddressInputPage', () => {
   let component: AddressInputPage;
   let fixture: ComponentFixture<AddressInputPage>;
   let store: MockStore<State>;
-
-  const initialState: State = {
-    search: initialSearchState
-  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -78,8 +75,9 @@ describe('AddressInputPage', () => {
 
   it('should render a list item for each autocomplete result', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         autocompleteResults: mockAutocompleteResults
       }
     });
@@ -90,8 +88,9 @@ describe('AddressInputPage', () => {
 
   it('should render text in each item for the main and secondary text', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         autocompleteResults: mockAutocompleteResults
       }
     });
@@ -118,8 +117,9 @@ describe('AddressInputPage', () => {
 
   it('should make showNoResults false if there are no results but is pristine', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         autocompleteResults: [],
         autocompleteDirty: false,
       }
@@ -131,8 +131,9 @@ describe('AddressInputPage', () => {
 
   it('should make showNoResults false if there are results', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         autocompleteResults: mockAutocompleteResults,
         autocompleteDirty: true,
       }
@@ -144,8 +145,9 @@ describe('AddressInputPage', () => {
 
   it('should make snowNoResults true if there are no results and is dirty', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         autocompleteResults: [],
         autocompleteDirty: true,
       }
@@ -157,8 +159,9 @@ describe('AddressInputPage', () => {
 
   it('should return the origin placeholder text', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         searchAddressType: 'Origin'
       }
     });
@@ -168,8 +171,9 @@ describe('AddressInputPage', () => {
 
   it('should dispatch actions to choose origin location, fetch geocode result, and clear autocomplete results', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         searchAddressType: 'Origin'
       }
     });
@@ -187,8 +191,9 @@ describe('AddressInputPage', () => {
 
   it('should return the destination placeholder text', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         searchAddressType: 'Destination'
       }
     });
@@ -198,8 +203,9 @@ describe('AddressInputPage', () => {
 
   it('should dispatch actions to choose destination location and clear autocomplete results', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         searchAddressType: 'Destination'
       }
     });

@@ -10,8 +10,8 @@ import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
 import { DEFAULT_LOCATION } from 'src/app/shared/constants';
 import { mockTrips } from 'src/app/trips/mock-trips';
 import { mockStations } from 'src/app/trips/mock-stations';
-import { State } from 'src/app/reducers';
-import { initialSearchState } from 'src/app/reducers/search.reducer';
+import { State } from '../../reducers';
+import { initialState } from '../../reducers';
 import {
   ChooseOriginLocation,
   ChooseDestinationLocation,
@@ -27,9 +27,9 @@ describe('GoogleMapComponent', () => {
   let fixture: ComponentFixture<GoogleMapComponent>;
   let store: MockStore<State>;
 
-  const initialState: State = {
-    search: initialSearchState
-  };
+  // const initialState: State = {
+  //   search: initialSearchState
+  // };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

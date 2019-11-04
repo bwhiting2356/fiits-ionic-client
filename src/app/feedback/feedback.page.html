@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Feedback
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <ion-textarea
+    [value]="comment | async"
+    [disabled]="feedbackPosting | async"
+    (keyup)="changeComment($event.target.value)"
+    autofocus
+    placeholder="How was your experience using the app?"
+    rows="10">
+  </ion-textarea>
+  <ion-button
+    [disabled]="disableSend | async"
+    expand="block"
+    (click)="sendFeedback()">
+    Send Feedback
+  </ion-button>
+</ion-content>

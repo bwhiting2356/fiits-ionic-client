@@ -4,12 +4,8 @@ import {
   SearchActionTypes,
   SaveAutocompleteResults,
   AutocompleteResultsError,
-  FetchAutocompleteResults,
-  FetchGeocodeOriginResult,
-  FetchGeocodeDestinationResult,
   SaveOriginLatLng,
   SaveDestinationLatLng,
-  TripSearchQuery,
   SaveTrip,
   SearchActions,
   TripSearchQueryError,
@@ -17,12 +13,12 @@ import {
   FetchAllStationsError,
   GeocodeError
 } from '../actions/search.actions';
-import { exhaustMap, map, catchError, tap, switchMap, mergeMap } from 'rxjs/operators';
+import { map, catchError, tap, switchMap } from 'rxjs/operators';
 import { AutocompleteService } from '../services/autocomplete.service';
 import { Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { GeocodeService } from '../services/geocode.service';
-import { TripService } from '../trips/trip.service';
+import { TripService } from '../services/trip.service';
 import { StationService } from '../services/station.service';
 import { NavController } from '@ionic/angular';
 

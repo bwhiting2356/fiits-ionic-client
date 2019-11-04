@@ -8,7 +8,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   { path: 'search', loadChildren: './search/search.module#SearchPageModule' },
-  { path: 'help', loadChildren: './help/help.module#HelpPageModule' },
+  { path: 'feedback', loadChildren: './feedback/feedback.module#FeedbackPageModule' },
   { path: 'trips', loadChildren: './trips/trips.module#TripsPageModule' },
   { path: 'payments', loadChildren: './payments/payments.module#PaymentsPageModule' },
   { path: 'sign-in', loadChildren: './sign-in/sign-in.module#SignInPageModule' },

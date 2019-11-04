@@ -1,8 +1,6 @@
 import { AutocompleteResult } from '../shared/maps/autocomplete-result';
-import { SearchActionTypes, SearchActions, SetSearchAddressType, SearchAddressType } from '../actions/search.actions';
+import { SearchActionTypes, SearchActions, SearchAddressType } from '../actions/search.actions';
 import { LatLng } from '../shared/latlng.model';
-import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { State } from '.';
 import { TimeTarget } from '../shared/time-target';
 import { Trip, StationInfo } from '../shared/trip.model';
 
@@ -23,7 +21,6 @@ export interface SearchState {
   stationsFetching: boolean;
   trip: Trip;
   error: any;
-  // TODO handle and test error
 }
 
 export const initialSearchState: SearchState = {
@@ -42,7 +39,7 @@ export const initialSearchState: SearchState = {
   stations: undefined,
   stationsFetching: false,
   trip: undefined,
-  error: false
+  error: undefined
 };
 
 export function searchReducer(state = initialSearchState, action: SearchActions): SearchState {

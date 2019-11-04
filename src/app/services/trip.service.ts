@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { of, Observable, throwError } from 'rxjs';
-import { map, catchError, timeout } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Trip } from '../shared/trip.model';
-import { mockTrips } from './mock-trips';
+import { mockTrips } from '../trips/mock-trips';
 import { SearchQuery } from '../shared/search-query';
 import { HttpClient } from '@angular/common/http';
 

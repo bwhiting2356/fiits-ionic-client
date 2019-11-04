@@ -18,11 +18,6 @@ export class AppComponent {
       icon: 'search'
     },
     {
-      title: 'Help',
-      url: '/help',
-      icon: 'help'
-    },
-    {
       title: 'Trips',
       url: '/trips',
       icon: 'bicycle',
@@ -36,6 +31,11 @@ export class AppComponent {
       title: 'Payments',
       url: '/payments',
       icon: 'card',
+    },
+    {
+      title: 'Feedback',
+      url: '/feedback',
+      icon: 'bulb'
     }
   ];
 

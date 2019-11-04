@@ -27,9 +27,9 @@ describe('new App', () => {
       expect(await page.getPageHeaderText('app-payments')).toBe('Payments');
     });
 
-    it('should have a title saying Help', async () => {
-      await page.navigateTo('/help');
-      expect(await page.getPageHeaderText('app-help')).toBe('Help');
+    it('should have a title saying Feedback', async () => {
+      await page.navigateTo('/feedback');
+      expect(await page.getPageHeaderText('app-feedback')).toBe('Feedback');
     });
 
     it('should have a title saying Sign In', async () => {

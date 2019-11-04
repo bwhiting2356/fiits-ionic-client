@@ -6,7 +6,7 @@ import { hot, cold } from 'jasmine-marbles';
 import { SearchEffects } from './search.effects';
 import { AutocompleteService } from '../services/autocomplete.service';
 import { GeocodeService } from '../services/geocode.service';
-import { TripService } from '../trips/trip.service';
+import { TripService } from '../services/trip.service';
 import {
   FetchAutocompleteResults,
   SaveAutocompleteResults,

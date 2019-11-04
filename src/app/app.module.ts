@@ -23,7 +23,8 @@ import { reducers, metaReducers } from './reducers';
 
 
 import { SearchEffects } from './effects/search.effects';
-import { ErrorEffects } from './effects/error.effects';
+import { ToastEffects } from './effects/toast.effects';
+import { FeedbackEffects } from './effects/feedback.effects';
 // import { environment } from '../environments/environment';
 
 @NgModule({
@@ -52,7 +53,7 @@ import { ErrorEffects } from './effects/error.effects';
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([SearchEffects, ErrorEffects]),
+    EffectsModule.forRoot([SearchEffects, ToastEffects, FeedbackEffects]),
   ],
   providers: [
     StatusBar,

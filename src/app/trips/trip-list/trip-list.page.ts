@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { TripService } from '../trip.service';
+import { TripService } from '../../services/trip.service';
 import { capitalize } from '../../shared/util/util';
 import { Observable } from 'rxjs';
 import { Trip } from 'src/app/shared/trip.model';

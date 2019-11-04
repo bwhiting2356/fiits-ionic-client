@@ -13,16 +13,18 @@ import { SetSearchAddressType, ChangeTimeTarget, ChangeTime, TripSearchQuery, Fe
 import { initialSearchState } from '../reducers/search.reducer';
 import { TimeTarget } from '../shared/time-target';
 import { cold } from 'jasmine-marbles';
-import { of, BehaviorSubject } from 'rxjs';
+import { of } from 'rxjs';
+import { initialState } from '../reducers';
 
 describe('SearchPage', () => {
   let component: SearchPage;
   let fixture: ComponentFixture<SearchPage>;
   let store: MockStore<State>;
 
-  const initialState = {
-    search: initialSearchState
-  };
+  // const initialState = {
+  //   search: initialSearchState
+  //   feedback: ini
+  // };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -61,8 +63,9 @@ describe('SearchPage', () => {
 
   it('should have the list of stations', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         stations: mockStations
       }
     });
@@ -81,8 +84,9 @@ describe('SearchPage', () => {
 
   it('should set showSpinner true if geocoding is fetching', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         geocodeFetching: true
       }
     });
@@ -93,8 +97,9 @@ describe('SearchPage', () => {
 
   it('should set showSpinner true if search query is fetching', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         searchQueryFetching: true
       }
     });
@@ -105,8 +110,9 @@ describe('SearchPage', () => {
 
   it('should show spinner over map if stations are fetching', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         stationsFetching: true
       }
     });
@@ -131,8 +137,9 @@ describe('SearchPage', () => {
 
   it('should show the spinner if geocoding is fetching', async () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         geocodeFetching: true,
       }
     });
@@ -143,8 +150,9 @@ describe('SearchPage', () => {
 
   it('should show the spinner if trip search query is fetching', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         searchQueryFetching: true,
       }
     });
@@ -156,8 +164,9 @@ describe('SearchPage', () => {
 
   it('should have rental button disabled if there is no origin', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         originLatLng: undefined,
         destinationLatLng: { lat: 1, lng: 1}
       }
@@ -169,8 +178,9 @@ describe('SearchPage', () => {
 
   it('should have rental button disabled if there is no destination', () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         originLatLng: { lat: 1, lng: 1},
         destinationLatLng: undefined
       }
@@ -182,8 +192,9 @@ describe('SearchPage', () => {
 
   it('should have rental button not disabled if there are both origin and destination, no query fetching', async () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         originLatLng: { lat: 1, lng: 1},
         destinationLatLng: { lat: 1, lng: 1},
         searchQueryFetching: false
@@ -196,8 +207,9 @@ describe('SearchPage', () => {
 
   it('should disabled the rental button if a trip search query is fetching', async () => {
     store.setState({
+      ...initialState,
       search: {
-        ...initialState.search,
+        ...initialSearchState,
         originLatLng: { lat: 1, lng: 1},
         destinationLatLng: { lat: 1, lng: 1},
         searchQueryFetching: true
@@ -230,6 +242,7 @@ describe('SearchPage', () => {
 
   it('should dispatch an action to send a trip search query', () => {
     store.setState({
+      ...initialState,
       search: {
         ...initialSearchState,
         timeTarget: 'ARRIVE_BY' as TimeTarget,
