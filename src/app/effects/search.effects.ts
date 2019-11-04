@@ -17,7 +17,7 @@ import {
   FetchAllStationsError,
   GeocodeError
 } from '../actions/search.actions';
-import { exhaustMap, map, catchError, tap } from 'rxjs/operators';
+import { exhaustMap, map, catchError, tap, switchMap, mergeMap } from 'rxjs/operators';
 import { AutocompleteService } from '../services/autocomplete.service';
 import { Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
@@ -33,45 +33,50 @@ export class SearchEffects {
   fetchAutocompleteResults$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.FetchAutocompleteResults),
     map(action => action.input),
-    exhaustMap(input => this.autocompleteService.getPlacePredictions$(input)),
-    map(autocompleteResults => new SaveAutocompleteResults(autocompleteResults)),
-    catchError(error => of(new AutocompleteResultsError(error)))
+    switchMap(input => this.autocompleteService.getPlacePredictions$(input).pipe(
+      map(autocompleteResults => new SaveAutocompleteResults(autocompleteResults)),
+      catchError(error => of(new AutocompleteResultsError(error)))
+    ))
   );
 
   @Effect()
   fetchGeocodeOriginResult$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.FetchGeocodeOriginResult),
     map(action => action.address),
-    exhaustMap(address => this.geocodeService.getLatLngFromAddress$(address)),
-    map(geocodeResult => new SaveOriginLatLng(geocodeResult)),
-    catchError(error => of(new GeocodeError(error)))
+    switchMap(address => this.geocodeService.getLatLngFromAddress$(address).pipe(
+      map(geocodeResult => new SaveOriginLatLng(geocodeResult)),
+      catchError(error => of(new GeocodeError(error)))
+    ))
   );
 
   @Effect()
   fetchGeocodeDestinationResult$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.FetchGeocodeDestinationResult),
     map(action => action.address),
-    exhaustMap(address => this.geocodeService.getLatLngFromAddress$(address)),
-    map(geocodeResult => new SaveDestinationLatLng(geocodeResult)),
-    catchError(error => of(new GeocodeError(error)))
+    switchMap(address => this.geocodeService.getLatLngFromAddress$(address).pipe(
+      map(geocodeResult => new SaveDestinationLatLng(geocodeResult)),
+      catchError(error => of(new GeocodeError(error)))
+    ))
   );
 
   @Effect()
   tripSearchQuery$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.TripSearchQuery),
     map(action => action.searchQuery),
-    exhaustMap(searchQuery => this.tripService.findBestTrip(searchQuery)),
-    tap(() => this.navCtrl.navigateForward('/trip-details')),
-    map(trip => new SaveTrip(trip)),
-    catchError(error => of(new TripSearchQueryError(error)))
+    switchMap(searchQuery => this.tripService.findBestTrip(searchQuery).pipe(
+      tap(() => this.navCtrl.navigateForward('/trip-details')),
+      map(trip => new SaveTrip(trip)),
+      catchError(error => of(new TripSearchQueryError(error)))
+    ))
   );
 
   @Effect()
   fetchAllStation$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.FetchAllStations),
-    exhaustMap(() => this.stationService.fetchAllStation$()),
-    map(stations => new SaveStations(stations)),
-    catchError(error => of(new FetchAllStationsError(error)))
+    switchMap(() => this.stationService.fetchAllStation$().pipe(
+      map(stations => new SaveStations(stations)),
+      catchError(error => of(new FetchAllStationsError(error)))
+    ))
   );
 
   constructor(

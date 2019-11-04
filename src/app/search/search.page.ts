@@ -1,14 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { State } from '../reducers';
 import { LatLng } from '../shared/latlng.model';
 import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { SetSearchAddressType, SearchAddressType, ChangeTimeTarget, ChangeTime, TripSearchQuery, FetchAllStations } from '../actions/search.actions';
+import {
+  SetSearchAddressType,
+  SearchAddressType,
+  ChangeTimeTarget,
+  ChangeTime,
+  TripSearchQuery,
+  FetchAllStations
+} from '../actions/search.actions';
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
-import { Trip, StationInfo } from '../shared/trip.model';
+import { StationInfo } from '../shared/trip.model';
 import { ToastController } from '@ionic/angular';
 
 @Component({
@@ -107,6 +114,7 @@ export class SearchPage implements OnInit {
   }
 
   findBikeRentals() {
+    
     this.store.pipe(
       take(1),
       map(state => state.search),

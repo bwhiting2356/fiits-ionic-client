@@ -33,14 +33,15 @@ describe('ErrorEffects ', () => {
             await errorEffects.presentToast('Error fetching station info');
             expect(toastController.create).toHaveBeenCalledWith({
                 message: 'Error fetching station info',
-                duration: 3000,
-                position: 'top'
+                duration: 5000,
+                position: 'bottom',
+                color: 'danger'
             });
             expect(mockToast.present).toHaveBeenCalled();
       }));
 
 
-    it('should call presentToat with the message \'Error fetching station info\'', async () => {
+    it('should call presentToast with the message \'Error fetching station info\'', async () => {
         const action = new FetchAllStationsError('oops');
         spyOn(effects, 'presentToast');
 
@@ -50,17 +51,27 @@ describe('ErrorEffects ', () => {
         expect(effects.presentToast).toHaveBeenCalledWith('Error fetching station info');
     });
 
-    it('should call presentToat with the message \'Error getting trip info\'', async () => {
+    it('should call presentToast with the specific message', async () => {
+        const action = new TripSearchQueryError({ error: { message: 'Stations too far apart' }});
+        spyOn(effects, 'presentToast');
+
+        actions$ = hot('--a-', { a: action });
+
+        expect(effects.searchQueryError$).toBeObservable(actions$);
+        expect(effects.presentToast).toHaveBeenCalledWith('Stations too far apart');
+    });
+
+    it('should call presentToast with a generic message', async () => {
         const action = new TripSearchQueryError('oops');
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
 
         expect(effects.searchQueryError$).toBeObservable(actions$);
-        expect(effects.presentToast).toHaveBeenCalledWith('Error getting trip info');
+        expect(effects.presentToast).toHaveBeenCalledWith('Error fetching trip info');
     });
 
-    it('should call presentToat with the message \'Error fetching location coordinates\'', async () => {
+    it('should call presentToast with the message \'Error fetching location coordinates\'', async () => {
         const action = new GeocodeError('oops');
         spyOn(effects, 'presentToast');
 
@@ -70,7 +81,7 @@ describe('ErrorEffects ', () => {
         expect(effects.presentToast).toHaveBeenCalledWith('Error fetching location coordinates');
     });
 
-    it('should call presentToat with the message \'Error fetching locations\'', async () => {
+    it('should call presentToast with the message \'Error fetching locations\'', async () => {
         const action = new AutocompleteResultsError('oops');
         spyOn(effects, 'presentToast');
 

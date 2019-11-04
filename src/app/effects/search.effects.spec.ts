@@ -200,7 +200,7 @@ describe('SearchEffects errors', () => {
     const action = new FetchAllStations();
     const completion = new FetchAllStationsError(error);
     actions$ = hot('--a-', { a: action });
-    const expected = cold('--(b|)', { b: completion });
+    const expected = cold('--b)', { b: completion });
     expect(effects.fetchAllStation$).toBeObservable(expected);
   });
 
@@ -208,7 +208,7 @@ describe('SearchEffects errors', () => {
     const action = new FetchGeocodeOriginResult('123 Main Street');
     const completion = new GeocodeError(error);
     actions$ = hot('--a-', { a: action });
-    const expected = cold('--(b|)', { b: completion });
+    const expected = cold('--b', { b: completion });
     expect(effects.fetchGeocodeOriginResult$).toBeObservable(expected);
   });
 
@@ -216,7 +216,7 @@ describe('SearchEffects errors', () => {
     const action = new FetchGeocodeDestinationResult('123 Main Street');
     const completion = new GeocodeError(error);
     actions$ = hot('--a-', { a: action });
-    const expected = cold('--(b|)', { b: completion });
+    const expected = cold('--b)', { b: completion });
     expect(effects.fetchGeocodeDestinationResult$).toBeObservable(expected);
   });
 
@@ -232,7 +232,7 @@ describe('SearchEffects errors', () => {
     const action = new TripSearchQuery(seachQuery);
     const completion = new TripSearchQueryError(error);
     actions$ = hot('--a-', { a: action });
-    const expected = cold('--(b|)', { b: completion });
+    const expected = cold('--b', { b: completion });
     expect(effects.tripSearchQuery$).toBeObservable(expected);
   });
 
@@ -240,7 +240,7 @@ describe('SearchEffects errors', () => {
     const action = new FetchAutocompleteResults('123 Main Street');
     const completion = new AutocompleteResultsError(error);
     actions$ = hot('--a-', { a: action });
-    const expected = cold('--(b|)', { b: completion });
+    const expected = cold('--b', { b: completion });
     expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
   });
 })
