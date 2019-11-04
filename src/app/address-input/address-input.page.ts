@@ -76,7 +76,7 @@ export class AddressInputPage {
         if (type === 'Origin') {
           this.store.dispatch(new ChooseOriginLocation(result.structured_formatting.main_text));
           this.store.dispatch(new FetchGeocodeOriginResult(result.structured_formatting.main_text));
-        } else if (type === 'Destination') {
+        } else { // (type === 'Destination')
           this.store.dispatch(new ChooseDestinationLocation(result.structured_formatting.main_text));
           this.store.dispatch(new FetchGeocodeDestinationResult(result.structured_formatting.main_text));
         }

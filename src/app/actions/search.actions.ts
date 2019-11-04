@@ -31,10 +31,6 @@ export enum SearchActionTypes {
 
 export type SearchAddressType = 'Origin' | 'Destination';
 
-export class AutocompleteDirty implements Action {
-  readonly type = SearchActionTypes.AutocompleteDirty;
-}
-
 export class AutocompleteResultsError implements Action {
   readonly type = SearchActionTypes.AutocompleteResultsError;
   constructor(public error: any) {}
@@ -134,7 +130,6 @@ export class TripSearchQueryError implements Action {
 }
 
 export type SearchActions = AutocompleteResultsError
-              | AutocompleteDirty
               | ChangeTime
               | ChangeTimeTarget
               | ChooseDestinationLocation

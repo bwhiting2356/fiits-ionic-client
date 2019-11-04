@@ -31,10 +31,8 @@ export class SearchPage implements OnInit {
   rentalButtonDisabled: Observable<boolean>;
   searchQueryFetching: Observable<boolean>;
   showSpinner: Observable<boolean>;
-  timeTarget: Observable<TimeTarget>;
   timeString: Observable<string>;
   stations: Observable<StationInfo[]>;
-  // trip: Trip;
 
   selectOptionValues: { display: string, value: TimeTarget }[] = [
     { display: 'Depart at', value: 'DEPART_AT'},
@@ -79,10 +77,6 @@ export class SearchPage implements OnInit {
         return searchQueryFetching || geocodeFetching || stationsFetching;
       })
     );
-
-    this.timeTarget = store
-      .select(state => state.search.timeTarget);
-      // TODO is nothing actually reading this value?
 
     this.timeString = store
       .select(state => state.search.time)
