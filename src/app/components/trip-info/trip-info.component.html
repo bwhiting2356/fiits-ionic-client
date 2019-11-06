@@ -27,7 +27,10 @@
     <ion-col size="1" class="center-icons station-icon">
       <img id="station-1" src="assets/imgs/station.svg" alt="">
     </ion-col>
-    <ion-col size="5" class="no-right-padding bold-text">Bike Pickup Reservation</ion-col>
+    <ion-col size="5" class="no-right-padding">
+      <ion-text class="bold-text">Pick up bike</ion-text><br>
+      <ion-text class="light-text" id="start-reservation-address">{{ trip.startReservation.station.address }}</ion-text>
+    </ion-col>
     <ion-col size="3" class="ion-text-end" id="start-reservation-price">
       <ion-text [color]="textColor(trip.startReservation.price)">{{ trip.startReservation.price | currency }}</ion-text>
     </ion-col>
@@ -54,7 +57,10 @@
     <ion-col size="1" class="center-icons station-icon">
       <img id="station-1" src="assets/imgs/station.svg" alt="">
     </ion-col>
-    <ion-col size="5" class="no-right-padding bold-text">Bike Dropoff Reservation</ion-col>
+    <ion-col size="5" class="no-right-padding">
+        <ion-text class="bold-text">Drop off bike</ion-text><br>
+        <ion-text class="light-text" id="end-reservation-address">{{ trip.endReservation.station.address }}</ion-text>
+    </ion-col>
     <ion-col size="3" class="ion-text-end no-left-padding" id="end-reservation-price">
       <ion-text [color]="textColor(trip.endReservation.price)">{{ trip.endReservation.price | currency }}</ion-text>
     </ion-col>

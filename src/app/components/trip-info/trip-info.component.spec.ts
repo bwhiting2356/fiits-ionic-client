@@ -78,6 +78,12 @@ describe('TripInfoComponent', () => {
     expect(fixture.debugElement.query(By.css('#start-reservation-price')).nativeElement.innerText).toEqual('$0.75');
   });
 
+  it('should render start reservation station address', () => {
+    component.trip = mockTrips[0];
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#start-reservation-address')).nativeElement.innerText).toEqual('867 Main Street');
+  });
+
   it('should render bicycling time', () => {
     component.trip = mockTrips[0];
     fixture.detectChanges();
@@ -120,6 +126,12 @@ describe('TripInfoComponent', () => {
     expect(fixture.debugElement.query(By.css('#end-reservation-price')).nativeElement.innerText).toEqual('-$0.45');
   });
 
+  it('should render end reservation station address', () => {
+    component.trip = mockTrips[0];
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#end-reservation-address')).nativeElement.innerText).toEqual('123 Main Street');
+  });
+
   it('should render arrival time', () => {
     component.trip = mockTrips[0];
     fixture.detectChanges();
@@ -156,7 +168,7 @@ describe('TripInfoComponent', () => {
     expect(fixture.debugElement.query(By.css('#total-price ion-text:nth-child(1)')).nativeElement.innerText).toEqual('Total earnings:');
   });
 
-  it('should return \'\success\' if the number is greater than or equal to 0', () => {
+  it('should return \'success\' if the number is greater than or equal to 0', () => {
     const colorValue = component.textColor(0.01);
     expect(colorValue).toBe('success');
   });

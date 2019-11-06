@@ -6,7 +6,7 @@ import { StationInfo } from '../shared/trip.model';
   providedIn: 'root'
 })
 export class StationService {
-  STATION_API_URL = 'http://localhost:8080/stations';
+  STATION_API_URL = 'https://fiits-backend.herokuapp.com/stations';
 
   constructor(private http: HttpClient) { }
 

@@ -150,7 +150,7 @@ describe('GoogleMapComponent', () => {
     );
   });
 
-  it('should call addMarker with the trip originLatLng when initMap is called', async () => {
+  it('should call addMarker with the trip origin, destination, start and end stations when initMap is called', async () => {
     spyOn(component, 'addMarker');
     component.trip = mockTrips[0];
     await component.initMap();
@@ -165,6 +165,18 @@ describe('GoogleMapComponent', () => {
       mockTrips[0].destinationAddress,
       'Destination',
       false
+    );
+    expect(component.addMarker).toHaveBeenCalledWith(
+      mockTrips[0].startReservation.station.latLng,
+      mockTrips[0].startReservation.station.address,
+      'Pickup Station',
+      true
+    );
+    expect(component.addMarker).toHaveBeenCalledWith(
+      mockTrips[0].endReservation.station.latLng,
+      mockTrips[0].endReservation.station.address,
+      'Dropoff Station',
+      true
     );
   });
 

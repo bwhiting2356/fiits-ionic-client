@@ -12,11 +12,11 @@
   <div id="search-container">
     <div id="search">
       <ion-item-group>
-        <ion-item button id="origin" detail (touchstart)="navigateToAddressInput('Origin')" (click)="navigateToAddressInput('Origin')">
+        <ion-item button id="origin" detail (ionFocus)="navigateToAddressInput('Origin')">
           <ion-label>Origin</ion-label>
           <ion-input readonly placeholder="Enter Origin" [value]="originAddress | async"></ion-input>
         </ion-item>
-        <ion-item button id="destination" detail (touchstart)="navigateToAddressInput('Destination')" (click)="navigateToAddressInput('Destination')">
+        <ion-item button id="destination" detail (ionFocus)="navigateToAddressInput('Destination')">
           <ion-label>Destination</ion-label>
           <ion-input readonly placeholder="Enter Destination" [value]="destinationAddress | async"></ion-input>
         </ion-item>
@@ -24,7 +24,6 @@
           <ion-select
             [value]="selectOptionValues[0]"
             (ionChange)="timeTargetChange($event)"
-
             interface="action-sheet"
             class="ion-float-left">
             <ion-select-option [value]="selectOptionValues[0]">{{ selectOptionValues[0].display }}</ion-select-option>

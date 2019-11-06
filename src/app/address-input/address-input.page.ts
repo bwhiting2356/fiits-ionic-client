@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { NavController, IonInput } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, combineLatest } from 'rxjs';
@@ -22,7 +22,7 @@ import { AutocompleteResult } from '../shared/maps/autocomplete-result';
   templateUrl: './address-input.page.html',
   styleUrls: ['./address-input.page.scss'],
 })
-export class AddressInputPage {
+export class AddressInputPage implements OnInit {
   @ViewChild('input', { static: false }) input: IonInput;
   autocompleteResults: Observable<AutocompleteResult[]>;
   autocompleteFetching: Observable<boolean>;
@@ -34,17 +34,19 @@ export class AddressInputPage {
   constructor(
     private navCtrl: NavController,
     private store: Store<State>
-  ) {
-    this.autocompleteResults = store
+  ) { }
+
+  ngOnInit() {
+    this.autocompleteResults = this.store
       .select(state => state.search.autocompleteResults);
 
-    this.autocompleteFetching = store
+    this.autocompleteFetching = this.store
       .select(state => state.search.autocompleteFetching);
 
-    this.autocompleteDirty = store
+    this.autocompleteDirty = this.store
       .select(state => state.search.autocompleteDirty);
 
-    this.searchAddressType = store
+    this.searchAddressType = this.store
       .select(state => state.search.searchAddressType);
 
     this.placeholderText = this.searchAddressType.pipe(
@@ -60,6 +62,7 @@ export class AddressInputPage {
         return results.length < 1 && !fetching && dirty;
       })
     );
+
   }
 
   ionViewDidEnter() {

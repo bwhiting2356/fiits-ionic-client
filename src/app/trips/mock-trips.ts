@@ -131,7 +131,7 @@ export const mockTrips: Trip[] = [
                 id: 1,
                 capacity: 10,
                 currentInventory: 5,
-                address: 'one',
+                address: '867 Main Street',
                 latLng: {
                     lat: 40.743647,
                     lng: -74.003238,
@@ -161,7 +161,7 @@ export const mockTrips: Trip[] = [
                 id: 1,
                 capacity: 10,
                 currentInventory: 5,
-                address: 'one',
+                address: '123 Main Street',
                 latLng: {
                     lat: 40.743647,
                     lng: -74.003238,
@@ -335,7 +335,7 @@ export const mockTrips: Trip[] = [
                 id: 1,
                 capacity: 10,
                 currentInventory: 5,
-                address: 'one',
+                address: '345 Victoria Street',
                 latLng: {
                     lat: 40.743647,
                     lng: -74.003238,
@@ -365,7 +365,7 @@ export const mockTrips: Trip[] = [
                 id: 1,
                 capacity: 10,
                 currentInventory: 5,
-                address: 'one',
+                address: '876 Main Street',
                 latLng: {
                     lat: 40.743647,
                     lng: -74.003238,
@@ -539,7 +539,7 @@ export const mockTrips: Trip[] = [
                 id: 1,
                 capacity: 10,
                 currentInventory: 5,
-                address: 'one',
+                address: '345 Victoria Street',
                 latLng: {
                     lat: 40.743647,
                     lng: -74.003238,
@@ -569,7 +569,7 @@ export const mockTrips: Trip[] = [
                 id: 1,
                 capacity: 10,
                 currentInventory: 5,
-                address: 'one',
+                address: '234 Market Street',
                 latLng: {
                     lat: 40.743647,
                     lng: -74.003238,
@@ -744,7 +744,7 @@ export const mockTrips: Trip[] = [
                 id: 1,
                 capacity: 10,
                 currentInventory: 5,
-                address: 'one',
+                address: '236 Main Street',
                 latLng: {
                     lat: 40.743647,
                     lng: -74.003238,
@@ -773,7 +773,7 @@ export const mockTrips: Trip[] = [
                 id: 1,
                 capacity: 10,
                 currentInventory: 5,
-                address: 'one',
+                address: '576 Market Street',
                 latLng: {
                     lat: 40.743647,
                     lng: -74.003238,

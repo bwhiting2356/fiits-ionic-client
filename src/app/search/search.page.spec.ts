@@ -21,11 +21,6 @@ describe('SearchPage', () => {
   let fixture: ComponentFixture<SearchPage>;
   let store: MockStore<State>;
 
-  // const initialState = {
-  //   search: initialSearchState
-  //   feedback: ini
-  // };
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ SearchPage ],
@@ -57,7 +52,6 @@ describe('SearchPage', () => {
   it('should dispatch an action to fetch all stations when the component loads', () => {
     spyOn(store, 'dispatch');
     (component as any).ngOnInit();
-
     expect(store.dispatch).toHaveBeenCalledWith(new FetchAllStations());
   });
 
@@ -79,8 +73,7 @@ describe('SearchPage', () => {
     component.showSpinner = of(true);
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('#spinner'))).toBeTruthy();
-
-  })
+  });
 
   it('should set showSpinner true if geocoding is fetching', () => {
     store.setState({
@@ -135,6 +128,48 @@ describe('SearchPage', () => {
         .toHaveBeenCalledWith(new SetSearchAddressType('Destination'));
   });
 
+  it('should call navigateToAddressInput when the origin input button is focused', () => {
+    spyOn(component, 'navigateToAddressInput');
+    fixture.debugElement.query(By.css('#origin'))
+      .listeners
+      .find(listener => listener.name === 'ionFocus')
+      .callback();
+
+    expect(component.navigateToAddressInput).toHaveBeenCalledWith('Origin');
+  });
+
+  it('should call navigateToAddressInput when the destination input button is focused', () => {
+    spyOn(component, 'navigateToAddressInput');
+    fixture.debugElement.query(By.css('#destination'))
+      .listeners
+      .find(listener => listener.name === 'ionFocus')
+      .callback();
+
+    expect(component.navigateToAddressInput).toHaveBeenCalledWith('Destination');
+  });
+
+  it('should call timeTargetChange when the time target select is changed', () => {
+    const mockEvent = { target: { value: 'ARRIVE_BY' }};
+    spyOn(component, 'timeTargetChange');
+    fixture.debugElement.query(By.css('ion-select'))
+      .listeners
+      .find(listener => listener.name === 'ionChange')
+      .callback(mockEvent);
+
+    expect(component.timeTargetChange).toHaveBeenCalledWith(mockEvent);
+  });
+
+  it('should call timeChange when the date picker is changed', () => {
+    const mockEvent = { target: { value: new Date() }};
+    spyOn(component, 'timeChange');
+    fixture.debugElement.query(By.css('ion-datetime'))
+      .listeners
+      .find(listener => listener.name === 'ionChange')
+      .callback(mockEvent);
+
+    expect(component.timeChange).toHaveBeenCalledWith(mockEvent);
+  });
+
   it('should show the spinner if geocoding is fetching', async () => {
     store.setState({
       ...initialState,
@@ -159,8 +194,7 @@ describe('SearchPage', () => {
     const expected = cold('a', { a: true } );
 
     expect(component.showSpinner).toBeObservable(expected);
-
-  })
+  });
 
   it('should have rental button disabled if there is no origin', () => {
     store.setState({
@@ -239,6 +273,8 @@ describe('SearchPage', () => {
     component.timeChange({ target: { value: timeString }});
     expect(store.dispatch).toHaveBeenCalledWith(new ChangeTime(date));
   });
+
+
 
   it('should dispatch an action to send a trip search query', () => {
     store.setState({

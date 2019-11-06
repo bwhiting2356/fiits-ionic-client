@@ -103,6 +103,14 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     if (this.trip) {
       this.addMarker(this.trip.originLatLng, this.trip.originAddress, 'Origin', false);
       this.addMarker(this.trip.destinationLatLng, this.trip.destinationAddress, 'Destination', false);
+      this.addMarker(
+        this.trip.startReservation.station.latLng, 
+        this.trip.startReservation.station.address,
+        'Pickup Station',true);
+      this.addMarker(
+        this.trip.endReservation.station.latLng,
+        this.trip.endReservation.station.address,
+        'Dropoff Station', true);
     } else {
       if (this.originLatLng) {
         this.addMarker(this.originLatLng, this.originAddress, 'Origin', false);
@@ -144,7 +152,7 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     this.map.fitBounds(bounds, { top: 10, bottom: 10, right: 10, left: 10 });
   }
 
-  createMarker(position: LatLng, station): Marker {
+  createMarker(position: LatLng, station: boolean): Marker {
     return new google.maps.Marker({
       position,
       map: this.map,
@@ -168,7 +176,7 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     this.openWindow.close();
   }
 
-    createInfoWindow(address: string, description: string, station: boolean, stationIndex?: number): InfoWindow {
+  createInfoWindow(address: string, description: string, station: boolean, stationIndex?: number): InfoWindow {
     let content = `<h5>${description}:</h5><p>${address}</p>`;
 
     if (station) {

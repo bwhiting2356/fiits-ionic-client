@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class TripService {
-  TRIP_API_URL = 'http://localhost:8080/trip';
+  TRIP_API_URL = 'https://fiits-backend.herokuapp.com/trip';
 
   constructor(private http: HttpClient) { }
 
