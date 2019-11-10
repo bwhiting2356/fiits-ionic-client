@@ -19,6 +19,7 @@ export interface SearchState {
   searchQueryFetching: boolean;
   stations: StationInfo[];
   stationsFetching: boolean;
+  bookTripFetching: boolean;
   trip: Trip;
   error: any;
 }
@@ -38,12 +39,28 @@ export const initialSearchState: SearchState = {
   searchQueryFetching: false,
   stations: undefined,
   stationsFetching: false,
+  bookTripFetching: false,
   trip: undefined,
   error: undefined
 };
 
 export function searchReducer(state = initialSearchState, action: SearchActions): SearchState {
   switch (action.type) {
+    case SearchActionTypes.BookTripRequest:
+      return {
+        ...state,
+        bookTripFetching: true
+      };
+    case SearchActionTypes.BookTripSuccess:
+      return {
+        ...initialSearchState
+      };
+    case SearchActionTypes.BookTripFailure:
+      return {
+        ...state,
+        error: action.error,
+        bookTripFetching: false
+      };
     case SearchActionTypes.ChangeTime:
       return {
         ...state,

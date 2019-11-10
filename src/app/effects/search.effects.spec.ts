@@ -21,7 +21,10 @@ import {
   FetchAllStationsError,
   TripSearchQueryError,
   GeocodeError,
-  AutocompleteResultsError
+  AutocompleteResultsError,
+  BookTripRequest,
+  BookTripSuccess,
+  BookTripFailure
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
 import { mockTrips } from '../../app/trips/mock-trips';
@@ -54,7 +57,8 @@ describe('SearchEffects success', () => {
         {
           provide: TripService,
           useValue: {
-            findBestTrip: () => of(mockTrips[0])
+            findBestTrip: () => of(mockTrips[0]),
+            bookTrip: () => of({})
           }
         },
         {
@@ -146,6 +150,17 @@ describe('SearchEffects success', () => {
     const expected = hot('--b', { b: completion });
     expect(effects.fetchAllStation$).toBeObservable(expected);
   });
+
+  it('should return success response from booking a trip', () => {
+    const action = new BookTripRequest(mockTrips[0]);
+    const completion = new BookTripSuccess();
+
+    actions$ = hot('--a-', { a: action });
+    const expected = hot('--b', { b: completion });
+    expect(effects.bookTrip$).toBeObservable(expected);
+
+
+  })
 });
 
 describe('SearchEffects errors', () => {
@@ -175,7 +190,8 @@ describe('SearchEffects errors', () => {
         {
           provide: TripService,
           useValue: {
-            findBestTrip: () => errorResponse
+            findBestTrip: () => errorResponse,
+            bookTrip: () => errorResponse
           }
         },
         {
@@ -243,4 +259,12 @@ describe('SearchEffects errors', () => {
     const expected = cold('--b', { b: completion });
     expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
   });
-})
+
+  it('should return BookTripFailure on error', () => {
+    const action = new BookTripRequest(mockTrips[0]);
+    const completion = new BookTripFailure(error);
+    actions$ = hot('--a-', { a: action });
+    const expected = cold('--b', { b: completion });
+    expect(effects.bookTrip$).toBeObservable(expected);
+  });
+});

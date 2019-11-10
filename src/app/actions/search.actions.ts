@@ -8,6 +8,9 @@ import { Trip, StationInfo } from '../shared/trip.model';
 export enum SearchActionTypes {
   AutocompleteResultsError = '[Search] Autocomplete Results Error',
   AutocompleteDirty = '[Search] Autocomplete Dirty',
+  BookTripRequest = '[Search] Book Trip Request',
+  BookTripSuccess = '[Search] Book Trip Success',
+  BookTripFailure = '[Search] Book Trip Failure',
   ChangeTime = '[Search] Change Time',
   ChangeTimeTarget = '[Search] Change Time Target',
   ChooseOriginLocation = '[Search] Choose Origin Location',
@@ -33,6 +36,20 @@ export type SearchAddressType = 'Origin' | 'Destination';
 
 export class AutocompleteResultsError implements Action {
   readonly type = SearchActionTypes.AutocompleteResultsError;
+  constructor(public error: any) {}
+}
+
+export class BookTripRequest implements Action {
+  readonly type = SearchActionTypes.BookTripRequest;
+  constructor(public trip: Trip) {}
+}
+
+export class BookTripSuccess implements Action {
+  readonly type = SearchActionTypes.BookTripSuccess;
+}
+
+export class BookTripFailure implements Action {
+  readonly type = SearchActionTypes.BookTripFailure;
   constructor(public error: any) {}
 }
 
@@ -130,6 +147,9 @@ export class TripSearchQueryError implements Action {
 }
 
 export type SearchActions = AutocompleteResultsError
+              | BookTripRequest
+              | BookTripSuccess
+              | BookTripFailure
               | ChangeTime
               | ChangeTimeTarget
               | ChooseDestinationLocation

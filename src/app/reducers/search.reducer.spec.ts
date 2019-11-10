@@ -19,13 +19,17 @@ import {
   SaveStations,
   FetchAllStations,
   FetchAllStationsError,
-  GeocodeError
+  GeocodeError,
+  BookTripRequest,
+  BookTripSuccess,
+  BookTripFailure
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
 import { mockTrips } from '../trips/mock-trips';
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
 import { StationInfo } from '../shared/trip.model';
+import { initialState } from '.';
 
 describe('Search Reducer', () => {
   describe('an unknown action', () => {
@@ -370,4 +374,50 @@ describe('Search Reducer', () => {
       error: 'oops'
     });
   });
+
+  it('should set book trip fetching to true', () => {
+    const action = new BookTripRequest(mockTrips[0]);
+
+    const result = searchReducer(initialSearchState, action);
+
+    expect(result).toEqual({
+      ...initialSearchState,
+      bookTripFetching: true
+    });
+  });
+
+  it('should set book trip fetching to false, clear the search state on success', () => {
+    const initialSearchStateWithTrip = {
+      ...initialSearchState,
+      trip: mockTrips[0],
+      bookTripFetching: true
+    };
+    const action = new BookTripSuccess();
+
+    const result = searchReducer(initialSearchStateWithTrip, action);
+
+    expect(result).toEqual({
+      ...initialSearchState
+    });
+  });
+
+  it('should set book trip fetching to false, save the error if booking fails', () => {
+    const initialSearchStateWithTrip = {
+      ...initialSearchState,
+      trip: mockTrips[0],
+      bookTripFetching: true
+    };
+
+    const action = new BookTripFailure('oops');
+
+    const result = searchReducer(initialSearchStateWithTrip, action);
+
+    expect(result).toEqual({
+      ...initialSearchState,
+      trip: mockTrips[0],
+      bookTripFetching: false,
+      error: 'oops'
+    });
+
+  })
 });

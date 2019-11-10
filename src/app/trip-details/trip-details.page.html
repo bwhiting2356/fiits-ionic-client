@@ -20,10 +20,10 @@
       </ng-template>
 
       <app-trip-info [trip]="trip | async"></app-trip-info>
-      <ion-button expand="block">
-          <span>Book this trip</span>
+      <ion-button expand="block" (click)="bookTrip()" [disabled]="bookTripFetching | async">
+          <span id="book-trip" *ngIf="!(bookTripFetching | async); else fetching">Book this trip</span>
           <ng-template #fetching>
-              <span>Booking your trip...</span>
+              <span id="book-trip-fetching">Booking your trip...</span>
           </ng-template>
       </ion-button>
     </div>

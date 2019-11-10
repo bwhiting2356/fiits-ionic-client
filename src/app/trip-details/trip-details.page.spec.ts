@@ -5,17 +5,17 @@ import { TripDetailsPage } from './trip-details.page';
 import { By } from '@angular/platform-browser';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { State } from '../reducers';
+import { initialState } from '../reducers';
 import { initialSearchState } from '../reducers/search.reducer';
 import { Store } from '@ngrx/store';
+import { cold } from 'jasmine-marbles';
+import { mockTrips } from '../trips/mock-trips';
+import { BookTripRequest } from '../actions/search.actions';
 
 describe('TripDetailPage', () => {
   let component: TripDetailsPage;
   let fixture: ComponentFixture<TripDetailsPage>;
   let store: MockStore<State>;
-
-  const initialState = {
-    search: initialSearchState
-  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -74,5 +74,111 @@ describe('TripDetailPage', () => {
     expect(fixture.debugElement
       .query(By.css('#placeholder')))
     .toBeFalsy();
+  });
+
+  it('should contain the value of bookTripFetching from state', () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        bookTripFetching: false
+      }
+    });
+    fixture.detectChanges();
+    const expected = cold('a', { a: false } );
+    expect(component.bookTripFetching).toBeObservable(expected);
+  });
+
+  it('should render \'Book this trip\' if bookTripFetching is false', async () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        bookTripFetching: false
+      }
+    });
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#book-trip')).nativeElement.innerText)
+      .toBe('Book this trip');
+    expect(fixture.debugElement.query(By.css('#book-trip-fetching')))
+      .toBeFalsy();
+  });
+
+  it('should render \'Booking your trip...\' if bookTripFetching is false', async () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        bookTripFetching: true
+      }
+    });
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#book-trip')))
+      .toBeFalsy();
+    expect(fixture.debugElement.query(By.css('#book-trip-fetching')).nativeElement.innerText)
+      .toBe('Booking your trip...');
+  });
+
+  it('should dispatch an action to book the trip', async () => {
+    spyOn(store, 'dispatch');
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        trip: mockTrips[0],
+        bookTripFetching: false
+      }
+    });
+    fixture.detectChanges();
+    component.bookTrip();
+    expect(store.dispatch).toHaveBeenCalledWith(new BookTripRequest(mockTrips[0]));
+  });
+
+  it('should not dispatch an action to book the trip if a request is already fetching', () => {
+    spyOn(store, 'dispatch');
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        bookTripFetching: true,
+        trip: mockTrips[0]
+      }
+    });
+    fixture.detectChanges();
+    component.bookTrip();
+    expect(store.dispatch).not.toHaveBeenCalled();
+  });
+
+  it('should call bookTrip when the button is clicked', () => {
+    spyOn(component, 'bookTrip');
+    const button = fixture.debugElement.query(By.css('ion-button')).nativeElement;
+    button.click();
+    expect(component.bookTrip).toHaveBeenCalled();
+  });
+
+  it('should have the button disabled if the trip booking request is fetching', () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        bookTripFetching: true
+      }
+    });
+    fixture.detectChanges();
+    const button = fixture.debugElement.query(By.css('ion-button')).nativeElement;
+    expect(button.disabled).toBeTruthy();
+  });
+
+  it('should have the button not disabled if the trip booking request is not fetching', () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        bookTripFetching: false
+      }
+    });
+    fixture.detectChanges();
+    const button = fixture.debugElement.query(By.css('ion-button')).nativeElement;
+    expect(button.disabled).toBeFalsy();
   });
 });

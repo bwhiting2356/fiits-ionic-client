@@ -49,14 +49,33 @@ describe('TripService', () => {
         time: new Date(),
       };
 
-      tripService.findBestTrip(seachQuery).subscribe(stations => {
-        expect(stations).toEqual(mockTrips[0]);
+      tripService.findBestTrip(seachQuery).subscribe(trip => {
+        expect(trip).toEqual(mockTrips[0]);
       });
 
-      const mockReq = httpMock.expectOne(tripService.TRIP_API_URL);
+      const mockReq = httpMock.expectOne(`${tripService.TRIP_API_URL}/trip`);
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
       mockReq.flush(mockTrips[0]);
+
+      httpMock.verify();
+  }));
+
+  it('should make a request to book the trip', inject(
+    [HttpTestingController, TripService],
+    (httpMock: HttpTestingController, tripService: TripService) => {
+      const trip = mockTrips[0];
+
+      tripService.bookTrip(trip).subscribe(result => {
+        expect(result).toEqual({});
+        // TODO: what is the response?
+      });
+
+      const mockReq = httpMock.expectOne(`${tripService.TRIP_API_URL}/book-trip`);
+      expect(mockReq.cancelled).toBeFalsy();
+      expect(mockReq.request.responseType).toEqual('json');
+      mockReq.flush({});
+      // TODO: what is the response?
 
       httpMock.verify();
   }));

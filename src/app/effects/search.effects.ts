@@ -11,7 +11,9 @@ import {
   TripSearchQueryError,
   SaveStations,
   FetchAllStationsError,
-  GeocodeError
+  GeocodeError,
+  BookTripSuccess,
+  BookTripFailure
 } from '../actions/search.actions';
 import { map, catchError, tap, switchMap } from 'rxjs/operators';
 import { AutocompleteService } from '../services/autocomplete.service';
@@ -72,6 +74,15 @@ export class SearchEffects {
     switchMap(() => this.stationService.fetchAllStation$().pipe(
       map(stations => new SaveStations(stations)),
       catchError(error => of(new FetchAllStationsError(error)))
+    ))
+  );
+
+  @Effect()
+  bookTrip$: Observable<Action> = this.actions$.pipe(
+    ofType(SearchActionTypes.BookTripRequest),
+    switchMap(action => this.tripService.bookTrip(action.trip).pipe(
+      map(() => new BookTripSuccess()),
+      catchError(error => of(new BookTripFailure(error)))
     ))
   );
 

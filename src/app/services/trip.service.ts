@@ -10,12 +10,16 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class TripService {
-  TRIP_API_URL = 'https://fiits-backend.herokuapp.com/trip';
+  TRIP_API_URL = 'https://fiits-backend.herokuapp.com';
 
   constructor(private http: HttpClient) { }
 
   findBestTrip(searchQuery: SearchQuery): Observable<Trip> {
-    return this.http.post<Trip>(this.TRIP_API_URL, searchQuery);
+    return this.http.post<Trip>(`${this.TRIP_API_URL}/trip`, searchQuery);
+  }
+
+  bookTrip(trip: Trip) {
+    return this.http.post(`${this.TRIP_API_URL}/book-trip`, trip);
   }
 
   getTrips(): Observable<Trip[]> {
