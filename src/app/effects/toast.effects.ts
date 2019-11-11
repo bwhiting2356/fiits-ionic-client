@@ -43,6 +43,20 @@ export class ToastEffects {
     );
 
     @Effect({ dispatch: false })
+    bookTripError$: Observable<any> = this.actions$.pipe(
+        ofType(SearchActionTypes.BookTripFailure),
+        tap(action => this.presentToast(
+            action.error.error ? action.error.error.message : 'Error booking trip',
+            'danger'))
+    );
+
+    @Effect({ dispatch: false })
+    bookTripSuccess$: Observable<any> = this.actions$.pipe(
+        ofType(SearchActionTypes.BookTripSuccess),
+        tap(_ => this.presentToast('Trip booked successfully!', 'success'))
+    );
+
+    @Effect({ dispatch: false })
     feedbackSuccess$: Observable<any> = this.actions$.pipe(
         ofType(FeedbackActionTypes.FeedbackSuccess),
         tap(_ => this.presentToast('Feedback sent successfully!', 'success'))

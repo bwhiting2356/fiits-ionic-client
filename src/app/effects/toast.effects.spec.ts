@@ -4,7 +4,7 @@ import { TestBed, inject } from '@angular/core/testing';
 import { ToastController } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { hot } from 'jasmine-marbles';
-import { FetchAllStationsError, TripSearchQueryError, GeocodeError, AutocompleteResultsError } from '../actions/search.actions';
+import { FetchAllStationsError, TripSearchQueryError, GeocodeError, AutocompleteResultsError, BookTripSuccess } from '../actions/search.actions';
 import { FeedbackError, FeedbackSuccess } from '../actions/feedback.actions';
 
 describe('Toast Effects ', () => {
@@ -111,4 +111,15 @@ describe('Toast Effects ', () => {
         expect(effects.feedbackSuccess$).toBeObservable(actions$);
         expect(effects.presentToast).toHaveBeenCalledWith('Feedback sent successfully!', 'success');
     });
+
+    it('shoudl call presentToast with the message \'Trip booked successfully!\'', async () => {
+        const action = new BookTripSuccess();
+        spyOn(effects, 'presentToast');
+
+        actions$ = hot('--a-', { a: action });
+
+        expect(effects.bookTripSuccess$).toBeObservable(actions$);
+        expect(effects.presentToast).toHaveBeenCalledWith('Trip booked successfully!', 'success');
+
+    })
 });
