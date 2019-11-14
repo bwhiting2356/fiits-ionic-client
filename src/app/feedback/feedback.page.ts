@@ -15,7 +15,6 @@ export class FeedbackPage {
   disableSend: Observable<boolean>;
   feedbackPosting: Observable<boolean>;
   comment: Observable<string>;
-  // comment$ = new BehaviorSubject('');
 
   constructor(private store: Store<State>) {
     this.feedbackPosting = store.select(state => state.feedback.feedbackPosting);
