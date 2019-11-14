@@ -180,7 +180,6 @@ describe('SearchEffects success', () => {
     actions$ = hot('a', { a: action });
     effects.geolocation$.subscribe(completionAction => {
       expect(completionAction).toEqual(completion);
-      // done();
     });
   });
 });
