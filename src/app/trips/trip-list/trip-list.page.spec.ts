@@ -55,7 +55,7 @@ describe('TripListPage trip list', () => {
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('ion-text'))).toBeFalsy();
     expect(fixture.debugElement.queryAll(By.css('app-trip-card')).length).toBe(4);
-  })
+  });
 });
 
 describe('TripListPage no trips', () => {
@@ -94,5 +94,5 @@ describe('TripListPage no trips', () => {
   it('should render "no trips" if no trips are provided', () => {
     expect(fixture.debugElement.query(By.css('ion-text')).nativeElement.innerText).toBe('No trips');
     expect(fixture.debugElement.queryAll(By.css('app-trip-card')).length).toBe(0);
-  })
+  });
 });

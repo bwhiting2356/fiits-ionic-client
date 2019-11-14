@@ -25,7 +25,7 @@ describe('TripService', () => {
     const filteredTrips = service.getFilteredTrips('Past', mockCurrentDate);
     const expected = hot('(a|)', { a: mockTrips.slice(0, 1) } );
     expect(filteredTrips).toBeObservable(expected);
-  })
+  });
 
   it('should filter the trips, only include upcoming', async () => {
     const service: TripService = TestBed.get(TripService);

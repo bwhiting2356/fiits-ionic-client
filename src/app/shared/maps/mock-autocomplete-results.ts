@@ -13,4 +13,4 @@ export const mockAutocompleteResults: AutocompleteResult[] = [
         secondary_text: 'East 31st Street, Oakland, CA, USA'
       }
     },
-  ]
+  ];

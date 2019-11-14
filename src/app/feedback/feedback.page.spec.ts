@@ -139,7 +139,7 @@ describe('FeedbackPage', () => {
   });
 
   it('should dispatch ChangeComment when changeComment is called', () => {
-    spyOn(store, 'dispatch')
+    spyOn(store, 'dispatch');
     component.changeComment('cool app');
     expect(store.dispatch).toHaveBeenCalledWith(new ChangeComment('cool app'));
   });
