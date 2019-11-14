@@ -12,8 +12,6 @@ export class GeolocationService {
   getCurrentPosition(): Promise<LatLng> {
     return new Promise(resolve => {
       navigator.geolocation.getCurrentPosition(position => {
-        console.log(`position ${position}`);
-        console.log(position);
         resolve({ lat: position.coords.latitude, lng: position.coords.longitude });
       });
     });
