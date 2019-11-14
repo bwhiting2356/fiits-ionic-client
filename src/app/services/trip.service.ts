@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Trip } from '../shared/trip.model';
-import { mockTrips } from '../trips/mock-trips';
 import { SearchQuery } from '../shared/search-query';
 import { HttpClient } from '@angular/common/http';
+import { mockTrips } from 'src/testing/mock-trips';
 
 @Injectable({
   providedIn: 'root'

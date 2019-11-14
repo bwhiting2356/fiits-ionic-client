@@ -22,14 +22,16 @@ import {
   GeocodeError,
   BookTripRequest,
   BookTripSuccess,
-  BookTripFailure
+  BookTripFailure,
+  GeolocationChanged
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
-import { mockTrips } from '../trips/mock-trips';
+import { mockTrips } from '../../testing/mock-trips';
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
 import { StationInfo } from '../shared/trip.model';
 import { initialState } from '.';
+import { mockPosition } from 'src/testing/mock-position';
 
 describe('Search Reducer', () => {
   describe('an unknown action', () => {
@@ -419,5 +421,16 @@ describe('Search Reducer', () => {
       error: 'oops'
     });
 
-  })
+  });
+
+  it('should add the position to state', () => {
+    const action = new GeolocationChanged({ lat: 0, lng: 0});
+
+    const result = searchReducer(initialSearchState, action);
+
+    expect(result).toEqual({
+      ...initialSearchState,
+      position: { lat: 0, lng: 0}
+    });
+  });
 });

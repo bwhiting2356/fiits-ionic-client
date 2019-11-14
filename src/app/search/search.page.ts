@@ -11,7 +11,8 @@ import {
   ChangeTimeTarget,
   ChangeTime,
   TripSearchQuery,
-  FetchAllStations
+  FetchAllStations,
+  FetchGeolocation
 } from '../actions/search.actions';
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
@@ -33,6 +34,7 @@ export class SearchPage implements OnInit {
   showSpinner: Observable<boolean>;
   timeString: Observable<string>;
   stations: Observable<StationInfo[]>;
+  position: Observable<LatLng>;
 
   selectOptionValues: { display: string, value: TimeTarget }[] = [
     { display: 'Depart at', value: 'DEPART_AT'},
@@ -86,10 +88,14 @@ export class SearchPage implements OnInit {
 
     this.stations = store
         .select(state => state.search.stations);
+
+    this.position = store
+        .select(state => state.search.position);
   }
 
   async ngOnInit() {
     this.store.dispatch(new FetchAllStations());
+    this.store.dispatch(new FetchGeolocation());
   }
 
   // TODO: set minimum date to now, acounting for timezone?

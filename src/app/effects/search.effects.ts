@@ -13,7 +13,9 @@ import {
   FetchAllStationsError,
   GeocodeError,
   BookTripSuccess,
-  BookTripFailure
+  BookTripFailure,
+  GeolocationChanged,
+  GeolocationError
 } from '../actions/search.actions';
 import { map, catchError, tap, switchMap } from 'rxjs/operators';
 import { AutocompleteService } from '../services/autocomplete.service';
@@ -23,6 +25,7 @@ import { GeocodeService } from '../services/geocode.service';
 import { TripService } from '../services/trip.service';
 import { StationService } from '../services/station.service';
 import { NavController } from '@ionic/angular';
+import { GeolocationService } from '../services/geolocation.service';
 
 @Injectable()
 export class SearchEffects {
@@ -86,9 +89,19 @@ export class SearchEffects {
     ))
   );
 
+  @Effect()
+  geolocation$: Observable<Action> = this.actions$.pipe(
+    ofType(SearchActionTypes.FetchGeolocation),
+    switchMap(() => this.geolocationService.getCurrentPosition$().pipe(
+      map(position => new GeolocationChanged(position)),
+      catchError(error => of(new GeolocationError(error)))
+    ))
+  );
+
   constructor(
     private actions$: Actions<SearchActions>,
     private geocodeService: GeocodeService,
+    private geolocationService: GeolocationService,
     private tripService: TripService,
     private stationService: StationService,
     private autocompleteService: AutocompleteService,

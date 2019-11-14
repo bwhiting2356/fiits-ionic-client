@@ -4,7 +4,7 @@ import { TestBed, inject } from '@angular/core/testing';
 import { ToastController } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { hot } from 'jasmine-marbles';
-import { FetchAllStationsError, TripSearchQueryError, GeocodeError, AutocompleteResultsError, BookTripSuccess } from '../actions/search.actions';
+import { FetchAllStationsError, TripSearchQueryError, GeocodeError, AutocompleteResultsError, BookTripSuccess, BookTripFailure } from '../actions/search.actions';
 import { FeedbackError, FeedbackSuccess } from '../actions/feedback.actions';
 
 describe('Toast Effects ', () => {
@@ -50,6 +50,26 @@ describe('Toast Effects ', () => {
 
         expect(effects.fetchingStationError$).toBeObservable(actions$);
         expect(effects.presentToast).toHaveBeenCalledWith('Error fetching station info', 'danger');
+    });
+
+    it('should call presentToast with the message \'Error booking trip\'', async () => {
+        const action = new BookTripFailure('oops');
+        spyOn(effects, 'presentToast');
+
+        actions$ = hot('--a-', { a: action });
+
+        expect(effects.bookTripError$).toBeObservable(actions$);
+        expect(effects.presentToast).toHaveBeenCalledWith('Error booking trip', 'danger');
+    });
+
+    it('should call presentToast with the message \'Custom error message\'', async () => {
+        const action = new BookTripFailure({ error: { message: 'Custom error message' }});
+        spyOn(effects, 'presentToast');
+
+        actions$ = hot('--a-', { a: action });
+
+        expect(effects.bookTripError$).toBeObservable(actions$);
+        expect(effects.presentToast).toHaveBeenCalledWith('Custom error message', 'danger');
     });
 
     it('should call presentToast with the specific message', async () => {

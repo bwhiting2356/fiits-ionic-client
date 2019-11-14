@@ -3,7 +3,8 @@ import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { StationService } from './station.service';
-import { mockStations } from '../trips/mock-stations';
+import { mockStations } from 'src/testing/mock-stations';
+
 
 describe('StationService', () => {
 

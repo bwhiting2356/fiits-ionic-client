@@ -6,8 +6,9 @@ import { By } from '@angular/platform-browser';
 import { TripListPage } from './trip-list.page';
 import { Router } from '@angular/router';
 import { TripService } from '../../services/trip.service';
-import { mockTrips } from '../mock-trips';
+
 import { of } from 'rxjs';
+import { mockTrips } from 'src/testing/mock-trips';
 
 describe('TripListPage trip list', () => {
   let component: TripListPage;

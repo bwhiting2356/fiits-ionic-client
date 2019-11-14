@@ -1,5 +1,5 @@
 import { capitalize, totalTripDuration, totalTripDistance, totalTripPrice } from './util';
-import { mockTrips } from 'src/app/trips/mock-trips';
+import { mockTrips } from 'src/testing/mock-trips';
 
 describe('util', () => {
     it('should capitalize the word', () => {

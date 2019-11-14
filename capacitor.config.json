@@ -1,0 +1,8 @@
+{
+  "appId": "bike.fiits",
+  "appName": "fiits",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}

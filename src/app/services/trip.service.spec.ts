@@ -1,11 +1,11 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { mockTrips } from '../trips/mock-trips';
 
 import { TripService } from './trip.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { hot } from 'jasmine-marbles';
 import { SearchQuery } from '../shared/search-query';
+import { mockTrips } from 'src/testing/mock-trips';
 
 describe('TripService', () => {
   beforeEach(() => TestBed.configureTestingModule({

@@ -1,4 +1,4 @@
-import { Trip } from '../shared/trip.model';
+import { Trip } from 'src/app/shared/trip.model';
 
 export const mockTrips: Trip[] = [
     {

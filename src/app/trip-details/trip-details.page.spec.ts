@@ -9,8 +9,9 @@ import { initialState } from '../reducers';
 import { initialSearchState } from '../reducers/search.reducer';
 import { Store } from '@ngrx/store';
 import { cold } from 'jasmine-marbles';
-import { mockTrips } from '../trips/mock-trips';
+
 import { BookTripRequest } from '../actions/search.actions';
+import { mockTrips } from 'src/testing/mock-trips';
 
 describe('TripDetailPage', () => {
   let component: TripDetailsPage;

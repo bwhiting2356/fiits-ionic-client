@@ -8,8 +8,6 @@ import { mock } from 'ts-mockito';
 
 import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
 import { DEFAULT_LOCATION } from 'src/app/shared/constants';
-import { mockTrips } from 'src/app/trips/mock-trips';
-import { mockStations } from 'src/app/trips/mock-stations';
 import { State } from '../../reducers';
 import { initialState } from '../../reducers';
 import {
@@ -20,16 +18,14 @@ import {
 } from 'src/app/actions/search.actions';
 
 import { GoogleMapComponent } from './google-map.component';
+import { mockTrips } from 'src/testing/mock-trips';
+import { mockStations } from 'src/testing/mock-stations';
 declare var google;
 
 describe('GoogleMapComponent', () => {
   let component: GoogleMapComponent;
   let fixture: ComponentFixture<GoogleMapComponent>;
   let store: MockStore<State>;
-
-  // const initialState: State = {
-  //   search: initialSearchState
-  // };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -63,11 +59,6 @@ describe('GoogleMapComponent', () => {
     spyOn((component as any).mapsAPILoader, 'load');
     await component.initMap();
     expect((component as any).mapsAPILoader.load).toHaveBeenCalled();
-  });
-  it('sould initialize the map with the default location if none is provided', async () => {
-    await component.initMap();
-    expect(component.map.getCenter().lat()).toBeCloseTo(DEFAULT_LOCATION.lat, 8);
-    expect(component.map.getCenter().lng()).toBeCloseTo(DEFAULT_LOCATION.lng, 8);
   });
 
   it('sould initialize the map with the center latlng', async () => {

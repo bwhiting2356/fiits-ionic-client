@@ -5,16 +5,17 @@ import { SearchPage } from './search.page';
 import { Router } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
-import { mockStations } from '../../app/trips/mock-stations';
+
 import { State } from '../reducers';
 import { By } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
-import { SetSearchAddressType, ChangeTimeTarget, ChangeTime, TripSearchQuery, FetchAllStations } from '../actions/search.actions';
+import { SetSearchAddressType, ChangeTimeTarget, ChangeTime, TripSearchQuery, FetchAllStations, FetchGeolocation } from '../actions/search.actions';
 import { initialSearchState } from '../reducers/search.reducer';
 import { TimeTarget } from '../shared/time-target';
 import { cold } from 'jasmine-marbles';
 import { of } from 'rxjs';
 import { initialState } from '../reducers';
+import { mockStations } from 'src/testing/mock-stations';
 
 describe('SearchPage', () => {
   let component: SearchPage;
@@ -53,6 +54,12 @@ describe('SearchPage', () => {
     spyOn(store, 'dispatch');
     (component as any).ngOnInit();
     expect(store.dispatch).toHaveBeenCalledWith(new FetchAllStations());
+  });
+
+  it('should dispatch an action to fetch geolocation when the component loads', () => {
+    spyOn(store, 'dispatch');
+    (component as any).ngOnInit();
+    expect(store.dispatch).toHaveBeenCalledWith(new FetchGeolocation());
   });
 
   it('should have the list of stations', () => {
@@ -274,7 +281,18 @@ describe('SearchPage', () => {
     expect(store.dispatch).toHaveBeenCalledWith(new ChangeTime(date));
   });
 
-
+  it('should get the position from state', () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        position: { lat: 0, lng: 0 }
+      }
+    });
+    fixture.detectChanges();
+    const expected = cold('a', { a: { lat: 0, lng: 0 } } );
+    expect(component.position).toBeObservable(expected);
+  });
 
   it('should dispatch an action to send a trip search query', () => {
     store.setState({
