@@ -9,7 +9,7 @@
 
 <ion-content>
   <ion-item>
-    <ion-input #input id="address-input" autofocus [placeholder]="placeholderText | async" (input)="inputChange($event)"></ion-input>
+    <ion-input #input id="address-input" [placeholder]="placeholderText | async" (input)="inputChange($event)"></ion-input>
   </ion-item>
   <ion-item id="fetching" *ngIf="(autocompleteFetching | async)">Fetching results...</ion-item>
   <ion-item id="no-results" *ngIf="(showNoResults | async)">No addresses found for this search</ion-item>
