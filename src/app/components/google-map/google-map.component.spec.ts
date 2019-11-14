@@ -186,7 +186,7 @@ describe('GoogleMapComponent', () => {
   });
 
   it('should call fitBounds on the map with the bounds object', () => {
-    component.map = mock<GoogleMap>(); ;
+    component.map = mock<GoogleMap>();
     spyOn(component.map, 'fitBounds');
     component.fitBounds();
     const expectedBounds = new google.maps.LatLngBounds();
@@ -250,7 +250,7 @@ describe('GoogleMapComponent', () => {
     spyOn(component, 'addOrRemoveStationMarkers');
     await component.initMap();
     expect(component.addOrRemoveStationMarkers).toHaveBeenCalled();
-  })
+  });
 
   it('should add markers to the map for each station if zoom is greater than or equal to 14', () => {
     component.stations = mockStations;
@@ -416,7 +416,7 @@ describe('GoogleMapComponent', () => {
   });
 
   it('should create a new info window an open it when the marker is clicked', () => {
-    const mockMap = mock<GoogleMap>()
+    const mockMap = mock<GoogleMap>();
     component.map = mockMap;
     const mockMarker = mock<Marker>();
     const mockInfoWindow = mock<InfoWindow>();
@@ -436,5 +436,5 @@ describe('GoogleMapComponent', () => {
   it('should add the handleInfoWindowButtonClick function to the window object on init', () => {
     component.ngOnInit();
     expect((window as any).handleInfoWindowButtonClick).toEqual(component.handleInfoWindowButtonClick);
-  })
+  });
 });

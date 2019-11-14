@@ -25,4 +25,4 @@ describe('util', () => {
         const price = totalTripPrice(trip);
         expect(price).toBe(0.3);
     });
-})
+});

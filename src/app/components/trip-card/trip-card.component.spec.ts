@@ -33,7 +33,7 @@ describe('TripCardComponent', () => {
 
   it('should render date and departure/arrival times', () => {
     expect(fixture.debugElement.query(By.css('.date-time'))
-      .nativeElement.innerText).toBe('12/18 1:00 PM - 1:01 PM');;
+      .nativeElement.innerText).toBe('12/18 1:00 PM - 1:01 PM');
   });
 
   it('should render the total price', () => {

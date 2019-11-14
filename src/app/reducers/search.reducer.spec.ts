@@ -54,7 +54,7 @@ describe('Search Reducer', () => {
         ...initialSearchState,
         originAddress: 'Oyster Point'
       });
-    })
+    });
 
     it('should set the destination location', () => {
       const action = new ChooseDestinationLocation(mockAutocompleteResults[1].structured_formatting.main_text);
@@ -87,7 +87,7 @@ describe('Search Reducer', () => {
         ...initialSearchState,
         searchAddressType: 'Destination'
       });
-    })
+    });
 
     it('should save the autocomplete results', () => {
       const initialStateWithFetching = {

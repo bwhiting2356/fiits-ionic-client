@@ -4,5 +4,5 @@ export interface GeocodingResult {
             lat(): number,
             lng(): number
         };
-    }
+    };
 }
