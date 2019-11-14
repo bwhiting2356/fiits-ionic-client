@@ -9,7 +9,6 @@ before_script:
 before_install:
   - export TZ=America/Los_Angeles
 script:
-  - date
   - npm install
   - npm run lint
   - npm run test-headless
