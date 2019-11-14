@@ -1,4 +1,4 @@
-import { StationInfo } from '../shared/trip.model';
+import { StationInfo } from '../app/shared/trip.model';
 
 export const mockStations: StationInfo[] = [
     {

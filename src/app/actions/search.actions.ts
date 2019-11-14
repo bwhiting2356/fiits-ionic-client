@@ -19,9 +19,12 @@ export enum SearchActionTypes {
   FetchAllStations = '[Search] Fetch All Stations',
   FetchAllStationsError = '[Search] Fetch All Stations Error',
   FetchAutocompleteResults = '[Search] Fetch Autocomplete Results',
-  FetchGeocodeOriginResult = '[Seach] Fetch Geocode Origin Result',
-  FetchGeocodeDestinationResult = '[Seach] Fetch Geocode Destination Result',
+  FetchGeocodeOriginResult = '[Search] Fetch Geocode Origin Result',
+  FetchGeocodeDestinationResult = '[Search] Fetch Geocode Destination Result',
+  FetchGeolocation = '[Search] Fetch Geolocation',
   GeocodeError = '[Search] Geocode Error',
+  GeolocationChanged = '[Search] Geolocation Changed',
+  GeolocationError = '[Search] Geolocation Error',
   SaveAutocompleteResults = '[Search] Save Autocomplete Results',
   SaveOriginLatLng = '[Search] Save Origin LatLng',
   SaveDestinationLatLng = '[Search] Save Destination LatLng',
@@ -101,8 +104,22 @@ export class FetchGeocodeDestinationResult implements Action {
   constructor(public address: string) {}
 }
 
+export class FetchGeolocation implements Action {
+  readonly type = SearchActionTypes.FetchGeolocation;
+}
+
 export class GeocodeError implements Action {
   readonly type = SearchActionTypes.GeocodeError;
+  constructor(public error: any) {}
+}
+
+export class GeolocationChanged implements Action {
+  readonly type = SearchActionTypes.GeolocationChanged;
+  constructor(public position: LatLng) {}
+}
+
+export class GeolocationError implements Action {
+  readonly type = SearchActionTypes.GeolocationError;
   constructor(public error: any) {}
 }
 
@@ -160,7 +177,9 @@ export type SearchActions = AutocompleteResultsError
               | FetchAutocompleteResults
               | FetchGeocodeOriginResult
               | FetchGeocodeDestinationResult
+              | FetchGeolocation
               | GeocodeError
+              | GeolocationChanged
               | SaveAutocompleteResults
               | SaveOriginLatLng
               | SaveDestinationLatLng

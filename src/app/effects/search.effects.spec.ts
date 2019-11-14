@@ -24,18 +24,25 @@ import {
   AutocompleteResultsError,
   BookTripRequest,
   BookTripSuccess,
-  BookTripFailure
+  BookTripFailure,
+  FetchGeolocation,
+  GeolocationChanged,
+  GeolocationError
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
-import { mockTrips } from '../../app/trips/mock-trips';
-import { mockStations } from '../../app/trips/mock-stations';
+
 import { SearchQuery } from '../shared/search-query';
 import { StationService } from '../services/station.service';
 import { NavController } from '@ionic/angular';
+import { mock } from 'ts-mockito';
+import { GeolocationService } from '../services/geolocation.service';
+import { mockTrips } from 'src/testing/mock-trips';
+import { mockStations } from 'src/testing/mock-stations';
 
 describe('SearchEffects success', () => {
   let actions$: Observable<any>;
   let effects: SearchEffects;
+  const mockPosition = mock<Position>();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -52,6 +59,12 @@ describe('SearchEffects success', () => {
           provide: GeocodeService,
           useValue: {
             getLatLngFromAddress$: () => of({ lat: 0, lng: 0})
+          }
+        },
+        {
+          provide: GeolocationService,
+          useValue: {
+            getCurrentPosition$: () => of({ lat: 0, lng: 0 })
           }
         },
         {
@@ -158,9 +171,17 @@ describe('SearchEffects success', () => {
     actions$ = hot('--a-', { a: action });
     const expected = hot('--b', { b: completion });
     expect(effects.bookTrip$).toBeObservable(expected);
+  });
 
+  it('should return GeolocationChanged on success', async () => {
+    const action = new FetchGeolocation();
+    const completion = new GeolocationChanged({ lat: 0, lng: 0 });
 
-  })
+    actions$ = hot('a', { a: action });
+    effects.geolocation$.subscribe(completionAction => {
+      expect(completionAction).toEqual(completion);
+    });
+  });
 });
 
 describe('SearchEffects errors', () => {
@@ -188,6 +209,12 @@ describe('SearchEffects errors', () => {
           }
         },
         {
+          provide: GeolocationService,
+          useValue: {
+            getCurrentPosition$: () => errorResponse
+          }
+        },
+        {
           provide: TripService,
           useValue: {
             findBestTrip: () => errorResponse,
@@ -205,7 +232,7 @@ describe('SearchEffects errors', () => {
           useValue: {
             navigateForward: () => {}
           }
-        }
+        },
       ]
     });
 
@@ -266,5 +293,14 @@ describe('SearchEffects errors', () => {
     actions$ = hot('--a-', { a: action });
     const expected = cold('--b', { b: completion });
     expect(effects.bookTrip$).toBeObservable(expected);
+  });
+
+  it('should return GeolocationError on error', () => {
+    const action = new FetchGeolocation();
+    const completion = new GeolocationError(error);
+
+    actions$ = cold('--a-', { a: action });
+    const expected = cold('--b', { b: completion });
+    expect(effects.geolocation$).toBeObservable(expected);
   });
 });

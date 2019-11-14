@@ -45,6 +45,7 @@
       </div>
       <app-google-map id="map"
         id="map"
+        [center]="position | async"
         [stations]="stations | async"
         [originLatLng]="originLatLng | async" 
         [destinationLatLng]="destinationLatLng | async">

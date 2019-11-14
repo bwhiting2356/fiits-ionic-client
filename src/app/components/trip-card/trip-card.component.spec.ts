@@ -3,9 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { By } from '@angular/platform-browser';
 
-import { mockTrips } from '../../trips/mock-trips';
 import { TripCardComponent } from './trip-card.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+import { mockTrips } from 'src/testing/mock-trips';
 
 describe('TripCardComponent', () => {
   let component: TripCardComponent;

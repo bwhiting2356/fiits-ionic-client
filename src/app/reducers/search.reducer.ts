@@ -3,6 +3,7 @@ import { SearchActionTypes, SearchActions, SearchAddressType } from '../actions/
 import { LatLng } from '../shared/latlng.model';
 import { TimeTarget } from '../shared/time-target';
 import { Trip, StationInfo } from '../shared/trip.model';
+import { DEFAULT_LOCATION } from '../shared/constants';
 
 export interface SearchState {
   originAddress: string;
@@ -21,6 +22,7 @@ export interface SearchState {
   stationsFetching: boolean;
   bookTripFetching: boolean;
   trip: Trip;
+  position: LatLng;
   error: any;
 }
 
@@ -41,6 +43,7 @@ export const initialSearchState: SearchState = {
   stationsFetching: false,
   bookTripFetching: false,
   trip: undefined,
+  position: DEFAULT_LOCATION,
   error: undefined
 };
 
@@ -118,6 +121,11 @@ export function searchReducer(state = initialSearchState, action: SearchActions)
         ...state,
         geocodeFetching: false,
         error: action.error
+      };
+    case SearchActionTypes.GeolocationChanged:
+      return {
+        ...state,
+        position: action.position
       };
     case SearchActionTypes.SaveAutocompleteResults:
       return {

@@ -80,7 +80,7 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     return new google.maps.Map(this.mapContainer.nativeElement, {
       zoom: this.zoom,
       maxZoom: 16,
-      center: this.center || new google.maps.LatLng(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng),
+      center: this.center,
       disableDefaultUI: true,
       zoomControl: this.zoomControl,
       streetViewControl: this.streetViewControl,

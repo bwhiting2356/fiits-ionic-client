@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TripInfoComponent } from './trip-info.component';
-import { mockTrips } from 'src/app/trips/mock-trips';
+import { mockTrips } from 'src/testing/mock-trips';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { By } from '@angular/platform-browser';
 
