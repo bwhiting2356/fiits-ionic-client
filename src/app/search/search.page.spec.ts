@@ -9,7 +9,14 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { State } from '../reducers';
 import { By } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
-import { SetSearchAddressType, ChangeTimeTarget, ChangeTime, TripSearchQuery, FetchAllStations, FetchGeolocation } from '../actions/search.actions';
+import {
+  SetSearchAddressType,
+  ChangeTimeTarget,
+  ChangeTime,
+  TripSearchQuery,
+  FetchAllStations,
+  FetchGeolocation
+} from '../actions/search.actions';
 import { initialSearchState } from '../reducers/search.reducer';
 import { TimeTarget } from '../shared/time-target';
 import { cold } from 'jasmine-marbles';

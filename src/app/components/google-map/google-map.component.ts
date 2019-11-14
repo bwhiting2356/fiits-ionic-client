@@ -104,9 +104,9 @@ export class GoogleMapComponent implements OnInit, OnChanges {
       this.addMarker(this.trip.originLatLng, this.trip.originAddress, 'Origin', false);
       this.addMarker(this.trip.destinationLatLng, this.trip.destinationAddress, 'Destination', false);
       this.addMarker(
-        this.trip.startReservation.station.latLng, 
+        this.trip.startReservation.station.latLng,
         this.trip.startReservation.station.address,
-        'Pickup Station',true);
+        'Pickup Station', true);
       this.addMarker(
         this.trip.endReservation.station.latLng,
         this.trip.endReservation.station.address,
@@ -146,7 +146,7 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     if (this.trip) {
       this.trip.walking1Directions.points.forEach(point => bounds.extend(point));
       this.trip.walking2Directions.points.forEach(point => bounds.extend(point));
-      this.trip.bicyclingDirections.points.forEach(point => bounds.extend(point))
+      this.trip.bicyclingDirections.points.forEach(point => bounds.extend(point));
     }
 
     this.map.fitBounds(bounds, { top: 10, bottom: 10, right: 10, left: 10 });

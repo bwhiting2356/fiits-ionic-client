@@ -4,4 +4,4 @@ export interface AutocompleteResult {
       secondary_text: string;
     };
   }
-  
+

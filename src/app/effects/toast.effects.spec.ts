@@ -4,7 +4,14 @@ import { TestBed, inject } from '@angular/core/testing';
 import { ToastController } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { hot } from 'jasmine-marbles';
-import { FetchAllStationsError, TripSearchQueryError, GeocodeError, AutocompleteResultsError, BookTripSuccess, BookTripFailure } from '../actions/search.actions';
+import {
+    FetchAllStationsError,
+    TripSearchQueryError,
+    GeocodeError,
+    AutocompleteResultsError,
+    BookTripSuccess,
+    BookTripFailure
+} from '../actions/search.actions';
 import { FeedbackError, FeedbackSuccess } from '../actions/feedback.actions';
 
 describe('Toast Effects ', () => {
@@ -141,5 +148,5 @@ describe('Toast Effects ', () => {
         expect(effects.bookTripSuccess$).toBeObservable(actions$);
         expect(effects.presentToast).toHaveBeenCalledWith('Trip booked successfully!', 'success');
 
-    })
+    });
 });

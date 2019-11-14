@@ -9,7 +9,7 @@ import {
   ChooseOriginLocation,
   ChooseDestinationLocation,
   FetchAutocompleteResults,
-  ClearAutocompleteResults, 
+  ClearAutocompleteResults,
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult,
   SearchAddressType
