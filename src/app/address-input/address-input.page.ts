@@ -12,10 +12,14 @@ import {
   ClearAutocompleteResults,
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult,
-  SearchAddressType
+  SearchAddressType,
+  ChooseCurrentLocation,
+  SaveOriginLatLng,
+  SaveDestinationLatLng
 } from '../actions/search.actions';
 
 import { AutocompleteResult } from '../shared/maps/autocomplete-result';
+import { DEFAULT_LOCATION } from '../shared/constants';
 
 @Component({
   selector: 'app-address-input',
@@ -28,12 +32,14 @@ export class AddressInputPage implements OnInit {
   autocompleteFetching: Observable<boolean>;
   autocompleteDirty: Observable<boolean>;
   showNoResults: Observable<boolean>;
+  showSuggestions: Observable<boolean>;
+  showCurrentLocation: Observable<boolean>;
   searchAddressType: Observable<SearchAddressType>;
   placeholderText: Observable<string>;
 
   constructor(
-    private navCtrl: NavController,
-    private store: Store<State>
+    public navCtrl: NavController,
+    public store: Store<State>
   ) { }
 
   ngOnInit() {
@@ -53,6 +59,15 @@ export class AddressInputPage implements OnInit {
       map(type => `Enter ${type} Address`)
     );
 
+    this.showSuggestions = combineLatest([
+      this.autocompleteResults,
+      this.autocompleteFetching,
+    ]).pipe(
+      map(([results, fetching]) => {
+        return results.length < 1 && !fetching;
+      })
+    );
+
     this.showNoResults = combineLatest([
       this.autocompleteResults,
       this.autocompleteFetching,
@@ -62,6 +77,12 @@ export class AddressInputPage implements OnInit {
         return results.length < 1 && !fetching && dirty;
       })
     );
+
+    this.showCurrentLocation = this.store
+      .select(state => state.search.position)
+      .pipe(
+        map(position => position !== DEFAULT_LOCATION)
+      );
 
   }
 
@@ -86,5 +107,22 @@ export class AddressInputPage implements OnInit {
         this.navCtrl.back();
         this.store.dispatch(new ClearAutocompleteResults());
       });
+  }
+
+  chooseCurrentLocation() {
+    combineLatest([
+      this.searchAddressType,
+      this.store.select(state => state.search.position)
+    ])
+    .pipe(take(1))
+    .subscribe(([type, position]) => {
+      if (type === 'Origin') {
+        this.store.dispatch(new SaveOriginLatLng(position));
+      } else { // (type === 'Destination')
+        this.store.dispatch(new SaveDestinationLatLng(position));
+      }
+      this.store.dispatch(new ChooseCurrentLocation(position));
+      this.navCtrl.back();
+    });
   }
 }

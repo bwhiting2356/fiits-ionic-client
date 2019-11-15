@@ -37,7 +37,27 @@ export class GeocodeService {
     });
   }
 
+  async reverseGeocode(latLng: LatLng): Promise<string> {
+    if (!this.googleGeocoderService) {
+      await this.initializeGeocoder();
+    }
+    return new Promise(resolve => {
+      this.googleGeocoderService.geocode({ location: latLng }, (results: any[]) => {
+        if (results && results[0]) {
+          resolve(results[0].formatted_address);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+
+  }
+
   getLatLngFromAddress$(input: string): Observable<LatLng> {
     return from(this.geocode(input));
+  }
+
+  getAddressFromLatLng$(latLng: LatLng): Observable<string> {
+    return from(this.reverseGeocode(latLng));
   }
 }

@@ -27,7 +27,9 @@ import {
   BookTripFailure,
   FetchGeolocation,
   GeolocationChanged,
-  GeolocationError
+  GeolocationError,
+  ChooseCurrentLocation,
+  ChooseOriginLocation
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
 
@@ -58,7 +60,8 @@ describe('SearchEffects success', () => {
         {
           provide: GeocodeService,
           useValue: {
-            getLatLngFromAddress$: () => of({ lat: 0, lng: 0})
+            getLatLngFromAddress$: () => of({ lat: 0, lng: 0}),
+            getAddressFromLatLng$: () => of('123 Main Street')
           }
         },
         {
@@ -179,6 +182,15 @@ describe('SearchEffects success', () => {
 
     actions$ = hot('a', { a: action });
     effects.geolocation$.subscribe(completionAction => {
+      expect(completionAction).toEqual(completion);
+    });
+  });
+
+  it('should return the origin address reverse geocoded on success', async () => {
+    const action = new ChooseCurrentLocation({ lat: 0, lng: 0 });
+    const completion = new ChooseOriginLocation('123 Main Street');
+    actions$ = hot('a', { a: action });
+    effects.originReverseGeocode$.subscribe(completionAction => {
       expect(completionAction).toEqual(completion);
     });
   });

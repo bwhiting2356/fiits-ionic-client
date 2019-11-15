@@ -15,7 +15,8 @@ import {
   BookTripSuccess,
   BookTripFailure,
   GeolocationChanged,
-  GeolocationError
+  GeolocationError,
+  ChooseOriginLocation
 } from '../actions/search.actions';
 import { map, catchError, tap, switchMap } from 'rxjs/operators';
 import { AutocompleteService } from '../services/autocomplete.service';
@@ -95,6 +96,15 @@ export class SearchEffects {
     switchMap(() => this.geolocationService.getCurrentPosition$().pipe(
       map(position => new GeolocationChanged(position)),
       catchError(error => of(new GeolocationError(error)))
+    ))
+  );
+
+  @Effect()
+  originReverseGeocode$: Observable<Action> = this.actions$.pipe(
+    ofType(SearchActionTypes.ChooseCurrentLocation),
+    switchMap(action => this.geocodeService.getAddressFromLatLng$(action.location).pipe(
+      map(address => new ChooseOriginLocation(address)),
+      catchError(error => of(new GeocodeError(error)))
     ))
   );
 

@@ -19,9 +19,13 @@ import {
   ClearAutocompleteResults,
   ChooseDestinationLocation,
   FetchGeocodeOriginResult,
-  FetchGeocodeDestinationResult
+  FetchGeocodeDestinationResult,
+  ChooseCurrentLocation,
+  SaveOriginLatLng,
+  SaveDestinationLatLng
 } from '../actions/search.actions';
 import { initialSearchState } from '../reducers/search.reducer';
+import { DEFAULT_LOCATION } from '../shared/constants';
 
 describe('AddressInputPage', () => {
   let component: AddressInputPage;
@@ -115,6 +119,18 @@ describe('AddressInputPage', () => {
     expect(fixture.debugElement.query(By.css('#no-results'))).toBeFalsy();
   });
 
+  it('should show the suggestions section if showSuggestions is true', () => {
+    component.showSuggestions = of(true);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#suggestions'))).toBeTruthy();
+  });
+
+  it('should not show the suggestions section if showSuggestions is false', () => {
+    component.showSuggestions = of(false);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#suggestions'))).toBeFalsy();
+  });
+
   it('should make showNoResults false if there are no results but is pristine', () => {
     store.setState({
       ...initialState,
@@ -157,6 +173,86 @@ describe('AddressInputPage', () => {
     expect(component.showNoResults).toBeObservable(expected);
   });
 
+  it('should make showSuggestions true if there are no results and is not fetching', () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        autocompleteResults: [],
+        autocompleteFetching: false,
+      }
+    });
+    fixture.detectChanges();
+    const expected = cold('a', { a: true } );
+    expect(component.showSuggestions).toBeObservable(expected);
+  });
+
+  it('should make showSuggestions false if there are results and is not fetching', () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        autocompleteResults: mockAutocompleteResults,
+        autocompleteFetching: false,
+      }
+    });
+    fixture.detectChanges();
+    const expected = cold('a', { a: false } );
+    expect(component.showSuggestions).toBeObservable(expected);
+  });
+
+  it('should make showSuggestions false if there are no results and is fetching', () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        autocompleteResults: [],
+        autocompleteFetching: true,
+      }
+    });
+    fixture.detectChanges();
+    const expected = cold('a', { a: false } );
+    expect(component.showSuggestions).toBeObservable(expected);
+  });
+
+  it('should set showCurrentLocation to true if their position is not the default location', () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        position: { lat: 0, lng: 0}
+      }
+    });
+    fixture.detectChanges();
+    const expected = cold('a', { a: true } );
+    expect(component.showCurrentLocation).toBeObservable(expected);
+  });
+
+  it('should set showCurrentLocation to false if their position is the default location', () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        position: DEFAULT_LOCATION
+      }
+    });
+    fixture.detectChanges();
+    const expected = cold('a', { a: false } );
+    expect(component.showCurrentLocation).toBeObservable(expected);
+  });
+
+  it('should show current location is showCurrentLocation is true', () => {
+    component.showCurrentLocation = of(true);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#current-location'))).toBeTruthy();
+  });
+
+  it('should not show current location is showCurrentLocation is false', () => {
+    component.showCurrentLocation = of(false);
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#current-location'))).toBeFalsy();
+  });
+
   it('should return the origin placeholder text', () => {
     store.setState({
       ...initialState,
@@ -178,6 +274,7 @@ describe('AddressInputPage', () => {
       }
     });
     spyOn(store, 'dispatch');
+    spyOn(component.navCtrl, 'back');
     fixture.detectChanges();
 
     component.chooseLocation(mockAutocompleteResults[0]);
@@ -187,6 +284,8 @@ describe('AddressInputPage', () => {
       .toHaveBeenCalledWith(new FetchGeocodeOriginResult(mockAutocompleteResults[0].structured_formatting.main_text));
     expect(store.dispatch)
       .toHaveBeenCalledWith(new ClearAutocompleteResults());
+
+    expect(component.navCtrl.back).toHaveBeenCalled();
   });
 
   it('should return the destination placeholder text', () => {
@@ -210,6 +309,7 @@ describe('AddressInputPage', () => {
       }
     });
     spyOn(store, 'dispatch');
+    spyOn(component.navCtrl, 'back');
     fixture.detectChanges();
 
     component.chooseLocation(mockAutocompleteResults[1]);
@@ -220,6 +320,7 @@ describe('AddressInputPage', () => {
       .toHaveBeenCalledWith(new FetchGeocodeDestinationResult(mockAutocompleteResults[1].structured_formatting.main_text));
     expect(store.dispatch)
       .toHaveBeenCalledWith(new ClearAutocompleteResults());
+    expect(component.navCtrl.back).toHaveBeenCalled();
   });
 
   it('should set focus to the input element after the view finishes animating in', () => {
@@ -229,6 +330,49 @@ describe('AddressInputPage', () => {
     (component as any).ionViewDidEnter();
 
     expect(component.input.setFocus).toHaveBeenCalled();
+  });
+
+  it('should call chooseCurrentLocation if they click on the current location line item', () => {
+    spyOn(component, 'chooseCurrentLocation');
+    const currentLocation = fixture.debugElement.query(By.css('#current-location')).nativeElement;
+    currentLocation.click();
+    expect(component.chooseCurrentLocation).toHaveBeenCalled();
+  });
+
+  it('should dispatch ChooseCurrentLocation, SaveOriginLatLng when chooseCurrentLocation is called', () => {
+    spyOn(store, 'dispatch');
+    spyOn(component.navCtrl, 'back');
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: 'Origin',
+        position: { lat: 0, lng: 0 }
+      }
+    });
+
+    component.chooseCurrentLocation();
+    expect(store.dispatch).toHaveBeenCalledWith(new ChooseCurrentLocation({ lat: 0, lng: 0 }));
+    expect(store.dispatch).toHaveBeenCalledWith(new SaveOriginLatLng({ lat: 0, lng: 0}));
+    expect(component.navCtrl.back).toHaveBeenCalled();
+  });
+
+  it('should dispatch ChooseCurrentLocation, SaveDestinationLatLng when chooseCurrentLocation is called', () => {
+    spyOn(store, 'dispatch');
+    spyOn(component.navCtrl, 'back');
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: 'Destination',
+        position: { lat: 0, lng: 0 }
+      }
+    });
+
+    component.chooseCurrentLocation();
+    expect(store.dispatch).toHaveBeenCalledWith(new ChooseCurrentLocation({ lat: 0, lng: 0 }));
+    expect(store.dispatch).toHaveBeenCalledWith(new SaveDestinationLatLng({ lat: 0, lng: 0}));
+    expect(component.navCtrl.back).toHaveBeenCalled();
   });
 
 });

@@ -13,6 +13,7 @@ export enum SearchActionTypes {
   BookTripFailure = '[Search] Book Trip Failure',
   ChangeTime = '[Search] Change Time',
   ChangeTimeTarget = '[Search] Change Time Target',
+  ChooseCurrentLocation = '[Search] Choose Current Location',
   ChooseOriginLocation = '[Search] Choose Origin Location',
   ChooseDestinationLocation = '[Search] Choose Destination Location',
   ClearAutocompleteResults = '[Search] Clear Autocomplete Results',
@@ -64,6 +65,11 @@ export class ChangeTime implements Action {
 export class ChangeTimeTarget implements Action {
   readonly type = SearchActionTypes.ChangeTimeTarget;
   constructor(public timeTarget: TimeTarget) {}
+}
+
+export class ChooseCurrentLocation implements Action {
+  readonly type = SearchActionTypes.ChooseCurrentLocation;
+  constructor(public location: LatLng) {}
 }
 
 export class ChooseOriginLocation implements Action {
@@ -169,6 +175,7 @@ export type SearchActions = AutocompleteResultsError
               | BookTripFailure
               | ChangeTime
               | ChangeTimeTarget
+              | ChooseCurrentLocation
               | ChooseDestinationLocation
               | ChooseOriginLocation
               | ClearAutocompleteResults
