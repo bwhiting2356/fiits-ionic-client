@@ -29,7 +29,8 @@ import {
   GeolocationChanged,
   GeolocationError,
   ChooseCurrentLocation,
-  ChooseOriginLocation
+  ChooseOriginLocation,
+  ChooseDestinationLocation
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
 
@@ -194,6 +195,15 @@ describe('SearchEffects success', () => {
       expect(completionAction).toEqual(completion);
     });
   });
+
+  it('should return the destination address reverse geocoded on success', async () => {
+    const action = new ChooseCurrentLocation({ lat: 0, lng: 0 });
+    const completion = new ChooseDestinationLocation('123 Main Street');
+    actions$ = hot('a', { a: action });
+    effects.destinationReverseGeocode$.subscribe(completionAction => {
+      expect(completionAction).toEqual(completion);
+    });
+  });
 });
 
 describe('SearchEffects errors', () => {
@@ -217,7 +227,8 @@ describe('SearchEffects errors', () => {
         {
           provide: GeocodeService,
           useValue: {
-            getLatLngFromAddress$: () => errorResponse
+            getLatLngFromAddress$: () => errorResponse,
+            getAddressFromLatLng$: () => errorResponse
           }
         },
         {
