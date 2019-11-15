@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'trips', loadChildren: './trips/trips.module#TripsPageModule' },
   { path: 'payments', loadChildren: './payments/payments.module#PaymentsPageModule' },
   { path: 'sign-in', loadChildren: './sign-in/sign-in.module#SignInPageModule' },
-  { path: 'search/:type', loadChildren: './address-input/address-input.module#AddressInputPageModule' },
+  { path: 'address-input', loadChildren: './address-input/address-input.module#AddressInputPageModule' },
   { path: 'trip-details', loadChildren: './trip-details/trip-details.module#TripDetailsPageModule' },
 ];
 

@@ -43,8 +43,8 @@ export class SearchPage implements OnInit {
 
   constructor(
     public toastController: ToastController,
-    private router: Router,
-    private store: Store<State>) {
+    public router: Router,
+    public store: Store<State>) {
     this.originLatLng = store
       .select(state => state.search.originLatLng);
 
@@ -101,7 +101,7 @@ export class SearchPage implements OnInit {
   // TODO: set minimum date to now, acounting for timezone?
 
   navigateToAddressInput(type: SearchAddressType) {
-    this.router.navigate(['search', type]);
+    this.router.navigate(['address-input']);
     this.store.dispatch(new SetSearchAddressType(type));
   }
 

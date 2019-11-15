@@ -1,3 +1,25 @@
-ion-content, ion-item {
-    background-color: green;
+#container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+#input {
+    width: 100%;
+    @media screen and (min-width: 700px) {
+        width: 280px;
+    }
+}
+
+#whitespace {
+    background-color: var(--ion-color-medium);
+    height: 100%;
+    width: 100px;
+    flex-grow: 1;
+    display: none;
+
+    @media screen and (min-width: 700px) {
+        display: block;
+    }
 }

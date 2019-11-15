@@ -130,16 +130,20 @@ describe('SearchPage', () => {
 
   it('should navigate to address input, set searchAddressType to \'Origin\'', () => {
     spyOn(store, 'dispatch');
+    spyOn(component.router, 'navigate');
     component.navigateToAddressInput('Origin');
     expect(store.dispatch)
         .toHaveBeenCalledWith(new SetSearchAddressType('Origin'));
+    expect(component.router.navigate).toHaveBeenCalledWith(['address-input']);
   });
 
   it('should navigate to address input, set searchAddressType to \'Destination\'', () => {
     spyOn(store, 'dispatch');
+    spyOn(component.router, 'navigate');
     component.navigateToAddressInput('Destination');
     expect(store.dispatch)
         .toHaveBeenCalledWith(new SetSearchAddressType('Destination'));
+    expect(component.router.navigate).toHaveBeenCalledWith(['address-input']);
   });
 
   it('should call navigateToAddressInput when the origin input button is focused', () => {
