@@ -2,7 +2,7 @@
 import { AutocompleteService } from './autocomplete.service';
 import { TestBed } from '@angular/core/testing';
 import { MapsAPILoader } from '@agm/core';
-import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
+import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 
 describe('AutocompleteService', () => {
   beforeEach(() => TestBed.configureTestingModule({

@@ -25,7 +25,7 @@ import {
   BookTripFailure,
   GeolocationChanged
 } from '../actions/search.actions';
-import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
+import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 import { mockTrips } from '../../testing/mock-trips';
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';

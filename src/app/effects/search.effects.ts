@@ -102,7 +102,7 @@ export class SearchEffects {
 
   @Effect()
   originReverseGeocode$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.ChooseCurrentLocation),
+    ofType(SearchActionTypes.ChooseCurrentLocationAsOrigin),
     switchMap(action => this.geocodeService.getAddressFromLatLng$(action.location).pipe(
       map(address => new ChooseOriginLocation(address)),
       catchError(error => of(new GeocodeError(error)))
@@ -111,7 +111,7 @@ export class SearchEffects {
 
   @Effect()
   destinationReverseGeocode$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.ChooseCurrentLocation),
+    ofType(SearchActionTypes.ChooseCurrentLocationAsDestination),
     switchMap(action => this.geocodeService.getAddressFromLatLng$(action.location).pipe(
       map(address => new ChooseDestinationLocation(address)),
       catchError(error => of(new GeocodeError(error)))

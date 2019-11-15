@@ -13,7 +13,8 @@ import {
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult,
   SearchAddressType,
-  ChooseCurrentLocation,
+  ChooseCurrentLocationAsDestination,
+  ChooseCurrentLocationAsOrigin,
   SaveOriginLatLng,
   SaveDestinationLatLng
 } from '../actions/search.actions';
@@ -118,10 +119,11 @@ export class AddressInputPage implements OnInit {
     .subscribe(([type, position]) => {
       if (type === 'Origin') {
         this.store.dispatch(new SaveOriginLatLng(position));
+        this.store.dispatch(new ChooseCurrentLocationAsOrigin(position));
       } else { // (type === 'Destination')
         this.store.dispatch(new SaveDestinationLatLng(position));
+        this.store.dispatch(new ChooseCurrentLocationAsDestination(position));
       }
-      this.store.dispatch(new ChooseCurrentLocation(position));
       this.navCtrl.back();
     });
   }

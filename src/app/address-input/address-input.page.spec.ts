@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { By } from '@angular/platform-browser';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
+import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 
 import { AddressInputPage } from './address-input.page';
 import { AutocompleteService } from '../services/autocomplete.service';
@@ -20,7 +20,8 @@ import {
   ChooseDestinationLocation,
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult,
-  ChooseCurrentLocation,
+  ChooseCurrentLocationAsDestination,
+  ChooseCurrentLocationAsOrigin,
   SaveOriginLatLng,
   SaveDestinationLatLng
 } from '../actions/search.actions';
@@ -339,7 +340,7 @@ describe('AddressInputPage', () => {
     expect(component.chooseCurrentLocation).toHaveBeenCalled();
   });
 
-  it('should dispatch ChooseCurrentLocation, SaveOriginLatLng when chooseCurrentLocation is called', () => {
+  it('should dispatch ChooseCurrentLocationAsOrigin, SaveOriginLatLng when chooseCurrentLocation is called', () => {
     spyOn(store, 'dispatch');
     spyOn(component.navCtrl, 'back');
     store.setState({
@@ -352,12 +353,12 @@ describe('AddressInputPage', () => {
     });
 
     component.chooseCurrentLocation();
-    expect(store.dispatch).toHaveBeenCalledWith(new ChooseCurrentLocation({ lat: 0, lng: 0 }));
+    expect(store.dispatch).toHaveBeenCalledWith(new ChooseCurrentLocationAsOrigin({ lat: 0, lng: 0 }));
     expect(store.dispatch).toHaveBeenCalledWith(new SaveOriginLatLng({ lat: 0, lng: 0}));
     expect(component.navCtrl.back).toHaveBeenCalled();
   });
 
-  it('should dispatch ChooseCurrentLocation, SaveDestinationLatLng when chooseCurrentLocation is called', () => {
+  it('should dispatch ChooseCurrentLocationAsDestination, SaveDestinationLatLng when chooseCurrentLocation is called', () => {
     spyOn(store, 'dispatch');
     spyOn(component.navCtrl, 'back');
     store.setState({
@@ -370,7 +371,7 @@ describe('AddressInputPage', () => {
     });
 
     component.chooseCurrentLocation();
-    expect(store.dispatch).toHaveBeenCalledWith(new ChooseCurrentLocation({ lat: 0, lng: 0 }));
+    expect(store.dispatch).toHaveBeenCalledWith(new ChooseCurrentLocationAsDestination({ lat: 0, lng: 0 }));
     expect(store.dispatch).toHaveBeenCalledWith(new SaveDestinationLatLng({ lat: 0, lng: 0}));
     expect(component.navCtrl.back).toHaveBeenCalled();
   });

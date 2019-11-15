@@ -3,7 +3,7 @@ import { MapsAPILoader } from '@agm/core';
 import { from, Observable, of } from 'rxjs';
 
 import { AutocompleteResult } from '../shared/maps/autocomplete-result';
-import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
+import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 
 declare var google;
 

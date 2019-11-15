@@ -1,4 +1,4 @@
-import { AutocompleteResult } from './autocomplete-result';
+import { AutocompleteResult } from '../app/shared/maps/autocomplete-result';
 
 export const mockAutocompleteResults: AutocompleteResult[] = [
     {

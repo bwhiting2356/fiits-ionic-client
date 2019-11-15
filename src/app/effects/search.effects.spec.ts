@@ -28,11 +28,12 @@ import {
   FetchGeolocation,
   GeolocationChanged,
   GeolocationError,
-  ChooseCurrentLocation,
+  ChooseCurrentLocationAsDestination,
+  ChooseCurrentLocationAsOrigin,
   ChooseOriginLocation,
   ChooseDestinationLocation
 } from '../actions/search.actions';
-import { mockAutocompleteResults } from '../shared/maps/mock-autocomplete-results';
+import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 
 import { SearchQuery } from '../shared/search-query';
 import { StationService } from '../services/station.service';
@@ -188,7 +189,7 @@ describe('SearchEffects success', () => {
   });
 
   it('should return the origin address reverse geocoded on success', async () => {
-    const action = new ChooseCurrentLocation({ lat: 0, lng: 0 });
+    const action = new ChooseCurrentLocationAsOrigin({ lat: 0, lng: 0 });
     const completion = new ChooseOriginLocation('123 Main Street');
     actions$ = hot('a', { a: action });
     effects.originReverseGeocode$.subscribe(completionAction => {
@@ -197,7 +198,7 @@ describe('SearchEffects success', () => {
   });
 
   it('should return the destination address reverse geocoded on success', async () => {
-    const action = new ChooseCurrentLocation({ lat: 0, lng: 0 });
+    const action = new ChooseCurrentLocationAsDestination({ lat: 0, lng: 0 });
     const completion = new ChooseDestinationLocation('123 Main Street');
     actions$ = hot('a', { a: action });
     effects.destinationReverseGeocode$.subscribe(completionAction => {
@@ -325,5 +326,21 @@ describe('SearchEffects errors', () => {
     actions$ = cold('--a-', { a: action });
     const expected = cold('--b', { b: completion });
     expect(effects.geolocation$).toBeObservable(expected);
+  });
+
+  it('should return GeocodeError on reverse geocoding error (destination)', () => {
+    const action = new ChooseCurrentLocationAsDestination({ lat: 0, lng: 0 });
+    const completion = new GeocodeError(error);
+    actions$ = hot('--a-', { a: action });
+    const expected = cold('--b)', { b: completion });
+    expect(effects.destinationReverseGeocode$).toBeObservable(expected);
+  });
+
+  it('should return GeocodeError on reverse geocoding error (origin)', () => {
+    const action = new ChooseCurrentLocationAsOrigin({ lat: 0, lng: 0 });
+    const completion = new GeocodeError(error);
+    actions$ = hot('--a-', { a: action });
+    const expected = cold('--b)', { b: completion });
+    expect(effects.originReverseGeocode$).toBeObservable(expected);
   });
 });

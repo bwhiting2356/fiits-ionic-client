@@ -6,3 +6,7 @@ export interface GeocodingResult {
         };
     };
 }
+
+export interface ReverseGeocodingResult {
+    formatted_address: string;
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MapsAPILoader } from '@agm/core';
 import { LatLng } from '../shared/latlng.model';
 import { from, Observable } from 'rxjs';
-import { GeocodingResult } from '../shared/maps/geocoding-result';
+import { GeocodingResult, ReverseGeocodingResult } from '../shared/maps/geocoding-result';
 
 declare var google;
 
@@ -42,7 +42,7 @@ export class GeocodeService {
       await this.initializeGeocoder();
     }
     return new Promise(resolve => {
-      this.googleGeocoderService.geocode({ location: latLng }, (results: any[]) => {
+      this.googleGeocoderService.geocode({ location: latLng }, (results: ReverseGeocodingResult[]) => {
         if (results && results[0]) {
           resolve(results[0].formatted_address);
         } else {

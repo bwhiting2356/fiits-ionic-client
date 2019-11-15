@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { GeocodeService } from './geocode.service';
 import { MapsAPILoader } from '@agm/core';
-import { mockGeocodingResults } from '../shared/maps/mock-geocoding-results';
+import { mockGeocodingResults, mockReverseGeocodingResults } from '../../testing/mock-geocoding-results';
 
 describe('GeocodeService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -55,6 +55,15 @@ describe('GeocodeService', () => {
     expect(result.lng).toEqual(1);
   });
 
+  it('should return the address from the reverse geocoded result', async () => {
+    const service: GeocodeService = TestBed.get(GeocodeService);
+    await service.initializeGeocoder();
+    spyOn((service as any).googleGeocoderService, 'geocode')
+      .and.callFake((_, cb) => cb(mockReverseGeocodingResults));
+    const result = await service.reverseGeocode({ lat: 0, lng: 0 });
+    expect(result).toEqual('123 Main Street');
+  });
+
   it('should return an observable of the geocoded result', async () => {
     const service: GeocodeService = TestBed.get(GeocodeService);
     await service.initializeGeocoder();
@@ -63,6 +72,16 @@ describe('GeocodeService', () => {
     service.getLatLngFromAddress$('123 Main Street').subscribe(result => {
       expect(result.lat).toEqual(1);
       expect(result.lng).toEqual(1);
+    });
+  });
+
+  it('should return an observable of the reverse geocoded result', async () => {
+    const service: GeocodeService = TestBed.get(GeocodeService);
+    await service.initializeGeocoder();
+    spyOn((service as any).googleGeocoderService, 'geocode')
+      .and.callFake((_, cb) => cb(mockReverseGeocodingResults));
+    service.getAddressFromLatLng$({ lat: 0, lng: 0 }).subscribe(result => {
+      expect(result).toEqual('123 Main Street');
     });
   });
 });
