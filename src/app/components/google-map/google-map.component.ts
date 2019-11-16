@@ -8,7 +8,6 @@ import { GoogleMap, Marker, InfoWindow } from '@agm/core/services/google-maps-ty
 
 import { GestureHandling } from 'src/app/shared/maps/gesture-handling';
 import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
-import { DEFAULT_LOCATION } from 'src/app/shared/constants';
 import { Trip, StationInfo } from 'src/app/shared/trip.model';
 import { LatLng } from 'src/app/shared/latlng.model';
 
