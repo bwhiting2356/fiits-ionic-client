@@ -181,11 +181,11 @@ export class GoogleMapComponent implements OnInit, OnChanges {
 
     if (station) {
       content += `
-<ion-button expand="full" onclick="handleInfoWindowButtonClick('from', ${stationIndex})">From this station</ion-button>
-<ion-button expand="full" onclick="handleInfoWindowButtonClick('to', ${stationIndex})">To this station</ion-button>`;
+<ion-button expand="full" onclick="handleInfoWindowButtonClick('from', ${stationIndex})">From here</ion-button>
+<ion-button expand="full" onclick="handleInfoWindowButtonClick('to', ${stationIndex})">To here</ion-button>`;
     }
     content += '</div>';
-    return new google.maps.InfoWindow({ content });
+    return new google.maps.InfoWindow({ content, width: 200, height: 200 });
   }
 
   addMarker(position: LatLng, address: string, description: string, station: boolean, stationIndex?: number): Marker {

@@ -368,8 +368,8 @@ describe('GoogleMapComponent', () => {
     const expected =  `
     <div style="margin-right: 10px; margin-bottom: 10px;">
     <h5>Station:</h5><p>123 Main Street</p>
-<ion-button expand="full" onclick="handleInfoWindowButtonClick('from', 0)">From this station</ion-button>
-<ion-button expand="full" onclick="handleInfoWindowButtonClick('to', 0)">To this station</ion-button></div>`;
+<ion-button expand="full" onclick="handleInfoWindowButtonClick('from', 0)">From here</ion-button>
+<ion-button expand="full" onclick="handleInfoWindowButtonClick('to', 0)">To here</ion-button></div>`;
     expect(expected).toEqual(actual);
   });
 
