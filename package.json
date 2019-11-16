@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ionic build --prod",
+    "build": "ng build",
     "test": "ng test",
     "test-headless": "ng test --watch=false --browsers=ChromeHeadless --codeCoverage=true && cat ../coverage/lcov.info | coveralls",
     "test-coverage": "ng test -- --codeCoverage=true",
