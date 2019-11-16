@@ -356,7 +356,7 @@ describe('GoogleMapComponent', () => {
   it('should create a new regular info window with the content', () => {
     const infoWindow = component.createInfoWindow('123 Main Street', 'Origin', false);
     expect(infoWindow.getContent()).toEqual(`
-<div style="margin-right: 10px; margin-bottom: 10px;">
+<div id="marker-info-window">
 <h5>Origin:</h5><p>123 Main Street</p></div>`);
   });
 
@@ -365,7 +365,7 @@ describe('GoogleMapComponent', () => {
     // tslint:disable-next-line: no-trailing-whitespace
     const actual: string = infoWindow.getContent() as string;
     const expected =  `
-<div style="margin-right: 10px; margin-bottom: 10px;">
+<div id="marker-info-window">
 <h5>Station:</h5><p>123 Main Street</p>
 <ion-buttons slot="primary">
 <ion-button fill="solid" color="dark" expand="full" onclick="handleInfoWindowButtonClick('from', 0)">From here</ion-button>

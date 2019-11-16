@@ -68,7 +68,9 @@
       [center]="position | async"
       [stations]="stations | async"
       [originLatLng]="originLatLng | async" 
-      [destinationLatLng]="destinationLatLng | async">
+      [originAddress]="originAddress | async"
+      [destinationLatLng]="destinationLatLng | async"
+      [destinationAddress]="destinationAddress | async">
     </app-google-map>
     <ng-template #placeholder>
         <div id="placeholder"></div>

@@ -158,7 +158,8 @@ export class GoogleMapComponent implements OnInit, OnChanges {
         url: station
           ? '/assets/imgs/station.svg'
           : '/assets/imgs/pin.svg'
-      }
+      },
+      zIndex: station ? 10 : 20
     });
   }
 
@@ -176,7 +177,7 @@ export class GoogleMapComponent implements OnInit, OnChanges {
 
   createInfoWindow(address: string, description: string, station: boolean, stationIndex?: number): InfoWindow {
     let content = `
-<div style="margin-right: 10px; margin-bottom: 10px;">
+<div id="marker-info-window">
 <h5>${description}:</h5><p>${address}</p>`;
 
     if (station) {
