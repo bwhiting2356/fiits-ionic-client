@@ -321,7 +321,6 @@ describe('GoogleMapComponent', () => {
   });
 
   it('should remove markers from the map if is less than 14', () => {
-    // TODO: why doesn't this actually work...
     component.stations = mockStations;
     component.map = mock<GoogleMap>();
     const mockMarker = mock<Marker>();

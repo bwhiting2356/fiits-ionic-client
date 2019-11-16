@@ -7,7 +7,6 @@ describe('Trips e2e tests', () => {
 
   beforeEach(async () => {
     page = new AppPage();
-    // await page.navigateTo('/trips');
   });
 
   it('should default to upcoming trips', async () => {
