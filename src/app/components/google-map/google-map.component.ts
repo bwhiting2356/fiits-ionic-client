@@ -3,7 +3,6 @@ import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef } from '@ang
 
 import { Store } from '@ngrx/store';
 
-
 import { GoogleMap, Marker, InfoWindow } from '@agm/core/services/google-maps-types';
 
 import { GestureHandling } from 'src/app/shared/maps/gesture-handling';
@@ -176,13 +175,16 @@ export class GoogleMapComponent implements OnInit, OnChanges {
   }
 
   createInfoWindow(address: string, description: string, station: boolean, stationIndex?: number): InfoWindow {
-    let content = `<h5>${description}:</h5><p>${address}</p>`;
+    let content = `
+    <div style="margin-right: 10px; margin-bottom: 10px;">
+    <h5>${description}:</h5><p>${address}</p>`;
 
     if (station) {
       content += `
 <ion-button expand="full" onclick="handleInfoWindowButtonClick('from', ${stationIndex})">From this station</ion-button>
 <ion-button expand="full" onclick="handleInfoWindowButtonClick('to', ${stationIndex})">To this station</ion-button>`;
     }
+    content += '</div>';
     return new google.maps.InfoWindow({ content });
   }
 

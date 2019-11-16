@@ -356,16 +356,20 @@ describe('GoogleMapComponent', () => {
 
   it('should create a new regular info window with the content', () => {
     const infoWindow = component.createInfoWindow('123 Main Street', 'Origin', false);
-    expect(infoWindow.getContent()).toEqual(`<h5>Origin:</h5><p>123 Main Street</p>`);
+    expect(infoWindow.getContent()).toEqual(`
+    <div style="margin-right: 10px; margin-bottom: 10px;">
+    <h5>Origin:</h5><p>123 Main Street</p></div>`);
   });
 
   it('should create a new station info window with the content', () => {
     const infoWindow = component.createInfoWindow('123 Main Street', 'Station', true, 0);
     // tslint:disable-next-line: no-trailing-whitespace
     const actual: string = infoWindow.getContent() as string;
-    const expected =  `<h5>Station:</h5><p>123 Main Street</p>
+    const expected =  `
+    <div style="margin-right: 10px; margin-bottom: 10px;">
+    <h5>Station:</h5><p>123 Main Street</p>
 <ion-button expand="full" onclick="handleInfoWindowButtonClick('from', 0)">From this station</ion-button>
-<ion-button expand="full" onclick="handleInfoWindowButtonClick('to', 0)">To this station</ion-button>`;
+<ion-button expand="full" onclick="handleInfoWindowButtonClick('to', 0)">To this station</ion-button></div>`;
     expect(expected).toEqual(actual);
   });
 
