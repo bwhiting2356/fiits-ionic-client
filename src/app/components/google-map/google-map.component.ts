@@ -176,13 +176,15 @@ export class GoogleMapComponent implements OnInit, OnChanges {
 
   createInfoWindow(address: string, description: string, station: boolean, stationIndex?: number): InfoWindow {
     let content = `
-    <div style="margin-right: 10px; margin-bottom: 10px;">
-    <h5>${description}:</h5><p>${address}</p>`;
+<div style="margin-right: 10px; margin-bottom: 10px;">
+<h5>${description}:</h5><p>${address}</p>`;
 
     if (station) {
       content += `
-<ion-button expand="full" onclick="handleInfoWindowButtonClick('from', ${stationIndex})">From here</ion-button>
-<ion-button expand="full" onclick="handleInfoWindowButtonClick('to', ${stationIndex})">To here</ion-button>`;
+<ion-buttons slot="primary">
+<ion-button fill="solid" color="dark" expand="full" onclick="handleInfoWindowButtonClick('from', ${stationIndex})">From here</ion-button>
+<ion-button fill="solid" color="dark" expand="full" onclick="handleInfoWindowButtonClick('to', ${stationIndex})">To here</ion-button>
+</ion-buttons>`;
     }
     content += '</div>';
     return new google.maps.InfoWindow({ content, width: 200, height: 200 });
