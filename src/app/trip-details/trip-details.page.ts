@@ -5,7 +5,6 @@ import { Observable, combineLatest, of } from 'rxjs';
 import { Trip } from '../shared/trip.model';
 import { take, map } from 'rxjs/operators';
 import { BookTripRequest } from '../actions/search.actions';
-import { mockTrips } from 'src/testing/mock-trips';
 
 @Component({
   selector: 'app-trip-details',
