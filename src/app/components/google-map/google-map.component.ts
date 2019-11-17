@@ -177,7 +177,7 @@ export class GoogleMapComponent implements OnChanges {
 
   createInfoWindow(address: string, description: string, station: boolean, stationIndex?: number): InfoWindow {
     let content = `
-<div id="marker-info-window">
+<div id="marker-info-window" style="margin-right: 10px, margin-bottom: 10px">
 <h5>${description}:</h5><p>${address}</p>`;
 
     if (station) {
