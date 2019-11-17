@@ -380,7 +380,7 @@ describe('GoogleMapComponent', () => {
     component.openWindow = openWindow;
     component.stations = mockStations;
     spyOn(store, 'dispatch');
-    component.ngOnInit();
+    component.ionViewDidEnter();
 
     (window as any).handleInfoWindowButtonClick('to', 0);
 
@@ -395,7 +395,7 @@ describe('GoogleMapComponent', () => {
     component.openWindow = openWindow;
     component.stations = mockStations;
     spyOn(store, 'dispatch');
-    component.ngOnInit();
+    component.ionViewDidEnter();
 
     (window as any).handleInfoWindowButtonClick('from', 0);
 
@@ -438,8 +438,8 @@ describe('GoogleMapComponent', () => {
     expect(mockInfoWindow.open).toHaveBeenCalledWith(mockMap, mockMarker);
   });
 
-  it('should add the handleInfoWindowButtonClick function to the window object on init', () => {
-    component.ngOnInit();
+  it('should add the handleInfoWindowButtonClick function to the window object on view did enter', () => {
+    component.ionViewDidEnter();
     expect((window as any).handleInfoWindowButtonClick).toEqual(component.handleInfoWindowButtonClick);
   });
 });
