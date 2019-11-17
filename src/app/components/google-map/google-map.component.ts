@@ -25,7 +25,7 @@ declare var google;
   templateUrl: './google-map.component.html',
   styleUrls: ['./google-map.component.scss'],
 })
-export class GoogleMapComponent implements OnInit, OnChanges {
+export class GoogleMapComponent implements OnChanges {
   @ViewChild('mapContainer', { static: false }) mapContainer: ElementRef;
   @Input() zoom = 14;
   @Input() zoomControl = false;
@@ -50,13 +50,13 @@ export class GoogleMapComponent implements OnInit, OnChanges {
     private store: Store<State>,
     private mapsAPILoader: MapsAPILoader) { }
 
-  ngOnInit() {
-    this.initMap();
-    (window as any).handleInfoWindowButtonClick = this.handleInfoWindowButtonClick;
-  }
-
   ngOnChanges() {
     this.initMap();
+  }
+
+  ionViewDidEnter() {
+    this.initMap();
+    (window as any).handleInfoWindowButtonClick = this.handleInfoWindowButtonClick;
   }
 
   addOrRemoveStationMarkers = () => {

@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { State } from '../reducers';
 import { Observable, combineLatest } from 'rxjs';
 import { Trip } from '../shared/trip.model';
-import { take, map } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { BookTripRequest } from '../actions/search.actions';
 
 @Component({
