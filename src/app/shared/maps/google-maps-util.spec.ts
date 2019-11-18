@@ -3,8 +3,6 @@ import { mock } from 'ts-mockito';
 import { GoogleMapsUtil } from './google-maps-util';
 import { GoogleMap, Polyline } from '@agm/core/services/google-maps-types';
 
-
-
 declare var google;
 
 describe('PolylineHelper', () => {

@@ -323,8 +323,6 @@ describe('Search Reducer', () => {
       searchQueryFetching: false,
       error: 'oops'
     });
-
-    // TODO: do something with this error, maybe show a toast (ngrx effect for errors, app-wide?)
   });
 
   it('should save the stations, set stations fetching to false', () => {

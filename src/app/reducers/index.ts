@@ -22,5 +22,4 @@ export const reducers: ActionReducerMap<State> = {
   feedback: feedbackReducer
 };
 
-
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];

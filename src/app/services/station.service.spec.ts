@@ -5,7 +5,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { StationService } from './station.service';
 import { mockStations } from 'src/testing/mock-stations';
 
-
 describe('StationService', () => {
 
   beforeEach(() => TestBed.configureTestingModule({

@@ -10,7 +10,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  // { title: 'Search', icon: 'search', component: SearchPage }
   public appPages = [
     {
       title: 'Search',

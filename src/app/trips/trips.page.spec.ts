@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 
 import { TripsPage } from './trips.page';
 
-
 describe('TripsPage', () => {
   let component: TripsPage;
   let fixture: ComponentFixture<TripsPage>;

@@ -8,7 +8,5 @@ export class SearchQuery {
     destinationAddress: string;
     time: Date;
     timeTarget: TimeTarget;
-
-    // TODO: change to LatLng on the backend
 }
 

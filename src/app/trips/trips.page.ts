@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { capitalize } from '../shared/util/util';
 
-
 @Component({
   selector: 'app-trips',
   templateUrl: './trips.page.html',

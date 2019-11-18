@@ -1,6 +1,5 @@
 import { FeedbackActions, FeedbackActionTypes } from '../actions/feedback.actions';
 
-
 export interface FeedbackState {
     feedbackPosting: boolean;
     comment: string;
