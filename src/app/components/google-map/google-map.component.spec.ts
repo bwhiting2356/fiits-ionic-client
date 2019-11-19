@@ -446,5 +446,5 @@ describe('GoogleMapComponent', () => {
     spyOn(component, 'fitBounds');
     component.ionViewDidEnter();
     expect(component.fitBounds).toHaveBeenCalled();
-  })
+  });
 });

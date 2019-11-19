@@ -13,6 +13,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ComponentsModule } from './components/components.module';
@@ -21,10 +24,10 @@ import { PipesModule } from './pipes/pipes.module';
 
 import { reducers, metaReducers } from './reducers';
 
-
 import { SearchEffects } from './effects/search.effects';
 import { ToastEffects } from './effects/toast.effects';
 import { FeedbackEffects } from './effects/feedback.effects';
+import { AuthEffects } from './effects/auth.effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -40,6 +43,8 @@ import { FeedbackEffects } from './effects/feedback.effects';
       apiKey: environment.googleMapsKey,
       libraries: ['places']
     }),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
@@ -52,7 +57,7 @@ import { FeedbackEffects } from './effects/feedback.effects';
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([SearchEffects, ToastEffects, FeedbackEffects]),
+    EffectsModule.forRoot([SearchEffects, ToastEffects, FeedbackEffects, AuthEffects]),
   ],
   providers: [
     StatusBar,
