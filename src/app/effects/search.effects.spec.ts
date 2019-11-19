@@ -38,7 +38,6 @@ import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results
 import { SearchQuery } from '../shared/search-query';
 import { StationService } from '../services/station.service';
 import { NavController } from '@ionic/angular';
-import { mock } from 'ts-mockito';
 import { GeolocationService } from '../services/geolocation.service';
 import { mockTrips } from 'src/testing/mock-trips';
 import { mockStations } from 'src/testing/mock-stations';
@@ -46,7 +45,6 @@ import { mockStations } from 'src/testing/mock-stations';
 describe('SearchEffects success', () => {
   let actions$: Observable<any>;
   let effects: SearchEffects;
-  const mockPosition = mock<Position>();
 
   beforeEach(() => {
     TestBed.configureTestingModule({

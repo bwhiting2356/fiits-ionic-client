@@ -1,6 +1,5 @@
 import { initialFeedbackState, feedbackReducer } from './feedback.reducer';
 import { SendFeedback, FeedbackSuccess, FeedbackError, ChangeComment } from '../actions/feedback.actions';
-import { initialState } from '.';
 
 describe('Feedback Reducer', () => {
     describe('an unknown action', () => {

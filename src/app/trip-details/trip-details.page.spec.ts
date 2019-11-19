@@ -12,6 +12,8 @@ import { cold } from 'jasmine-marbles';
 
 import { BookTripRequest } from '../actions/search.actions';
 import { mockTrips } from 'src/testing/mock-trips';
+import { initialAuthState } from '../reducers/auth.reducer';
+import { LogInFromSearch } from '../actions/auth.actions';
 
 describe('TripDetailPage', () => {
   let component: TripDetailsPage;
@@ -120,10 +122,14 @@ describe('TripDetailPage', () => {
       .toBe('Booking your trip...');
   });
 
-  it('should dispatch an action to book the trip', async () => {
+  it('should dispatch an action to book the trip if not already fetching and user logged in', async () => {
     spyOn(store, 'dispatch');
     store.setState({
       ...initialState,
+      auth: {
+        ...initialAuthState,
+        uid: 'mock-uid',
+      },
       search: {
         ...initialSearchState,
         trip: mockTrips[0],
@@ -148,6 +154,26 @@ describe('TripDetailPage', () => {
     fixture.detectChanges();
     component.bookTrip();
     expect(store.dispatch).not.toHaveBeenCalled();
+  });
+
+  it('should dispatch an action to log in from search if the user is not logged in', () => {
+    spyOn(store, 'dispatch');
+    store.setState({
+      ...initialState,
+      auth: {
+        ...initialAuthState,
+        uid: '',
+      },
+      search: {
+        ...initialSearchState,
+        trip: mockTrips[0],
+        bookTripFetching: false
+      }
+    });
+    fixture.detectChanges();
+    component.bookTrip();
+    expect(store.dispatch).toHaveBeenCalledWith(new LogInFromSearch());
+
   });
 
   it('should call bookTrip when the button is clicked', () => {
@@ -181,5 +207,31 @@ describe('TripDetailPage', () => {
     fixture.detectChanges();
     const button = fixture.debugElement.query(By.css('ion-button')).nativeElement;
     expect(button.disabled).toBeFalsy();
+  });
+
+  it('should set userLoggedIn to true if there is a uid in the auth state', async () => {
+    store.setState({
+      ...initialState,
+      auth: {
+        ...initialAuthState,
+        uid: 'mock-uid',
+      }
+    });
+    fixture.detectChanges();
+    const expected = cold('a', { a: true } );
+    expect(component.userLoggedIn).toBeObservable(expected);
+  });
+
+  it('should set userLoggedIn to false if there is no uid in the auth state', async () => {
+    store.setState({
+      ...initialState,
+      auth: {
+        ...initialAuthState,
+        uid: '',
+      }
+    });
+    fixture.detectChanges();
+    const expected = cold('a', { a: false } );
+    expect(component.userLoggedIn).toBeObservable(expected);
   });
 });

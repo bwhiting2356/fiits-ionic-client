@@ -30,8 +30,6 @@ import { mockTrips } from '../../testing/mock-trips';
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
 import { StationInfo } from '../shared/trip.model';
-import { initialState } from '.';
-import { mockPosition } from 'src/testing/mock-position';
 
 describe('Search Reducer', () => {
   describe('an unknown action', () => {
