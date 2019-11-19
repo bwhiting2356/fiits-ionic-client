@@ -373,13 +373,13 @@ describe('GoogleMapComponent', () => {
     expect(expected).toEqual(actual);
   });
 
-  it('should dispatch an action to change search origin to this station, close the window', () => {
+  it('should dispatch an action to change search destination to this station, close the window', () => {
     const openWindow = mock<InfoWindow>();
     spyOn(openWindow, 'close');
     component.openWindow = openWindow;
     component.stations = mockStations;
     spyOn(store, 'dispatch');
-    component.ionViewDidEnter();
+    component.ngOnInit();
 
     (window as any).handleInfoWindowButtonClick('to', 0);
 
@@ -394,7 +394,7 @@ describe('GoogleMapComponent', () => {
     component.openWindow = openWindow;
     component.stations = mockStations;
     spyOn(store, 'dispatch');
-    component.ionViewDidEnter();
+    component.ngOnInit();
 
     (window as any).handleInfoWindowButtonClick('from', 0);
 
@@ -437,8 +437,14 @@ describe('GoogleMapComponent', () => {
     expect(mockInfoWindow.open).toHaveBeenCalledWith(mockMap, mockMarker);
   });
 
-  it('should add the handleInfoWindowButtonClick function to the window object on view did enter', () => {
-    component.ionViewDidEnter();
+  it('should add the handleInfoWindowButtonClick function to the window object on ngOnInit', () => {
+    component.ngOnInit();
     expect((window as any).handleInfoWindowButtonClick).toEqual(component.handleInfoWindowButtonClick);
   });
+
+  it('should call fitBounds when ionViewDidEnter is called', () => {
+    spyOn(component, 'fitBounds');
+    component.ionViewDidEnter();
+    expect(component.fitBounds).toHaveBeenCalled();
+  })
 });
