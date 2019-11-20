@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  backendURL: 'https://fiits-backend.herokuapp.com',
   googleMapsKey: 'AIzaSyC6vr3LC6OgSjPeuso4dH2xNqdFAyA1NWs',
   firebaseConfig: {
     apiKey: 'AIzaSyDs1RSEr9YBPsM1zbf07bIxAfZzqg0Nx8U',

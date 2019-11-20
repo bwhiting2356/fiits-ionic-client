@@ -5,12 +5,13 @@ import { Trip } from '../shared/trip.model';
 import { SearchQuery } from '../shared/search-query';
 import { HttpClient } from '@angular/common/http';
 import { mockTrips } from 'src/testing/mock-trips';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TripService {
-  TRIP_API_URL = 'https://fiits-backend.herokuapp.com';
+  TRIP_API_URL = `${environment.backendURL}`;
 
   constructor(private http: HttpClient) { }
 

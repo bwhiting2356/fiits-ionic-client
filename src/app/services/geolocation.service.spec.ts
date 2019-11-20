@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
 import { GeolocationService } from './geolocation.service';
-import { hot, cold } from 'jasmine-marbles';
 import { mockPosition } from 'src/testing/mock-position';
 
 describe('GeolocationService', () => {

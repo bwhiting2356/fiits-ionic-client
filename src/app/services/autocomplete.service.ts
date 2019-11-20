@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MapsAPILoader } from '@agm/core';
-import { from, Observable, of } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 import { AutocompleteResult } from '../shared/maps/autocomplete-result';
-import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 
 declare var google;
 
