@@ -16,7 +16,7 @@ const fakeLocation = (latitude, longitude) =>  {
 const platforms = ['iphone-x', 'iphone-5']
 // const platforms = ['iphone-x'];
 
-describe('Search Tests', function() {
+xdescribe('Search Tests', function() {
     platforms.forEach(platform => {
         it(`${platform}: should search using address input`, () => {
             cy.viewport(platform);
