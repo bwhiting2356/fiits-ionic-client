@@ -339,7 +339,7 @@ describe('GoogleMapComponent', () => {
 
   it('should create a new station icon marker at position', () => {
     const latlng = { lat: 1, lng: 2 };
-    const marker = component.createMarker(latlng, true);
+    const marker = component.createMarker(latlng, true, 1);
     expect((marker as any).icon.url).toBe('/assets/imgs/station.svg');
     expect((marker as any).position.lat()).toEqual(1);
     expect((marker as any).position.lng()).toEqual(2);
@@ -347,7 +347,7 @@ describe('GoogleMapComponent', () => {
 
   it('should create a new pin icon marker at position', () => {
     const latlng = { lat: 1, lng: 2 };
-    const marker = component.createMarker(latlng, false);
+    const marker = component.createMarker(latlng, false, 1);
     expect((marker as any).icon.url).toBe('/assets/imgs/pin.svg');
     expect((marker as any).position.lat()).toEqual(1);
     expect((marker as any).position.lng()).toEqual(2);
@@ -367,8 +367,22 @@ describe('GoogleMapComponent', () => {
 <div id="marker-info-window" style="margin-right: 10px, margin-bottom: 10px">
 <h5>Station:</h5><p>123 Main Street</p>
 <ion-buttons slot="primary">
-<ion-button fill="solid" color="dark" expand="full" onclick="handleInfoWindowButtonClick('from', 0)">From here</ion-button>
-<ion-button fill="solid" color="dark" expand="full" onclick="handleInfoWindowButtonClick('to', 0)">To here</ion-button>
+  <ion-button
+    id="from-station"
+    fill="solid"
+    color="dark"
+    expand="full"
+    onclick="handleInfoWindowButtonClick('from', 0)">
+    From here
+  </ion-button>
+  <ion-button
+    id="to-station"
+    fill="solid"
+    color="dark"
+    expand="full"
+    onclick="handleInfoWindowButtonClick('to', 0)">
+    To here
+  </ion-button>
 </ion-buttons></div>`;
     expect(expected).toEqual(actual);
   });

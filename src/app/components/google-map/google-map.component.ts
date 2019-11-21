@@ -17,6 +17,7 @@ import {
   SaveOriginLatLng,
   SaveDestinationLatLng
 } from 'src/app/actions/search.actions';
+import { environment } from 'src/environments/environment';
 
 declare var google;
 
@@ -154,9 +155,11 @@ export class GoogleMapComponent implements OnChanges, OnInit {
     this.map.fitBounds(bounds, { top: 10, bottom: 10, right: 10, left: 10 });
   }
 
-  createMarker(position: LatLng, station: boolean): Marker {
-    return new google.maps.Marker({
+  createMarker(position: LatLng, station: boolean, stationIndex: number): Marker {
+    const markerOptions = {
       position,
+      title: `station-marker-${stationIndex}`,
+      optimized: true,
       map: this.map,
       icon: {
         url: station
@@ -164,7 +167,12 @@ export class GoogleMapComponent implements OnChanges, OnInit {
           : '/assets/imgs/pin.svg'
       },
       zIndex: station ? 10 : 20
-    });
+    };
+
+    if (environment.test) {
+      markerOptions.optimized = false;
+    }
+    return new google.maps.Marker(markerOptions);
   }
 
   handleInfoWindowButtonClick = (direction: string, stationIndex: number) => {
@@ -176,7 +184,9 @@ export class GoogleMapComponent implements OnChanges, OnInit {
       this.store.dispatch(new ChooseDestinationLocation(station.address));
       this.store.dispatch(new SaveDestinationLatLng(station.latLng));
     }
-    this.openWindow.close();
+    if (this.openWindow) {
+      this.openWindow.close();
+    }
   }
 
   createInfoWindow(address: string, description: string, station: boolean, stationIndex?: number): InfoWindow {
@@ -187,8 +197,22 @@ export class GoogleMapComponent implements OnChanges, OnInit {
     if (station) {
       content += `
 <ion-buttons slot="primary">
-<ion-button fill="solid" color="dark" expand="full" onclick="handleInfoWindowButtonClick('from', ${stationIndex})">From here</ion-button>
-<ion-button fill="solid" color="dark" expand="full" onclick="handleInfoWindowButtonClick('to', ${stationIndex})">To here</ion-button>
+  <ion-button
+    id="from-station"
+    fill="solid"
+    color="dark"
+    expand="full"
+    onclick="handleInfoWindowButtonClick('from', ${stationIndex})">
+    From here
+  </ion-button>
+  <ion-button
+    id="to-station"
+    fill="solid"
+    color="dark"
+    expand="full"
+    onclick="handleInfoWindowButtonClick('to', ${stationIndex})">
+    To here
+  </ion-button>
 </ion-buttons>`;
     }
     content += '</div>';
@@ -196,7 +220,7 @@ export class GoogleMapComponent implements OnChanges, OnInit {
   }
 
   addMarker(position: LatLng, address: string, description: string, station: boolean, stationIndex?: number): Marker {
-    const marker = this.createMarker(position, station);
+    const marker = this.createMarker(position, station, stationIndex);
     const infoWindow = this.createInfoWindow(address, description, station, stationIndex);
 
     marker.addListener('click', () => {
@@ -206,6 +230,7 @@ export class GoogleMapComponent implements OnChanges, OnInit {
       this.openWindow = infoWindow;
       this.openWindow.open(this.map, marker);
     });
+
     return marker;
   }
 }

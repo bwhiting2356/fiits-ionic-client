@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
 import { LatLng } from '../shared/latlng.model';
-import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import {
   SetSearchAddressType,
@@ -17,7 +17,6 @@ import {
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
 import { StationInfo } from '../shared/trip.model';
-import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-search',
@@ -42,7 +41,6 @@ export class SearchPage implements OnInit {
   ];
 
   constructor(
-    public toastController: ToastController,
     public router: Router,
     public store: Store<State>) {
     this.originLatLng = store
