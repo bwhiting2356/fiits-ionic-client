@@ -3,6 +3,16 @@ node_js:
   - "12.13.0"
 addons:
   chrome: stable
+  apt: 
+    packages: 
+      - libgconf-2-4
+
+cache:
+  npm: true
+  directories:
+    - ~/.npm
+    - ./node_modules
+    - ~/.cache
 branches:
   only:
     - master
@@ -17,6 +27,7 @@ script:
   - npm run test:ci
   - npm run e2e:ci
   - npm run build
+  - npm run e2e:ci
 deploy:
   skip_cleanup: true
   provider: firebase

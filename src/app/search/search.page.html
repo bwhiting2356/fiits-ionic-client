@@ -43,7 +43,7 @@
           <ng-container *ngTemplateOutlet="map"></ng-container>
       </div>
       
-      <div id="button">
+      <div id="button-container">
         <ion-button expand="full" [disabled]='rentalButtonDisabled | async' (click)="findBikeRentals()">
             <span *ngIf="!(searchQueryFetching | async); else fetching">Find bike rentals</span>
             <ng-template #fetching>
