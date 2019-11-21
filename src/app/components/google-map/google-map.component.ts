@@ -197,8 +197,22 @@ export class GoogleMapComponent implements OnChanges, OnInit {
     if (station) {
       content += `
 <ion-buttons slot="primary">
-<ion-button id="from-station" fill="solid" color="dark" expand="full" onclick="handleInfoWindowButtonClick('from', ${stationIndex})">From here</ion-button>
-<ion-button id="to-station" fill="solid" color="dark" expand="full" onclick="handleInfoWindowButtonClick('to', ${stationIndex})">To here</ion-button>
+  <ion-button
+    id="from-station"
+    fill="solid"
+    color="dark"
+    expand="full"
+    onclick="handleInfoWindowButtonClick('from', ${stationIndex})">
+    From here
+  </ion-button>
+  <ion-button
+    id="to-station"
+    fill="solid"
+    color="dark"
+    expand="full"
+    onclick="handleInfoWindowButtonClick('to', ${stationIndex})">
+    To here
+  </ion-button>
 </ion-buttons>`;
     }
     content += '</div>';
@@ -208,7 +222,7 @@ export class GoogleMapComponent implements OnChanges, OnInit {
   addMarker(position: LatLng, address: string, description: string, station: boolean, stationIndex?: number): Marker {
     const marker = this.createMarker(position, station, stationIndex);
     const infoWindow = this.createInfoWindow(address, description, station, stationIndex);
-    
+
     marker.addListener('click', () => {
       if (this.openWindow) {
         this.openWindow.close();

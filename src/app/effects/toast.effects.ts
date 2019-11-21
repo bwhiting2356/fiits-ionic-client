@@ -66,7 +66,7 @@ export class ToastEffects {
         const toast = await this.toastCtrl.create({
             message,
             color,
-            duration: 50000,
+            duration: 5000,
             position: 'bottom'
         });
         toast.present();
