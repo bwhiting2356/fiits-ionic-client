@@ -25,7 +25,7 @@ export class GeocodeService {
     }
     return new Promise(resolve => {
       this.googleGeocoderService.geocode({ address }, (results: GeocodingResult[]) => {
-        if (results && results[0]) { // why do I need this results[0] to avoid that bug in the tests?
+        if (results && results[0]) {
           resolve({
             lat: results[0].geometry.location.lat(),
             lng: results[0].geometry.location.lng()
