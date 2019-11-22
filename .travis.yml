@@ -17,7 +17,6 @@ branches:
   only:
     - master
 before_script:
-  - java --version
   - npm install -g @angular/cli
 before_install:
   - export TZ=America/Los_Angeles
