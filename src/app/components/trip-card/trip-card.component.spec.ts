@@ -47,7 +47,6 @@ describe('TripCardComponent', () => {
   });
 
   xit('should render the trips status', () => {
-    // TODO: make this real when I have real statuses
     expect(fixture.debugElement.query(By.css('.title'))
       .nativeElement.innerText).toBe('Completed Trip');
   });

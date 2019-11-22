@@ -96,8 +96,6 @@ export class SearchPage implements OnInit {
     this.store.dispatch(new FetchGeolocation());
   }
 
-  // TODO: set minimum date to now, acounting for timezone?
-
   navigateToAddressInput(type: SearchAddressType) {
     this.router.navigate(['address-input']);
     this.store.dispatch(new SetSearchAddressType(type));

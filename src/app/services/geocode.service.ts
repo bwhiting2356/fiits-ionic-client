@@ -31,7 +31,7 @@ export class GeocodeService {
             lng: results[0].geometry.location.lng()
           });
         } else {
-          resolve(null); // TODO: test
+          resolve(null); 
         }
       });
     });

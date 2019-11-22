@@ -68,14 +68,12 @@ describe('TripService', () => {
 
       tripService.bookTrip(trip).subscribe(result => {
         expect(result).toEqual({});
-        // TODO: what is the response?
       });
 
       const mockReq = httpMock.expectOne(`${tripService.TRIP_API_URL}/book-trip`);
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
       mockReq.flush({});
-      // TODO: what is the response?
 
       httpMock.verify();
   }));
