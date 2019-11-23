@@ -11,6 +11,7 @@
     "test:ci": "ng test --configuration ci && cat ../coverage/lcov.info | coveralls",
     "test-coverage": "ng test -- --codeCoverage=true",
     "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
     "e2e": "cypress run --record",
     "e2e:ci": "start-server-and-test start 8100 e2e",
     "cy:verify": "cypress verify"

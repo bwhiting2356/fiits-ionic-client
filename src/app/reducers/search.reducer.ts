@@ -1,9 +1,13 @@
+import { createSelector, createFeatureSelector } from '@ngrx/store';
+
 import { AutocompleteResult } from '../shared/maps/autocomplete-result';
 import { SearchActionTypes, SearchActions, SearchAddressType } from '../actions/search.actions';
 import { LatLng } from '../shared/latlng.model';
 import { TimeTarget } from '../shared/time-target';
 import { Trip, StationInfo } from '../shared/trip.model';
 import { DEFAULT_LOCATION } from '../shared/constants';
+
+import { State } from './index';
 
 export interface SearchState {
   originAddress: string;
@@ -46,6 +50,90 @@ export const initialSearchState: SearchState = {
   position: DEFAULT_LOCATION,
   error: undefined
 };
+
+const selectSearch = createFeatureSelector<State, SearchState>('search');
+
+export const selectAutocompleteResults = createSelector(
+  selectSearch,
+  state => state.autocompleteResults);
+
+export const selectAutocompletFetching = createSelector(
+  selectSearch,
+  state => state.autocompleteFetching);
+
+export const selectAutocompleteDirty = createSelector(
+  selectSearch,
+  state => state.autocompleteDirty);
+
+export const selectAddressType = createSelector(
+  selectSearch,
+  state => state.searchAddressType);
+
+export const selectShowAutocompleteSuggestions = createSelector(
+  selectAutocompleteResults,
+  selectAutocompletFetching,
+  (results, fetching) => results.length < 1 && !fetching
+);
+
+export const selectAutocompleteShowNoResults = createSelector(
+  selectAutocompleteResults,
+  selectAutocompletFetching,
+  selectAutocompleteDirty,
+  (results, fetching, dirty) => results.length < 1 && !fetching && dirty
+);
+
+export const selectShowCurrentLocation = createSelector(
+  selectSearch,
+  state => state.search.position,
+  (_, position) => position !== DEFAULT_LOCATION
+);
+
+export const selectSearchOriginLatLng = createSelector(
+  selectSearch,
+  state => state.originLatLng);
+
+export const selectSearchOriginAddress = createSelector(
+  selectSearch,
+  state => state.originAddress);
+
+export const selectSearchDestinationLatLng = createSelector(
+  selectSearch,
+  state => state.destinationLatLng);
+
+export const selectSearchDestinationAddress = createSelector(
+  selectSearch,
+  state => state.destinationAddress
+);
+
+export const selectSearchQueryFetching = createSelector(
+  selectSearch,
+  state => state.searchQueryFetching);
+
+export const selectSearchButtonDisabled = createSelector(
+  selectSearchOriginLatLng,
+  selectSearchDestinationLatLng,
+  selectSearchQueryFetching,
+  (origin, destination, fetching) => !origin || !destination || fetching
+);
+
+export const selectSearchShowSpinner = createSelector(
+  createSelector(selectSearch, state => state.geocodeFetching),
+  createSelector(selectSearch, state => state.stationsFetching),
+  selectSearchQueryFetching,
+  (searchQueryFetching, geocodeFetching, stationsFetching) => searchQueryFetching || geocodeFetching || stationsFetching
+);
+
+export const selectStations = createSelector(
+  selectSearch,
+  search => search.stations);
+
+export const selectPosition = createSelector(
+  selectSearch,
+  search => search.position);
+
+export const selectTrip = createSelector(
+  selectSearch,
+  search => search.trip);
 
 export function searchReducer(state = initialSearchState, action: SearchActions): SearchState {
   switch (action.type) {

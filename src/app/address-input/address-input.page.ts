@@ -21,6 +21,16 @@ import {
 
 import { AutocompleteResult } from '../shared/maps/autocomplete-result';
 import { DEFAULT_LOCATION } from '../shared/constants';
+import {
+  selectAutocompleteResults,
+  selectAutocompletFetching,
+  selectAutocompleteDirty,
+  selectAddressType,
+  selectShowAutocompleteSuggestions,
+  selectAutocompleteShowNoResults,
+  selectShowCurrentLocation,
+  selectPosition
+} from '../reducers/search.reducer';
 
 @Component({
   selector: 'app-address-input',
@@ -44,47 +54,16 @@ export class AddressInputPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.autocompleteResults = this.store
-      .select(state => state.search.autocompleteResults);
-
-    this.autocompleteFetching = this.store
-      .select(state => state.search.autocompleteFetching);
-
-    this.autocompleteDirty = this.store
-      .select(state => state.search.autocompleteDirty);
-
-    this.searchAddressType = this.store
-      .select(state => state.search.searchAddressType);
-
+    this.autocompleteResults = this.store.select(selectAutocompleteResults);
+    this.autocompleteFetching = this.store.select(selectAutocompletFetching);
+    this.autocompleteDirty = this.store.select(selectAutocompleteDirty);
+    this.searchAddressType = this.store.select(selectAddressType);
+    this.showSuggestions = this.store.select(selectShowAutocompleteSuggestions);
+    this.showNoResults = this.store.select(selectAutocompleteShowNoResults);
+    this.showCurrentLocation = this.store.select(selectShowCurrentLocation);
     this.placeholderText = this.searchAddressType.pipe(
       map(type => `Enter ${type} Address`)
     );
-
-    this.showSuggestions = combineLatest([
-      this.autocompleteResults,
-      this.autocompleteFetching,
-    ]).pipe(
-      map(([results, fetching]) => {
-        return results.length < 1 && !fetching;
-      })
-    );
-
-    this.showNoResults = combineLatest([
-      this.autocompleteResults,
-      this.autocompleteFetching,
-      this.autocompleteDirty
-    ]).pipe(
-      map(([results, fetching, dirty]) => {
-        return results.length < 1 && !fetching && dirty;
-      })
-    );
-
-    this.showCurrentLocation = this.store
-      .select(state => state.search.position)
-      .pipe(
-        map(position => position !== DEFAULT_LOCATION)
-      );
-
   }
 
   ionViewDidEnter() {
@@ -113,7 +92,7 @@ export class AddressInputPage implements OnInit {
   chooseCurrentLocation() {
     combineLatest([
       this.searchAddressType,
-      this.store.select(state => state.search.position)
+      this.store.select(selectPosition)
     ])
     .pipe(take(1))
     .subscribe(([type, position]) => {
