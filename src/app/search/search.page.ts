@@ -17,6 +17,17 @@ import {
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
 import { StationInfo } from '../shared/trip.model';
+import {
+  selectSearchOriginLatLng,
+  selectSearchOriginAddress,
+  selectSearchDestinationLatLng,
+  selectSearchDestinationAddress,
+  selectSearchQueryFetching,
+  selectSearchButtonDisabled,
+  selectSearchShowSpinner,
+  selectStations,
+  selectPosition
+} from '../reducers/search.reducer';
 
 @Component({
   selector: 'app-search',
@@ -43,52 +54,22 @@ export class SearchPage implements OnInit {
   constructor(
     public router: Router,
     public store: Store<State>) {
-    this.originLatLng = store
-      .select(state => state.search.originLatLng);
 
-    this.originAddress = store
-      .select(state => state.search.originAddress);
-
-    this.destinationLatLng = store
-      .select(state => state.search.destinationLatLng);
-
-    this.destinationAddress = store
-      .select(state => state.search.destinationAddress);
-
-    this.searchQueryFetching = store
-      .select(state => state.search.searchQueryFetching);
-
-    this.rentalButtonDisabled = combineLatest([
-      this.originLatLng,
-      this.destinationLatLng,
-      this.searchQueryFetching
-    ]).pipe(
-      map(([origin, destination, searchQueryFetching]) =>  {
-        return !origin || !destination || searchQueryFetching;
-      })
-    );
-
-    this.showSpinner = combineLatest([
-      this.searchQueryFetching,
-      store.select(state => state.search.geocodeFetching),
-      store.select(state => state.search.stationsFetching),
-    ]).pipe(
-      map(([searchQueryFetching, geocodeFetching, stationsFetching]) => {
-        return searchQueryFetching || geocodeFetching || stationsFetching;
-      })
-    );
+    this.originLatLng = store.select(selectSearchOriginLatLng);
+    this.originAddress = store.select(selectSearchOriginAddress);
+    this.destinationLatLng = store.select(selectSearchDestinationLatLng);
+    this.destinationAddress = store.select(selectSearchDestinationAddress);
+    this.searchQueryFetching = store.select(selectSearchQueryFetching);
+    this.rentalButtonDisabled = store.select(selectSearchButtonDisabled);
+    this.showSpinner = store.select(selectSearchShowSpinner);
+    this.stations = store.select(selectStations);
+    this.position = store.select(selectPosition);
 
     this.timeString = store
       .select(state => state.search.time)
       .pipe(
         map(time => time.toString())
       );
-
-    this.stations = store
-        .select(state => state.search.stations);
-
-    this.position = store
-        .select(state => state.search.position);
   }
 
   async ngOnInit() {
