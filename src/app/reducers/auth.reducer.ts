@@ -13,6 +13,7 @@ export const initialAuthState: AuthState = {
     authFetching: false
 };
 
+export const authKey = 'auth';
 export function authReducer(state = initialAuthState, action: AuthActions): AuthState {
     switch (action.type) {
         case AuthActionTypes.LogInFromSearch:

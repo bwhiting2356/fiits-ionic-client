@@ -9,7 +9,6 @@ import { State } from '../reducers';
 import { BookTripRequest } from '../actions/search.actions';
 import { selectTrip } from '../reducers/search.reducer';
 
-
 @Injectable()
 export class AuthEffects {
 

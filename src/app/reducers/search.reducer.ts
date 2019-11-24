@@ -51,7 +51,8 @@ export const initialSearchState: SearchState = {
   error: undefined
 };
 
-const selectSearch = createFeatureSelector<State, SearchState>('search');
+export const searchKey = 'search';
+const selectSearch = createFeatureSelector<State, SearchState>(searchKey);
 
 export const selectAutocompleteResults = createSelector(
   selectSearch,
@@ -120,7 +121,7 @@ export const selectSearchShowSpinner = createSelector(
   createSelector(selectSearch, state => state.geocodeFetching),
   createSelector(selectSearch, state => state.stationsFetching),
   selectSearchQueryFetching,
-  (searchQueryFetching, geocodeFetching, stationsFetching) => searchQueryFetching || geocodeFetching || stationsFetching
+  (searchFetching, geocodeFetching, stationsFetching) => searchFetching || geocodeFetching || stationsFetching
 );
 
 export const selectStations = createSelector(

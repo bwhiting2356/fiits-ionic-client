@@ -1,0 +1,26 @@
+[
+    {
+        "id": 3,
+        "lat": 37.78637526861584,
+        "lng": -122.40490436553954,
+        "capacity": 35,
+        "currentInventory": 5,
+        "address": "Powell St BART Station (Market St at 4th St)",
+        "latLng": {
+            "lat": 37.78637526861584,
+            "lng": -122.40490436553954
+        }
+    },
+    {
+        "id": 4,
+        "lat": 37.78588062694133,
+        "lng": -122.4089150084319,
+        "capacity": 35,
+        "currentInventory": 5,
+        "address": "Cyril Magnin St at Ellis St",
+        "latLng": {
+            "lat": 37.78588062694133,
+            "lng": -122.4089150084319
+        }
+    }
+ ]
