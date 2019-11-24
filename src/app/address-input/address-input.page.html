@@ -9,8 +9,8 @@
 
 <ion-content>
   <div id="container">
-    <div id="input">
-      <ion-item>
+    <div id="input" *ngIf="(searchAddressType | async) != undefined">
+      <ion-item >
         <ion-input #input id="address-input" [placeholder]="placeholderText | async" (input)="inputChange($event)"></ion-input>
       </ion-item>
       <ion-item id="fetching" *ngIf="(autocompleteFetching | async)">Fetching results...</ion-item>

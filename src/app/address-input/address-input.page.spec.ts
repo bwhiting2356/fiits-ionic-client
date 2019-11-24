@@ -47,7 +47,8 @@ describe('AddressInputPage', () => {
         {
           provide: NavController,
           useValue: {
-            back: () => {}
+            back: () => {},
+            navigateForward: () => {}
           }
         },
         provideMockStore({ initialState })
@@ -83,6 +84,7 @@ describe('AddressInputPage', () => {
       ...initialState,
       search: {
         ...initialSearchState,
+        searchAddressType: 'Origin',
         autocompleteResults: mockAutocompleteResults
       }
     });
@@ -96,6 +98,7 @@ describe('AddressInputPage', () => {
       ...initialState,
       search: {
         ...initialSearchState,
+        searchAddressType: 'Origin',
         autocompleteResults: mockAutocompleteResults
       }
     });
@@ -109,6 +112,7 @@ describe('AddressInputPage', () => {
 
   it('should show the no-results text if showNoResults is true', () => {
     component.showNoResults = of(true);
+    component.searchAddressType = of('Origin');
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('#no-results'))
       .nativeElement.innerText).toBe('No addresses found for this search');
@@ -116,18 +120,21 @@ describe('AddressInputPage', () => {
 
   it('should not show the no-results text if showNoResults is false', () => {
     component.showNoResults = of(false);
+    component.searchAddressType = of('Origin');
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('#no-results'))).toBeFalsy();
   });
 
   it('should show the suggestions section if showSuggestions is true', () => {
     component.showSuggestions = of(true);
+    component.searchAddressType = of('Origin');
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('#suggestions'))).toBeTruthy();
   });
 
   it('should not show the suggestions section if showSuggestions is false', () => {
     component.showSuggestions = of(false);
+    component.searchAddressType = of('Origin');
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('#suggestions'))).toBeFalsy();
   });
@@ -243,6 +250,13 @@ describe('AddressInputPage', () => {
   });
 
   it('should show current location is showCurrentLocation is true', () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: 'Origin'
+      }
+    });
     component.showCurrentLocation = of(true);
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('#current-location'))).toBeTruthy();
@@ -333,8 +347,17 @@ describe('AddressInputPage', () => {
     expect(component.input.setFocus).toHaveBeenCalled();
   });
 
-  it('should call chooseCurrentLocation if they click on the current location line item', () => {
+  it('should call chooseCurrentLocation if they click on the current location line item', async () => {
     spyOn(component, 'chooseCurrentLocation');
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: 'Origin',
+        position: { lat: 0, lng: 0 }
+      }
+    });
+    fixture.detectChanges();
     const currentLocation = fixture.debugElement.query(By.css('#current-location')).nativeElement;
     currentLocation.click();
     expect(component.chooseCurrentLocation).toHaveBeenCalled();
@@ -374,6 +397,22 @@ describe('AddressInputPage', () => {
     expect(store.dispatch).toHaveBeenCalledWith(new ChooseCurrentLocationAsDestination({ lat: 0, lng: 0 }));
     expect(store.dispatch).toHaveBeenCalledWith(new SaveDestinationLatLng({ lat: 0, lng: 0}));
     expect(component.navCtrl.back).toHaveBeenCalled();
+  });
+
+  it('should not render the input if searchAddressType is undefined and navigate back to /search', async () => {
+    spyOn(component.navCtrl, 'navigateForward');
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: undefined
+      }
+    });
+
+    fixture.detectChanges();
+    component.ngOnInit();
+    expect(fixture.debugElement.query(By.css('#input'))).toBeFalsy();
+    expect(component.navCtrl.navigateForward).toHaveBeenCalledWith('/search');
   });
 
 });

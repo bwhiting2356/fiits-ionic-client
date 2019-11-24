@@ -158,4 +158,10 @@ describe('Search: error paths', () => {
       }).should('eq', 'Error fetching station info')
       cy.wait('@stations');
    });
+
+   it('should navigate away from /address-input if navigated to directly', () => {
+      cy.visit('http://localhost:8100/address-input');
+      cy.wait(500);
+      cy.url().should('include', '/search');
+   });
 });
