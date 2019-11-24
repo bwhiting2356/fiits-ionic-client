@@ -33,7 +33,7 @@ describe('Search: happy path', () => {
    });
 
    platforms.forEach(platform => {
-      it(`${platform}: should search using address input`, () => {
+      xit(`${platform}: should search using address input`, () => {
          cy.viewport(platform);
          cy.visit('http://localhost:8100', fakeLocation(37.780984, -122.408755));
          cy.url().should('include', '/search');
