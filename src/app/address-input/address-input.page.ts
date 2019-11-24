@@ -20,7 +20,6 @@ import {
 } from '../actions/search.actions';
 
 import { AutocompleteResult } from '../shared/maps/autocomplete-result';
-import { DEFAULT_LOCATION } from '../shared/constants';
 import {
   selectAutocompleteResults,
   selectAutocompletFetching,
@@ -64,6 +63,12 @@ export class AddressInputPage implements OnInit {
     this.placeholderText = this.searchAddressType.pipe(
       map(type => `Enter ${type} Address`)
     );
+
+    this.searchAddressType.pipe(take(1)).subscribe(type => {
+      if (!type) {
+        this.navCtrl.navigateForward('/search');
+      }
+    });
   }
 
   ionViewDidEnter() {
