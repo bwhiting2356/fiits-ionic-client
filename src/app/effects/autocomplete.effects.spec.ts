@@ -42,6 +42,19 @@ describe('SearchEffects success', () => {
     expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
   });
 
+  it('should debounce the autocomplete requests', () => {
+    const action1 = new FetchResults('123 Main Str');
+    const action2 = new FetchResults('123 Main Stre');
+    const action3 = new FetchResults('123 Main Stree');
+
+    const completion = new SaveResults(mockAutocompleteResults);
+
+    actions$ = hot('--abc-', { a: action1, b: action2, c: action3 });
+
+    const expected = hot('--b', { b: completion });
+    expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
+  });
+
 });
 
 describe('AutocompleteEffects errors', () => {
