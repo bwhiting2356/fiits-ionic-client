@@ -19,7 +19,9 @@ export class ToastEffects {
     searchQueryError$: Observable<any> = this.actions$.pipe(
         ofType(SearchActionTypes.TripSearchQueryError),
         tap(action => this.presentToast(
-            action.error.error ? action.error.error.message : 'Error fetching trip info',
+            action.error.error && action.error.error.message
+                ? action.error.error.message
+                : 'Error fetching trip info',
             'danger'
         ))
     );
@@ -46,8 +48,11 @@ export class ToastEffects {
     bookTripError$: Observable<any> = this.actions$.pipe(
         ofType(SearchActionTypes.BookTripFailure),
         tap(action => this.presentToast(
-            action.error.error ? action.error.error.message : 'Error booking trip',
-            'danger'))
+            action.error.error && action.error.error.message
+                ? action.error.error.message
+                : 'Error booking trip',
+            'danger'
+        ))
     );
 
     @Effect({ dispatch: false })
