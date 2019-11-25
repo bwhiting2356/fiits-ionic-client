@@ -17,9 +17,6 @@ export interface SearchState {
   timeTarget: TimeTarget;
   time: Date;
   searchAddressType: SearchAddressType;
-  autocompleteResults: AutocompleteResult[];
-  autocompleteFetching: boolean;
-  autocompleteDirty: boolean;
   geocodeFetching: boolean;
   searchQueryFetching: boolean;
   stations: StationInfo[];
@@ -38,9 +35,6 @@ export const initialSearchState: SearchState = {
   timeTarget: 'DEPART_AT',
   time: new Date(),
   searchAddressType: undefined,
-  autocompleteResults: [],
-  autocompleteFetching: false,
-  autocompleteDirty: false,
   geocodeFetching: false,
   searchQueryFetching: false,
   stations: undefined,
@@ -54,34 +48,9 @@ export const initialSearchState: SearchState = {
 export const searchKey = 'search';
 const selectSearch = createFeatureSelector<State, SearchState>(searchKey);
 
-export const selectAutocompleteResults = createSelector(
-  selectSearch,
-  state => state.autocompleteResults);
-
-export const selectAutocompletFetching = createSelector(
-  selectSearch,
-  state => state.autocompleteFetching);
-
-export const selectAutocompleteDirty = createSelector(
-  selectSearch,
-  state => state.autocompleteDirty);
-
 export const selectAddressType = createSelector(
   selectSearch,
   state => state.searchAddressType);
-
-export const selectShowAutocompleteSuggestions = createSelector(
-  selectAutocompleteResults,
-  selectAutocompletFetching,
-  (results, fetching) => results.length < 1 && !fetching
-);
-
-export const selectAutocompleteShowNoResults = createSelector(
-  selectAutocompleteResults,
-  selectAutocompletFetching,
-  selectAutocompleteDirty,
-  (results, fetching, dirty) => results.length < 1 && !fetching && dirty
-);
 
 export const selectShowCurrentLocation = createSelector(
   selectSearch,
@@ -173,13 +142,6 @@ export function searchReducer(state = initialSearchState, action: SearchActions)
         ...state,
         destinationAddress: action.location
       };
-    case SearchActionTypes.ClearAutocompleteResults:
-      return {
-        ...state,
-        autocompleteResults: [],
-        autocompleteDirty: false,
-        searchAddressType: undefined,
-      };
     case SearchActionTypes.FetchAllStations:
       return {
         ...state,
@@ -190,13 +152,6 @@ export function searchReducer(state = initialSearchState, action: SearchActions)
         ...state,
         stationsFetching: false,
         error: action.error
-      };
-    case SearchActionTypes.FetchAutocompleteResults:
-      return {
-        ...state,
-        autocompleteResults: [],
-        autocompleteFetching: true,
-        autocompleteDirty: true
       };
     case SearchActionTypes.FetchGeocodeOriginResult:
     case SearchActionTypes.FetchGeocodeDestinationResult:
@@ -215,12 +170,6 @@ export function searchReducer(state = initialSearchState, action: SearchActions)
       return {
         ...state,
         position: action.position
-      };
-    case SearchActionTypes.SaveAutocompleteResults:
-      return {
-        ...state,
-        autocompleteResults: action.autocompleteResults,
-        autocompleteFetching: false
       };
     case SearchActionTypes.SaveOriginLatLng:
       return {

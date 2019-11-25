@@ -2,9 +2,6 @@ import { searchReducer, initialSearchState } from './search.reducer';
 import {
   ChooseOriginLocation,
   ChooseDestinationLocation,
-  SaveAutocompleteResults,
-  ClearAutocompleteResults,
-  FetchAutocompleteResults,
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult,
   SaveOriginLatLng,
@@ -84,71 +81,6 @@ describe('Search Reducer', () => {
       expect(result).toEqual({
         ...initialSearchState,
         searchAddressType: 'Destination'
-      });
-    });
-
-    it('should save the autocomplete results', () => {
-      const initialStateWithFetching = {
-        ...initialSearchState,
-        autocompleteFetching: true
-      };
-      const action = new SaveAutocompleteResults(mockAutocompleteResults);
-
-      const result = searchReducer(initialStateWithFetching, action);
-
-      expect(result).toEqual({
-        ...initialSearchState,
-        autocompleteResults: mockAutocompleteResults,
-        autocompleteFetching: false
-      });
-    });
-
-    it('should clear the autocomplete results, set dirty to false, set searchAddressType to undefined', () => {
-      const initialStateWithMockResults = {
-        ...initialSearchState,
-        autocompleteResults: mockAutocompleteResults,
-        autocompleteDirty: true,
-        searchAddressType: 'Destination' as SearchAddressType
-      };
-      const action = new ClearAutocompleteResults();
-
-      const result = searchReducer(initialStateWithMockResults, action);
-
-      expect(result).toEqual({
-        ...initialSearchState,
-        autocompleteResults: [],
-        autocompleteDirty: false,
-        searchAddressType: undefined
-      });
-    });
-
-    it('should set the fetching state to true, dirty to true', () => {
-      const action = new FetchAutocompleteResults('123 Main Street');
-
-      const result = searchReducer(initialSearchState, action);
-
-      expect(result).toEqual({
-        ...initialSearchState,
-        autocompleteFetching: true,
-        autocompleteDirty: true,
-      });
-    });
-
-    it('should set the fetching state to true, clear the current results', () => {
-      const initialStateWithMockResults = {
-        ...initialSearchState,
-        autocompleteDirty: true,
-        autocompleteResults: mockAutocompleteResults
-      };
-      const action = new FetchAutocompleteResults('123 Main Street');
-
-      const result = searchReducer(initialStateWithMockResults, action);
-
-      expect(result).toEqual({
-        ...initialSearchState,
-        autocompleteDirty: true,
-        autocompleteFetching: true,
-        autocompleteResults: []
       });
     });
 

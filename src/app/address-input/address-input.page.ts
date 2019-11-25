@@ -4,12 +4,11 @@ import { Store } from '@ngrx/store';
 import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
+import { AutocompleteResult } from '../shared/maps/autocomplete-result';
 import { State } from '../reducers';
 import {
   ChooseOriginLocation,
   ChooseDestinationLocation,
-  FetchAutocompleteResults,
-  ClearAutocompleteResults,
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult,
   SearchAddressType,
@@ -19,17 +18,19 @@ import {
   SaveDestinationLatLng
 } from '../actions/search.actions';
 
-import { AutocompleteResult } from '../shared/maps/autocomplete-result';
+import {
+  selectAddressType,
+  selectShowCurrentLocation,
+  selectPosition
+} from '../reducers/search.reducer';
+import { FetchResults, ClearResults } from '../actions/autocomplete.actions';
 import {
   selectAutocompleteResults,
   selectAutocompletFetching,
   selectAutocompleteDirty,
-  selectAddressType,
   selectShowAutocompleteSuggestions,
-  selectAutocompleteShowNoResults,
-  selectShowCurrentLocation,
-  selectPosition
-} from '../reducers/search.reducer';
+  selectAutocompleteShowNoResults
+} from '../reducers/autocomplete.reducer';
 
 @Component({
   selector: 'app-address-input',
@@ -76,7 +77,7 @@ export class AddressInputPage implements OnInit {
   }
 
   async inputChange(e) {
-    this.store.dispatch(new FetchAutocompleteResults(e.target.value));
+    this.store.dispatch(new FetchResults(e.target.value));
   }
 
   chooseLocation(result: AutocompleteResult) {
@@ -90,7 +91,7 @@ export class AddressInputPage implements OnInit {
           this.store.dispatch(new FetchGeocodeDestinationResult(result.structured_formatting.main_text));
         }
         this.navCtrl.back();
-        this.store.dispatch(new ClearAutocompleteResults());
+        this.store.dispatch(new ClearResults());
       });
   }
 

@@ -14,19 +14,19 @@ import { AutocompleteService } from '../services/autocomplete.service';
 import { State } from '../reducers';
 import { initialState } from '../reducers';
 import {
-  FetchAutocompleteResults,
   ChooseOriginLocation,
-  ClearAutocompleteResults,
   ChooseDestinationLocation,
   FetchGeocodeOriginResult,
   FetchGeocodeDestinationResult,
   ChooseCurrentLocationAsDestination,
   ChooseCurrentLocationAsOrigin,
   SaveOriginLatLng,
-  SaveDestinationLatLng
+  SaveDestinationLatLng,
 } from '../actions/search.actions';
 import { initialSearchState } from '../reducers/search.reducer';
 import { DEFAULT_LOCATION } from '../shared/constants';
+import { FetchResults, ClearResults } from '../actions/autocomplete.actions';
+import { initialAutocompleteState } from '../reducers/autocomplete.reducer';
 
 describe('AddressInputPage', () => {
   let component: AddressInputPage;
@@ -72,7 +72,7 @@ describe('AddressInputPage', () => {
     spyOn(store, 'dispatch');
     await component.inputChange({ target: { value: '123 Main Street' }});
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new FetchAutocompleteResults('123 Main Street'));
+      .toHaveBeenCalledWith(new FetchResults('123 Main Street'));
   });
 
   it('should not show the no-results text if there are results', () => {
@@ -85,6 +85,9 @@ describe('AddressInputPage', () => {
       search: {
         ...initialSearchState,
         searchAddressType: 'Origin',
+      },
+      autocomplete: {
+        ...initialAutocompleteState,
         autocompleteResults: mockAutocompleteResults
       }
     });
@@ -99,6 +102,9 @@ describe('AddressInputPage', () => {
       search: {
         ...initialSearchState,
         searchAddressType: 'Origin',
+      },
+      autocomplete: {
+        ...initialAutocompleteState,
         autocompleteResults: mockAutocompleteResults
       }
     });
@@ -142,8 +148,8 @@ describe('AddressInputPage', () => {
   it('should make showNoResults false if there are no results but is pristine', () => {
     store.setState({
       ...initialState,
-      search: {
-        ...initialSearchState,
+      autocomplete: {
+        ...initialAutocompleteState,
         autocompleteResults: [],
         autocompleteDirty: false,
       }
@@ -156,8 +162,8 @@ describe('AddressInputPage', () => {
   it('should make showNoResults false if there are results', () => {
     store.setState({
       ...initialState,
-      search: {
-        ...initialSearchState,
+      autocomplete: {
+        ...initialAutocompleteState,
         autocompleteResults: mockAutocompleteResults,
         autocompleteDirty: true,
       }
@@ -170,8 +176,8 @@ describe('AddressInputPage', () => {
   it('should make snowNoResults true if there are no results and is dirty', () => {
     store.setState({
       ...initialState,
-      search: {
-        ...initialSearchState,
+      autocomplete: {
+        ...initialAutocompleteState,
         autocompleteResults: [],
         autocompleteDirty: true,
       }
@@ -184,8 +190,8 @@ describe('AddressInputPage', () => {
   it('should make showSuggestions true if there are no results and is not fetching', () => {
     store.setState({
       ...initialState,
-      search: {
-        ...initialSearchState,
+      autocomplete: {
+        ...initialAutocompleteState,
         autocompleteResults: [],
         autocompleteFetching: false,
       }
@@ -198,8 +204,8 @@ describe('AddressInputPage', () => {
   it('should make showSuggestions false if there are results and is not fetching', () => {
     store.setState({
       ...initialState,
-      search: {
-        ...initialSearchState,
+      autocomplete: {
+        ...initialAutocompleteState,
         autocompleteResults: mockAutocompleteResults,
         autocompleteFetching: false,
       }
@@ -212,8 +218,8 @@ describe('AddressInputPage', () => {
   it('should make showSuggestions false if there are no results and is fetching', () => {
     store.setState({
       ...initialState,
-      search: {
-        ...initialSearchState,
+      autocomplete: {
+        ...initialAutocompleteState,
         autocompleteResults: [],
         autocompleteFetching: true,
       }
@@ -298,7 +304,7 @@ describe('AddressInputPage', () => {
     expect(store.dispatch)
       .toHaveBeenCalledWith(new FetchGeocodeOriginResult(mockAutocompleteResults[0].structured_formatting.main_text));
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new ClearAutocompleteResults());
+      .toHaveBeenCalledWith(new ClearResults());
 
     expect(component.navCtrl.back).toHaveBeenCalled();
   });
@@ -334,7 +340,7 @@ describe('AddressInputPage', () => {
     expect(store.dispatch)
       .toHaveBeenCalledWith(new FetchGeocodeDestinationResult(mockAutocompleteResults[1].structured_formatting.main_text));
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new ClearAutocompleteResults());
+      .toHaveBeenCalledWith(new ClearResults());
     expect(component.navCtrl.back).toHaveBeenCalled();
   });
 

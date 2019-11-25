@@ -8,10 +8,12 @@ import {
     FetchAllStationsError,
     TripSearchQueryError,
     GeocodeError,
-    AutocompleteResultsError,
     BookTripSuccess,
     BookTripFailure
 } from '../actions/search.actions';
+import {
+    ResultsError
+} from '../actions/autocomplete.actions';
 import { FeedbackError, FeedbackSuccess } from '../actions/feedback.actions';
 
 describe('Toast Effects ', () => {
@@ -110,7 +112,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Error fetching locations\'', async () => {
-        const action = new AutocompleteResultsError('oops');
+        const action = new ResultsError('oops');
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
 import { FeedbackActions, FeedbackActionTypes } from '../actions/feedback.actions';
+import { AutocompleteActions, AutocompleteActionTypes } from '../actions/autocomplete.actions';
 
 @Injectable()
 export class ToastEffects {
@@ -34,7 +35,7 @@ export class ToastEffects {
 
     @Effect({ dispatch: false })
     autocompleteError$: Observable<any> = this.actions$.pipe(
-        ofType(SearchActionTypes.AutocompleteResultsError),
+        ofType(AutocompleteActionTypes. Error),
         tap(_ => this.presentToast('Error fetching locations', 'danger'))
     );
 
@@ -78,5 +79,5 @@ export class ToastEffects {
     }
     constructor(
         private toastCtrl: ToastController,
-        private actions$: Actions<SearchActions | FeedbackActions>) {}
+        private actions$: Actions<SearchActions | FeedbackActions | AutocompleteActions>) {}
 }

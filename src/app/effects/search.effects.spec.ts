@@ -8,8 +8,6 @@ import { AutocompleteService } from '../services/autocomplete.service';
 import { GeocodeService } from '../services/geocode.service';
 import { TripService } from '../services/trip.service';
 import {
-  FetchAutocompleteResults,
-  SaveAutocompleteResults,
   FetchGeocodeOriginResult,
   SaveOriginLatLng,
   FetchGeocodeDestinationResult,
@@ -21,7 +19,6 @@ import {
   FetchAllStationsError,
   TripSearchQueryError,
   GeocodeError,
-  AutocompleteResultsError,
   BookTripRequest,
   BookTripSuccess,
   BookTripFailure,
@@ -93,14 +90,6 @@ describe('SearchEffects success', () => {
     });
 
     effects = TestBed.get<SearchEffects>(SearchEffects);
-  });
-
-  it('should return SaveAutocompleteResults on success', () => {
-    const action = new FetchAutocompleteResults('123 Main Street');
-    const completion = new SaveAutocompleteResults(mockAutocompleteResults);
-    actions$ = hot('--a-', { a: action });
-    const expected = hot('--b', { b: completion });
-    expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
   });
 
   it('should return SaveGeocodingOritinResult on success', () => {
@@ -299,14 +288,6 @@ describe('SearchEffects errors', () => {
     actions$ = hot('--a-', { a: action });
     const expected = cold('--b', { b: completion });
     expect(effects.tripSearchQuery$).toBeObservable(expected);
-  });
-
-  it('should return AutocompleteError on error', () => {
-    const action = new FetchAutocompleteResults('123 Main Street');
-    const completion = new AutocompleteResultsError(error);
-    actions$ = hot('--a-', { a: action });
-    const expected = cold('--b', { b: completion });
-    expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
   });
 
   it('should return BookTripFailure on error', () => {

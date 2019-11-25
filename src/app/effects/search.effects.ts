@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import {
   SearchActionTypes,
-  SaveAutocompleteResults,
-  AutocompleteResultsError,
   SaveOriginLatLng,
   SaveDestinationLatLng,
   SaveTrip,
@@ -20,7 +18,6 @@ import {
   ChooseDestinationLocation
 } from '../actions/search.actions';
 import { map, catchError, tap, switchMap } from 'rxjs/operators';
-import { AutocompleteService } from '../services/autocomplete.service';
 import { Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { GeocodeService } from '../services/geocode.service';
@@ -31,16 +28,6 @@ import { GeolocationService } from '../services/geolocation.service';
 
 @Injectable()
 export class SearchEffects {
-
-  @Effect()
-  fetchAutocompleteResults$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.FetchAutocompleteResults),
-    map(action => action.input),
-    switchMap(input => this.autocompleteService.getPlacePredictions$(input).pipe(
-      map(autocompleteResults => new SaveAutocompleteResults(autocompleteResults)),
-      catchError(error => of(new AutocompleteResultsError(error)))
-    ))
-  );
 
   @Effect()
   fetchGeocodeOriginResult$: Observable<Action> = this.actions$.pipe(
@@ -124,6 +111,5 @@ export class SearchEffects {
     private geolocationService: GeolocationService,
     private tripService: TripService,
     private stationService: StationService,
-    private autocompleteService: AutocompleteService,
     private navCtrl: NavController) {}
 }
