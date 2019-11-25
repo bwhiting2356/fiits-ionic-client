@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Observable, of } from 'rxjs';
-import { hot, cold } from 'jasmine-marbles';
+import { Observable, of, Scheduler } from 'rxjs';
+import { hot, cold, getTestScheduler } from 'jasmine-marbles';
 
-import { SearchEffects } from './search.effects';
 import { AutocompleteService } from '../services/autocomplete.service';
 import {
   FetchResults,
@@ -11,7 +10,7 @@ import {
   ResultsError,
 } from '../actions/autocomplete.actions';
 import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
-import { AutocompleteEffects } from './autocomplete.effects';
+import { AutocompleteEffects, AUTOCOMPLETE_DEBOUNCE, AUTOCOMPLETE_EFFECTS_SCHEDULER } from './autocomplete.effects';
 
 describe('SearchEffects success', () => {
   let actions$: Observable<any>;
@@ -26,8 +25,10 @@ describe('SearchEffects success', () => {
           provide: AutocompleteService,
           useValue: {
             getPlacePredictions$: () => of(mockAutocompleteResults)
-          }
+          },
         },
+        { provide: AUTOCOMPLETE_DEBOUNCE, useValue: 30 },
+        { provide: AUTOCOMPLETE_EFFECTS_SCHEDULER, useFactory: getTestScheduler },
       ]
     });
 
