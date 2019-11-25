@@ -12,7 +12,7 @@ import {
 import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 import { AutocompleteEffects, AUTOCOMPLETE_DEBOUNCE, AUTOCOMPLETE_EFFECTS_SCHEDULER } from './autocomplete.effects';
 
-describe('SearchEffects success', () => {
+describe('AutocompleteEffects success', () => {
   let actions$: Observable<any>;
   let effects: AutocompleteEffects;
 
@@ -39,11 +39,11 @@ describe('SearchEffects success', () => {
     const action = new FetchResults('123 Main Street');
     const completion = new SaveResults(mockAutocompleteResults);
     actions$ = hot('--a-', { a: action });
-    const expected = hot('--b', { b: completion });
+    const expected = hot('-----b', { b: completion });
     expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
   });
 
-  it('should debounce the autocomplete requests', () => {
+  it('should debounce the autocomplete requests', async () => {
     const action1 = new FetchResults('123 Main Str');
     const action2 = new FetchResults('123 Main Stre');
     const action3 = new FetchResults('123 Main Stree');
@@ -52,7 +52,7 @@ describe('SearchEffects success', () => {
 
     actions$ = hot('--abc-', { a: action1, b: action2, c: action3 });
 
-    const expected = hot('--b', { b: completion });
+    const expected = hot('-------b', { b: completion });
     expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
   });
 
@@ -75,7 +75,9 @@ describe('AutocompleteEffects errors', () => {
           useValue: {
             getPlacePredictions$: () => errorResponse
           }
-        }
+        },
+        { provide: AUTOCOMPLETE_DEBOUNCE, useValue: 30 },
+        { provide: AUTOCOMPLETE_EFFECTS_SCHEDULER, useFactory: getTestScheduler },
       ]
     });
 
@@ -83,11 +85,11 @@ describe('AutocompleteEffects errors', () => {
   });
 
 
-  it('should return AutocompleteError on error', () => {
+  it('should return AutocompleteError on error', async () => {
     const action = new FetchResults('123 Main Street');
     const completion = new ResultsError(error);
     actions$ = hot('--a-', { a: action });
-    const expected = cold('--b', { b: completion });
+    const expected = cold('-----b', { b: completion });
     expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
   });
 

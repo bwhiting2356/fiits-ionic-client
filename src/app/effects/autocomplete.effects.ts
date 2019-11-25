@@ -8,19 +8,12 @@ import { Action } from '@ngrx/store';
 import { AutocompleteActionTypes, SaveResults, ResultsError, AutocompleteActions } from '../actions/autocomplete.actions';
 import { async } from 'rxjs/internal/scheduler/async';
 
-export const AUTOCOMPLETE_DEBOUNCE = 300;
+export const AUTOCOMPLETE_DEBOUNCE = new InjectionToken<number>('Test Debounce');
 export const AUTOCOMPLETE_EFFECTS_SCHEDULER = new InjectionToken<SchedulerLike>('AutocompleteEffects Scheduler');
 
 @Injectable()
 export class AutocompleteEffects {
 
-  @Optional()
-  @Inject(AUTOCOMPLETE_DEBOUNCE)
-  private debounce: number;
-
-  @Optional()
-  @Inject(AUTOCOMPLETE_EFFECTS_SCHEDULER)
-  private scheduler: SchedulerLike;
 
   @Effect()
   fetchAutocompleteResults$: Observable<Action> = this.actions$.pipe(
@@ -35,5 +28,13 @@ export class AutocompleteEffects {
 
   constructor(
     private actions$: Actions<AutocompleteActions>,
-    private autocompleteService: AutocompleteService) {}
+    private autocompleteService: AutocompleteService,
+
+    @Optional()
+    @Inject(AUTOCOMPLETE_DEBOUNCE)
+    private debounce: number,
+
+    @Optional()
+    @Inject(AUTOCOMPLETE_EFFECTS_SCHEDULER)
+    private scheduler: SchedulerLike) {}
 }
