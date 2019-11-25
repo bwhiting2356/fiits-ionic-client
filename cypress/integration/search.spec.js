@@ -104,7 +104,7 @@ describe('Search: happy path', () => {
 })
 
 describe('Search: error paths', () => {
-  xit('should show an error toast with the message \'Error fetching trip info\'', () => {
+   xit('should show an error toast with the message \'Error fetching trip info\'', () => {
       cy.server();
       cy.route({
             method: 'GET',
