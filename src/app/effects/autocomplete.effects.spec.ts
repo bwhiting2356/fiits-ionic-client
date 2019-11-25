@@ -84,7 +84,6 @@ describe('AutocompleteEffects errors', () => {
     effects = TestBed.get<AutocompleteEffects>(AutocompleteEffects);
   });
 
-
   it('should return AutocompleteError on error', async () => {
     const action = new FetchResults('123 Main Street');
     const completion = new ResultsError(error);
