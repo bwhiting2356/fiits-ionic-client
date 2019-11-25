@@ -39,11 +39,6 @@ export enum SearchActionTypes {
 
 export type SearchAddressType = 'Origin' | 'Destination';
 
-export class AutocompleteResultsError implements Action {
-  readonly type = SearchActionTypes.AutocompleteResultsError;
-  constructor(public error: any) {}
-}
-
 export class BookTripRequest implements Action {
   readonly type = SearchActionTypes.BookTripRequest;
   constructor(public trip: Trip) {}
@@ -88,10 +83,6 @@ export class ChooseDestinationLocation implements Action {
   constructor(public location: string) {}
 }
 
-export class ClearAutocompleteResults implements Action {
-  readonly type = SearchActionTypes.ClearAutocompleteResults;
-}
-
 export class FetchAllStations implements Action {
   readonly type = SearchActionTypes.FetchAllStations;
 }
@@ -99,11 +90,6 @@ export class FetchAllStations implements Action {
 export class FetchAllStationsError implements Action {
   readonly type = SearchActionTypes.FetchAllStationsError;
   constructor(public error: any) {}
-}
-
-export class FetchAutocompleteResults implements Action {
-  readonly type = SearchActionTypes.FetchAutocompleteResults;
-  constructor(public input: string) {}
 }
 
 export class FetchGeocodeOriginResult implements Action {
@@ -133,11 +119,6 @@ export class GeolocationChanged implements Action {
 export class GeolocationError implements Action {
   readonly type = SearchActionTypes.GeolocationError;
   constructor(public error: any) {}
-}
-
-export class SaveAutocompleteResults implements Action {
-  readonly type = SearchActionTypes.SaveAutocompleteResults;
-  constructor(public autocompleteResults: AutocompleteResult[]) {}
 }
 
 export class SaveOriginLatLng implements Action {
@@ -175,8 +156,7 @@ export class TripSearchQueryError implements Action {
   constructor(public error: any) {}
 }
 
-export type SearchActions = AutocompleteResultsError
-              | BookTripRequest
+export type SearchActions = BookTripRequest
               | BookTripSuccess
               | BookTripFailure
               | ChangeTime
@@ -185,16 +165,13 @@ export type SearchActions = AutocompleteResultsError
               | ChooseCurrentLocationAsDestination
               | ChooseDestinationLocation
               | ChooseOriginLocation
-              | ClearAutocompleteResults
               | FetchAllStations
               | FetchAllStationsError
-              | FetchAutocompleteResults
               | FetchGeocodeOriginResult
               | FetchGeocodeDestinationResult
               | FetchGeolocation
               | GeocodeError
               | GeolocationChanged
-              | SaveAutocompleteResults
               | SaveOriginLatLng
               | SaveDestinationLatLng
               | SaveStations

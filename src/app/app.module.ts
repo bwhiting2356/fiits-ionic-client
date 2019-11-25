@@ -28,6 +28,7 @@ import { SearchEffects } from './effects/search.effects';
 import { ToastEffects } from './effects/toast.effects';
 import { FeedbackEffects } from './effects/feedback.effects';
 import { AuthEffects } from './effects/auth.effects';
+import { AutocompleteEffects } from './effects/autocomplete.effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -57,7 +58,7 @@ import { AuthEffects } from './effects/auth.effects';
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([SearchEffects, ToastEffects, FeedbackEffects, AuthEffects]),
+    EffectsModule.forRoot([SearchEffects, ToastEffects, FeedbackEffects, AuthEffects, AutocompleteEffects]),
   ],
   providers: [
     StatusBar,
