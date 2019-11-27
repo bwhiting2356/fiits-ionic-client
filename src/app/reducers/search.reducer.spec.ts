@@ -306,7 +306,7 @@ describe('Search Reducer', () => {
   });
 
   it('should set book trip fetching to true', () => {
-    const action = new BookTripRequest(mockTrips[0]);
+    const action = new BookTripRequest(mockTrips[0], 'mock-uid');
 
     const result = searchReducer(initialSearchState, action);
 

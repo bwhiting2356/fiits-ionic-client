@@ -157,7 +157,7 @@ describe('SearchEffects success', () => {
   });
 
   it('should return success response from booking a trip', () => {
-    const action = new BookTripRequest(mockTrips[0]);
+    const action = new BookTripRequest(mockTrips[0], 'mock-uid');
     const completion = new BookTripSuccess();
 
     actions$ = hot('--a-', { a: action });
@@ -291,7 +291,7 @@ describe('SearchEffects errors', () => {
   });
 
   it('should return BookTripFailure on error', () => {
-    const action = new BookTripRequest(mockTrips[0]);
+    const action = new BookTripRequest(mockTrips[0], 'mock-uid');
     const completion = new BookTripFailure(error);
     actions$ = hot('--a-', { a: action });
     const expected = cold('--b', { b: completion });

@@ -72,7 +72,7 @@ export class SearchEffects {
   @Effect()
   bookTrip$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.BookTripRequest),
-    switchMap(action => this.tripService.bookTrip(action.trip).pipe(
+    switchMap(action => this.tripService.bookTrip(action.trip, action.uid).pipe(
       map(() => new BookTripSuccess()),
       catchError(error => of(new BookTripFailure(error)))
     ))

@@ -64,15 +64,18 @@ describe('TripService', () => {
   it('should make a request to book the trip', inject(
     [HttpTestingController, TripService],
     (httpMock: HttpTestingController, tripService: TripService) => {
-      const trip = mockTrips[0];
 
-      tripService.bookTrip(trip).subscribe(result => {
+      tripService.bookTrip(mockTrips[0], 'mock-uid').subscribe(result => {
         expect(result).toEqual({});
       });
 
       const mockReq = httpMock.expectOne(`${tripService.TRIP_API_URL}/book-trip`);
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
+      expect(mockReq.request.body).toEqual({
+        uid: 'mock-uid',
+        trip: mockTrips[0]
+      });
       mockReq.flush({});
 
       httpMock.verify();

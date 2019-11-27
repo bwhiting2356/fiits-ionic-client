@@ -42,7 +42,7 @@ export type SearchAddressType = 'Origin' | 'Destination';
 
 export class BookTripRequest implements Action {
   readonly type = SearchActionTypes.BookTripRequest;
-  constructor(public trip: Trip) {}
+  constructor(public trip: Trip, public uid: string) {}
 }
 
 export class BookTripSuccess implements Action {

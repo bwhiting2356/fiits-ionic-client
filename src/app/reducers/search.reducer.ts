@@ -1,6 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { AutocompleteResult } from '../shared/maps/autocomplete-result';
 import { SearchActionTypes, SearchActions, SearchAddressType } from '../actions/search.actions';
 import { LatLng } from '../shared/latlng.model';
 import { TimeTarget } from '../shared/time-target';
@@ -104,6 +103,10 @@ export const selectPosition = createSelector(
 export const selectTrip = createSelector(
   selectSearch,
   search => search.trip);
+
+export const selectBookTripFetching = createSelector(
+    selectSearch,
+    search => search.bookTripFetching);
 
 export function searchReducer(state = initialSearchState, action: SearchActions): SearchState {
   switch (action.type) {

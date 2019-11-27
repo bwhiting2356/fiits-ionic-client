@@ -6,6 +6,8 @@ import { Trip } from '../shared/trip.model';
 import { take, map } from 'rxjs/operators';
 import { BookTripRequest } from '../actions/search.actions';
 import { LogInFromSearch } from '../actions/auth.actions';
+import { selectTrip, selectBookTripFetching } from '../reducers/search.reducer';
+import { selectUID } from '../reducers/auth.reducer';
 
 @Component({
   selector: 'app-trip-details',
@@ -15,19 +17,13 @@ import { LogInFromSearch } from '../actions/auth.actions';
 export class TripDetailsPage {
   trip: Observable<Trip>;
   bookTripFetching: Observable<boolean>;
-  userLoggedIn: Observable<boolean>;
+  uid: Observable<string>;
   showMap = false;
 
   constructor(private store: Store<State>) {
-    this.trip = store
-      .select(state => state.search.trip);
-
-    this.bookTripFetching = store
-      .select(state => state.search.bookTripFetching);
-
-    this.userLoggedIn = store
-      .select(state => state.auth.uid)
-      .pipe(map(uid => uid !== ''));
+    this.trip = store.select(selectTrip);
+    this.bookTripFetching = store.select(selectBookTripFetching);
+    this.uid = store.select(selectUID);
   }
 
   ionViewDidEnter() {
@@ -35,13 +31,13 @@ export class TripDetailsPage {
   }
 
   bookTrip() {
-    combineLatest([this.userLoggedIn, this.bookTripFetching, this.trip])
+    combineLatest([this.uid, this.bookTripFetching, this.trip])
       .pipe(take(1))
-      .subscribe(([userLoggedIn, fetching, trip]) => {
-        if (!fetching && !userLoggedIn) {
+      .subscribe(([uid, fetching, trip]) => {
+        if (!fetching && uid === '') {
           this.store.dispatch(new LogInFromSearch());
         } else if (!fetching) {
-          this.store.dispatch(new BookTripRequest(trip));
+          this.store.dispatch(new BookTripRequest(trip, uid));
         }
       });
   }
