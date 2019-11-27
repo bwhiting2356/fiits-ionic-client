@@ -138,7 +138,7 @@ describe('TripDetailPage', () => {
     });
     fixture.detectChanges();
     component.bookTrip();
-    expect(store.dispatch).toHaveBeenCalledWith(new BookTripRequest(mockTrips[0]));
+    expect(store.dispatch).toHaveBeenCalledWith(new BookTripRequest(mockTrips[0], 'mock-uid'));
   });
 
   it('should not dispatch an action to book the trip if a request is already fetching', () => {
@@ -209,7 +209,7 @@ describe('TripDetailPage', () => {
     expect(button.disabled).toBeFalsy();
   });
 
-  it('should set userLoggedIn to true if there is a uid in the auth state', async () => {
+  it('should set uid to the uid form auth state', async () => {
     store.setState({
       ...initialState,
       auth: {
@@ -218,20 +218,7 @@ describe('TripDetailPage', () => {
       }
     });
     fixture.detectChanges();
-    const expected = cold('a', { a: true } );
-    expect(component.userLoggedIn).toBeObservable(expected);
-  });
-
-  it('should set userLoggedIn to false if there is no uid in the auth state', async () => {
-    store.setState({
-      ...initialState,
-      auth: {
-        ...initialAuthState,
-        uid: '',
-      }
-    });
-    fixture.detectChanges();
-    const expected = cold('a', { a: false } );
-    expect(component.userLoggedIn).toBeObservable(expected);
+    const expected = cold('a', { a: 'mock-uid' } );
+    expect(component.uid).toBeObservable(expected);
   });
 });
