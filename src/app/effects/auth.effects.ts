@@ -18,7 +18,7 @@ export class AuthEffects {
       switchMap(() => this.authService.login$()),
       withLatestFrom(this.store.select(selectTrip)),
       switchMap(([uid, trip]) => [
-        new BookTripRequest(trip),
+        new BookTripRequest(trip, uid),
         new LogInSuccessFromSearch(uid),
       ]),
       catchError(error => of(new LogInErrorFromSearch(error)))
