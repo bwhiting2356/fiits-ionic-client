@@ -21,7 +21,7 @@ export class ClearResults implements Action {
 export class FetchResults implements Action {
     readonly type = AutocompleteActionTypes.FetchResults;
     constructor(public input: string) {}
-  }
+}
 
 export class SaveResults implements Action {
     readonly type = AutocompleteActionTypes.SaveResults;
