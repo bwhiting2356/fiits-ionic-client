@@ -12,7 +12,8 @@ import {
   ChangeTime,
   TripSearchQuery,
   FetchAllStations,
-  FetchGeolocation
+  FetchGeolocation,
+  TimeInPastError
 } from '../actions/search.actions';
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
@@ -106,7 +107,12 @@ export class SearchPage implements OnInit {
         return searchQuery;
       })
     ).subscribe(searchQuery => {
-      this.store.dispatch(new TripSearchQuery(searchQuery));
+      const twoMinutesAgo = new Date(Date.now() - 1000 * 60 * 2);
+      if (searchQuery.time < twoMinutesAgo) {
+        this.store.dispatch(new TimeInPastError());
+      } else {
+        this.store.dispatch(new TripSearchQuery(searchQuery));
+      }
     });
   }
 }

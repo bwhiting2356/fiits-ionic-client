@@ -9,7 +9,8 @@ import {
     TripSearchQueryError,
     GeocodeError,
     BookTripSuccess,
-    BookTripFailure
+    BookTripFailure,
+    TimeInPastError
 } from '../actions/search.actions';
 import {
     ResultsError
@@ -149,6 +150,16 @@ describe('Toast Effects ', () => {
 
         expect(effects.bookTripSuccess$).toBeObservable(actions$);
         expect(effects.presentToast).toHaveBeenCalledWith('Trip booked successfully!', 'success');
+    });
 
+    it('should call presentToast with the message \'Time cannot be in the past.\'', () => {
+        const action = new TimeInPastError();
+        spyOn(effects, 'presentToast');
+
+        actions$ = hot('--a-', { a: action });
+
+        expect(effects.timeInPastError$).toBeObservable(actions$);
+        expect(effects.presentToast).toHaveBeenCalledWith('Time cannot be in the past.', 'danger');
     });
 });
+
