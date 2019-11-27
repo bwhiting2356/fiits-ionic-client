@@ -5,7 +5,7 @@ export const environment = {
     googleMapsKey: 'AIzaSyC6vr3LC6OgSjPeuso4dH2xNqdFAyA1NWs',
     firebaseConfig: {
       apiKey: 'AIzaSyDs1RSEr9YBPsM1zbf07bIxAfZzqg0Nx8U',
-      authDomain: 'bike-share-1517478720061.firebaseapp.com',
+      authDomain: 'fiits.bike',
       databaseURL: 'https://bike-share-1517478720061.firebaseio.com',
       projectId: 'bike-share-1517478720061',
       storageBucket: 'bike-share-1517478720061.appspot.com',
