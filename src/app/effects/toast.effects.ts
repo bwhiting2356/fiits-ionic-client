@@ -63,6 +63,12 @@ export class ToastEffects {
     );
 
     @Effect({ dispatch: false })
+    timeInPastError$: Observable<any> = this.actions$.pipe(
+        ofType(SearchActionTypes.TimeInPastError),
+        tap(_ => this.presentToast('Time cannot be in the past.', 'danger'))
+    );
+
+    @Effect({ dispatch: false })
     feedbackSuccess$: Observable<any> = this.actions$.pipe(
         ofType(FeedbackActionTypes.FeedbackSuccess),
         tap(_ => this.presentToast('Feedback sent successfully!', 'success'))

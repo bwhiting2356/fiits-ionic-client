@@ -15,7 +15,8 @@ import {
   ChangeTime,
   TripSearchQuery,
   FetchAllStations,
-  FetchGeolocation
+  FetchGeolocation,
+  TimeInPastError
 } from '../actions/search.actions';
 import { initialSearchState } from '../reducers/search.reducer';
 import { TimeTarget } from '../shared/time-target';
@@ -306,6 +307,35 @@ describe('SearchPage', () => {
   });
 
   it('should dispatch an action to send a trip search query', () => {
+    const later = new Date(new Date().setMinutes(new Date().getMinutes() + 100));
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        timeTarget: 'ARRIVE_BY' as TimeTarget,
+        time: later,
+        originAddress: '123 Main Street',
+        originLatLng: { lat: 0, lng: 0 },
+        destinationAddress: '576 Main Street',
+        destinationLatLng: { lat: 1, lng: 1 }
+      }
+    });
+    fixture.detectChanges();
+    spyOn(store, 'dispatch');
+    component.findBikeRentals();
+    expect(store.dispatch).toHaveBeenCalledWith(
+      new TripSearchQuery({
+        timeTarget: 'ARRIVE_BY' as TimeTarget,
+        time: later,
+        originAddress: '123 Main Street',
+        originLatLng: { lat: 0, lng: 0 },
+        destinationAddress: '576 Main Street',
+        destinationLatLng: { lat: 1, lng: 1 }
+      })
+    );
+  });
+
+  it('should dispatch a message to show a toast saying the time must be in the future, not search for the trip', () => {
     store.setState({
       ...initialState,
       search: {
@@ -321,7 +351,8 @@ describe('SearchPage', () => {
     fixture.detectChanges();
     spyOn(store, 'dispatch');
     component.findBikeRentals();
-    expect(store.dispatch).toHaveBeenCalledWith(
+    expect(store.dispatch).toHaveBeenCalledWith(new TimeInPastError());
+    expect(store.dispatch).not.toHaveBeenCalledWith(
       new TripSearchQuery({
         timeTarget: 'ARRIVE_BY' as TimeTarget,
         time: new Date('2018-12-31T21:00:40.000+0000'),
@@ -331,5 +362,6 @@ describe('SearchPage', () => {
         destinationLatLng: { lat: 1, lng: 1 }
       })
     );
+
   });
 });

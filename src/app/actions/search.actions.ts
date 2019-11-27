@@ -33,6 +33,7 @@ export enum SearchActionTypes {
   SaveStations = '[Search] Save Stations',
   SaveTrip = '[Search] Save Trip',
   SetSearchAddressType = '[Search] Set Search Address Type',
+  TimeInPastError = '[Search] Time In Past Error',
   TripSearchQuery = '[Search] Trip Search Query',
   TripSearchQueryError = '[Search] Trip Search Query Error',
 }
@@ -146,6 +147,10 @@ export class SetSearchAddressType implements Action {
   constructor(public addressType: SearchAddressType) {}
 }
 
+export class TimeInPastError implements Action {
+  readonly type = SearchActionTypes.TimeInPastError;
+}
+
 export class TripSearchQuery implements Action {
   readonly type = SearchActionTypes.TripSearchQuery;
   constructor(public searchQuery: SearchQuery) {}
@@ -177,5 +182,6 @@ export type SearchActions = BookTripRequest
               | SaveStations
               | SaveTrip
               | SetSearchAddressType
+              | TimeInPastError
               | TripSearchQuery
               | TripSearchQueryError;
