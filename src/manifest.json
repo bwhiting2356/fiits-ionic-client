@@ -8,9 +8,6 @@
 
     "display": "standalone",
     "orientation": "portrait",
-
-    /// Add icons in next section
-
     "icons": [
         {
           "src": "/assets/images/icons/icon-57x57.png",
@@ -81,6 +78,6 @@
           "src": "/assets/images/icons/icon-512x512.png",
           "sizes": "512x512",
           "type": "image/png"
-        },
+        }
     ]
 }
