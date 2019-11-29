@@ -16,7 +16,9 @@ import {
   TripSearchQuery,
   FetchAllStations,
   FetchGeolocation,
-  TimeInPastError
+  TimeInPastError,
+  ActiveSearchTrue,
+  ActiveSearchFalse
 } from '../actions/search.actions';
 import { initialSearchState } from '../reducers/search.reducer';
 import { TimeTarget } from '../shared/time-target';
@@ -362,6 +364,17 @@ describe('SearchPage', () => {
         destinationLatLng: { lat: 1, lng: 1 }
       })
     );
+  });
 
+  it('should dispatch an action to set active search to true on ionViewDidEnter', () => {
+    spyOn(store, 'dispatch');
+    component.ionViewDidEnter();
+    expect(store.dispatch).toHaveBeenCalledWith(new ActiveSearchTrue());
+  });
+
+  it('should dispatch an action to set active search to false on ionViewDidLeave', () => {
+    spyOn(store, 'dispatch');
+    component.ionViewDidLeave();
+    expect(store.dispatch).toHaveBeenCalledWith(new ActiveSearchFalse());
   });
 });

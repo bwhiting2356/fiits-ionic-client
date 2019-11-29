@@ -6,6 +6,8 @@ import { TimeTarget } from '../shared/time-target';
 import { Trip, StationInfo } from '../shared/trip.model';
 
 export enum SearchActionTypes {
+  ActiveSearchTrue = '[Search] Active Search True',
+  ActiveSearchFalse = '[Search] Active Search False',
   AutocompleteResultsError = '[Search] Autocomplete Results Error',
   AutocompleteDirty = '[Search] Autocomplete Dirty',
   BookTripRequest = '[Search] Book Trip Request',
@@ -39,6 +41,14 @@ export enum SearchActionTypes {
 }
 
 export type SearchAddressType = 'Origin' | 'Destination';
+
+export class ActiveSearchTrue implements Action {
+  readonly type = SearchActionTypes.ActiveSearchTrue;
+}
+
+export class ActiveSearchFalse implements Action {
+  readonly type = SearchActionTypes.ActiveSearchFalse;
+}
 
 export class BookTripRequest implements Action {
   readonly type = SearchActionTypes.BookTripRequest;
@@ -161,7 +171,9 @@ export class TripSearchQueryError implements Action {
   constructor(public error: any) {}
 }
 
-export type SearchActions = BookTripRequest
+export type SearchActions = ActiveSearchTrue
+              | ActiveSearchFalse
+              | BookTripRequest
               | BookTripSuccess
               | BookTripFailure
               | ChangeTime

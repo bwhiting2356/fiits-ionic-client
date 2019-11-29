@@ -13,7 +13,9 @@ import {
   TripSearchQuery,
   FetchAllStations,
   FetchGeolocation,
-  TimeInPastError
+  TimeInPastError,
+  ActiveSearchTrue,
+  ActiveSearchFalse
 } from '../actions/search.actions';
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
@@ -76,6 +78,14 @@ export class SearchPage implements OnInit {
   async ngOnInit() {
     this.store.dispatch(new FetchAllStations());
     this.store.dispatch(new FetchGeolocation());
+  }
+
+  ionViewDidEnter() {
+    this.store.dispatch(new ActiveSearchTrue());
+  }
+
+  ionViewDidLeave() {
+    this.store.dispatch(new ActiveSearchFalse());
   }
 
   navigateToAddressInput(type: SearchAddressType) {

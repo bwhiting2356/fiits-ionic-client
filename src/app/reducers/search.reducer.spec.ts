@@ -1,5 +1,7 @@
 import { searchReducer, initialSearchState } from './search.reducer';
 import {
+  ActiveSearchTrue,
+  ActiveSearchFalse,
   ChooseOriginLocation,
   ChooseDestinationLocation,
   FetchGeocodeOriginResult,
@@ -7,7 +9,6 @@ import {
   SaveOriginLatLng,
   SaveDestinationLatLng,
   SetSearchAddressType,
-  SearchAddressType,
   ChangeTimeTarget,
   ChangeTime,
   TripSearchQuery,
@@ -20,7 +21,7 @@ import {
   BookTripRequest,
   BookTripSuccess,
   BookTripFailure,
-  GeolocationChanged
+  GeolocationChanged,
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 import { mockTrips } from '../../testing/mock-trips';
@@ -359,6 +360,33 @@ describe('Search Reducer', () => {
     expect(result).toEqual({
       ...initialSearchState,
       position: { lat: 0, lng: 0}
+    });
+  });
+
+  it('shoudls set active search to true', () => {
+    const action = new ActiveSearchTrue();
+
+    const result = searchReducer(initialSearchState, action);
+
+    expect(result).toEqual({
+      ...initialSearchState,
+      activeSearch: true
+    });
+  });
+
+  it('shoudls set active search to false', () => {
+    const initialStateWithSearchTrue = {
+      ...initialSearchState,
+      activeSearch: true
+    };
+
+    const action = new ActiveSearchFalse();
+
+    const result = searchReducer(initialStateWithSearchTrue, action);
+
+    expect(result).toEqual({
+      ...initialSearchState,
+      activeSearch: false
     });
   });
 });
