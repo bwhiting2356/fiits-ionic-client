@@ -9,6 +9,7 @@ import { DEFAULT_LOCATION } from '../shared/constants';
 import { State } from './index';
 
 export interface SearchState {
+  activeSearch: boolean;
   originAddress: string;
   originLatLng: LatLng;
   destinationAddress: string;
@@ -27,6 +28,7 @@ export interface SearchState {
 }
 
 export const initialSearchState: SearchState = {
+  activeSearch: false,
   originAddress: '',
   originLatLng: undefined,
   destinationAddress: '',
@@ -74,6 +76,11 @@ export const selectSearchDestinationAddress = createSelector(
   state => state.destinationAddress
 );
 
+export const selectSearchTime = createSelector(
+  selectSearch,
+  state => state.time
+);
+
 export const selectSearchQueryFetching = createSelector(
   selectSearch,
   state => state.searchQueryFetching);
@@ -110,6 +117,16 @@ export const selectBookTripFetching = createSelector(
 
 export function searchReducer(state = initialSearchState, action: SearchActions): SearchState {
   switch (action.type) {
+    case SearchActionTypes.ActiveSearchTrue:
+      return {
+        ...state,
+        activeSearch: true
+      };
+    case SearchActionTypes.ActiveSearchFalse:
+      return {
+        ...state,
+        activeSearch: false
+      };
     case SearchActionTypes.BookTripRequest:
       return {
         ...state,

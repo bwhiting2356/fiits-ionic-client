@@ -1,9 +1,9 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
-import { hot, cold } from 'jasmine-marbles';
+import { hot, cold, getTestScheduler } from 'jasmine-marbles';
 
-import { SearchEffects } from './search.effects';
+import { SearchEffects, SEARCH_EFFECTS_SCHEDULER, SEARCH_EFFECTS_INTERVAL } from './search.effects';
 import { AutocompleteService } from '../services/autocomplete.service';
 import { GeocodeService } from '../services/geocode.service';
 import { TripService } from '../services/trip.service';
@@ -28,7 +28,10 @@ import {
   ChooseCurrentLocationAsDestination,
   ChooseCurrentLocationAsOrigin,
   ChooseOriginLocation,
-  ChooseDestinationLocation
+  ChooseDestinationLocation,
+  ActiveSearchTrue,
+  ActiveSearchFalse,
+  ChangeTime
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 
@@ -38,10 +41,15 @@ import { NavController } from '@ionic/angular';
 import { GeolocationService } from '../services/geolocation.service';
 import { mockTrips } from 'src/testing/mock-trips';
 import { mockStations } from 'src/testing/mock-stations';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { State } from '../reducers';
+import { initialState } from '../reducers';
+import { Store } from '@ngrx/store';
 
 describe('SearchEffects success', () => {
   let actions$: Observable<any>;
   let effects: SearchEffects;
+  let store: MockStore<State>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -85,11 +93,15 @@ describe('SearchEffects success', () => {
           useValue: {
             navigateForward: () => {}
           }
-        }
+        },
+        { provide: SEARCH_EFFECTS_SCHEDULER, useFactory: getTestScheduler },
+        { provide: SEARCH_EFFECTS_INTERVAL, useValue: 10 },
+        provideMockStore({ initialState })
       ]
     });
 
     effects = TestBed.get<SearchEffects>(SearchEffects);
+    store = TestBed.get<Store<State>>(Store);
   });
 
   it('should return SaveGeocodingOritinResult on success', () => {
@@ -192,11 +204,36 @@ describe('SearchEffects success', () => {
       expect(completionAction).toEqual(completion);
     });
   });
+
+  it('should return an action to change time to the present if time is in the past', () => {
+    const dateInThePast = new Date(0);
+    const newAction = effects.checkTimeIsNotPast(dateInThePast);
+    expect(newAction.time).toEqual(new Date());
+  });
+
+  it('should return an action to change time to the same time if time is not in the past', () => {
+    const later = new Date(Date.now() + 1000 * 60 * 60 * 24 * 10);
+    const newAction = effects.checkTimeIsNotPast(later);
+    expect(newAction.time).toEqual(later);
+  });
+
+  it('should dispatch an action four times to check the time and then stop when search is no longer active', async () => {
+    const onAction = new ActiveSearchTrue();
+    const offAction = new ActiveSearchFalse();
+    const changeTime = new ChangeTime(new Date());
+    spyOn(effects, 'checkTimeIsNotPast').and.returnValue(changeTime);
+
+    actions$ = hot('--a----b-', { a: onAction, b: offAction });
+
+    const expected = hot('---cccc', { c: changeTime });
+    expect(effects.setTimeToPresent$).toBeObservable(expected);
+  });
 });
 
 describe('SearchEffects errors', () => {
   let actions$: Observable<any>;
   let effects: SearchEffects;
+  let store: MockStore<State>;
   const error = new Error();
 
   beforeEach(() => {
@@ -244,10 +281,12 @@ describe('SearchEffects errors', () => {
             navigateForward: () => {}
           }
         },
+        provideMockStore({ initialState })
       ]
     });
 
     effects = TestBed.get<SearchEffects>(SearchEffects);
+    store = TestBed.get<Store<State>>(Store);
   });
 
   it('should return FetchAllStationsError on error', () => {

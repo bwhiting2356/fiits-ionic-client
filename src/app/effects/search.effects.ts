@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional, Inject, InjectionToken } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import {
   SearchActionTypes,
@@ -15,16 +15,25 @@ import {
   GeolocationChanged,
   GeolocationError,
   ChooseOriginLocation,
-  ChooseDestinationLocation
+  ChooseDestinationLocation,
+  ChangeTime
 } from '../actions/search.actions';
-import { map, catchError, tap, switchMap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
-import { Action } from '@ngrx/store';
+import { map, catchError, tap, switchMap, withLatestFrom, takeUntil } from 'rxjs/operators';
+import { Observable, of, interval, timer, SchedulerLike } from 'rxjs';
+import { Action, Store } from '@ngrx/store';
 import { GeocodeService } from '../services/geocode.service';
 import { TripService } from '../services/trip.service';
 import { StationService } from '../services/station.service';
 import { NavController } from '@ionic/angular';
 import { GeolocationService } from '../services/geolocation.service';
+import { State } from '../reducers';
+import { selectSearchTime } from '../reducers/search.reducer';
+import { async } from 'rxjs/internal/scheduler/async';
+
+const ONE_MINUTE = 60 * 1000;
+
+export const SEARCH_EFFECTS_INTERVAL = new InjectionToken<number>('Test Interval');
+export const SEARCH_EFFECTS_SCHEDULER = new InjectionToken<SchedulerLike>('SearchEffects Scheduler');
 
 @Injectable()
 export class SearchEffects {
@@ -105,11 +114,40 @@ export class SearchEffects {
     ))
   );
 
+  @Effect()
+  setTimeToPresent$: Observable<Action> = this.actions$.pipe(
+    ofType(SearchActionTypes.ActiveSearchTrue),
+    switchMap(() => interval(this.timerInterval || ONE_MINUTE, this.scheduler || async).pipe(
+      takeUntil(
+        this.actions$.pipe(ofType(SearchActionTypes.ActiveSearchFalse))
+      ),
+      withLatestFrom(this.store.select(selectSearchTime)),
+      map(([_, time]) => this.checkTimeIsNotPast(time)))
+    )
+  );
+
+  checkTimeIsNotPast(time: Date) {
+    if (time < new Date()) {
+      return new ChangeTime(new Date());
+    } else {
+      return new ChangeTime(time);
+    }
+  }
+
   constructor(
+    private store: Store<State>,
     private actions$: Actions<SearchActions>,
     private geocodeService: GeocodeService,
     private geolocationService: GeolocationService,
     private tripService: TripService,
     private stationService: StationService,
-    private navCtrl: NavController) {}
+    private navCtrl: NavController,
+
+    @Optional()
+    @Inject(SEARCH_EFFECTS_INTERVAL)
+    private timerInterval: number,
+
+    @Optional()
+    @Inject(SEARCH_EFFECTS_SCHEDULER)
+    private scheduler: SchedulerLike) {}
 }
