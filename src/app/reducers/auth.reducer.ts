@@ -10,7 +10,7 @@ export interface AuthState {
 }
 
 export const initialAuthState: AuthState = {
-    uid: 'mock_uid_1',
+    uid: '',
     displayName: '',
     authFetching: false
 };
