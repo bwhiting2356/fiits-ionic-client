@@ -3,7 +3,7 @@ import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { SearchActionTypes, SearchActions, SearchAddressType } from '../actions/search.actions';
 import { LatLng } from '../shared/latlng.model';
 import { TimeTarget } from '../shared/time-target';
-import { Trip, StationInfo } from '../shared/trip.model';
+import { TripDetails, StationInfo } from '../shared/trip-details.model';
 import { DEFAULT_LOCATION } from '../shared/constants';
 
 import { State } from './index';
@@ -22,7 +22,7 @@ export interface SearchState {
   stations: StationInfo[];
   stationsFetching: boolean;
   bookTripFetching: boolean;
-  trip: Trip;
+  trip: TripDetails;
   position: LatLng;
   error: any;
 }

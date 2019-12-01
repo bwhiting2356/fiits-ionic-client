@@ -7,7 +7,7 @@ import { GoogleMap, Marker, InfoWindow } from '@agm/core/services/google-maps-ty
 
 import { GestureHandling } from 'src/app/shared/maps/gesture-handling';
 import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
-import { Trip, StationInfo } from 'src/app/shared/trip.model';
+import { TripDetails, StationInfo } from 'src/app/shared/trip-details.model';
 import { LatLng } from 'src/app/shared/latlng.model';
 
 import { State } from 'src/app/reducers';
@@ -18,6 +18,7 @@ import {
   SaveDestinationLatLng
 } from 'src/app/actions/search.actions';
 import { environment } from 'src/environments/environment';
+import { latLngEquals } from 'src/app/shared/util/util';
 
 declare var google;
 
@@ -39,7 +40,7 @@ export class GoogleMapComponent implements OnChanges, OnInit {
   @Input() originAddress: string;
   @Input() destinationLatLng: LatLng;
   @Input() destinationAddress: string;
-  @Input() trip: Trip;
+  @Input() trip: TripDetails;
 
   @Input() stations: StationInfo[];
   @Input() collapsed = false; // this is only here to trigger change detection when the size changes
@@ -64,11 +65,14 @@ export class GoogleMapComponent implements OnChanges, OnInit {
     this.fitBounds();
   }
 
+
+
   addOrRemoveStationMarkers = () => {
     if (this.stations && this.map.getZoom() >= 14) {
       this.stations.forEach((station, i) => {
-        const { address, latLng } = station;
-        if (latLng !== this.originLatLng && latLng !== this.destinationLatLng) {
+        const { address, lat, lng } = station;
+        const latLng = { lat, lng};
+        if (!latLngEquals(latLng, this.destinationLatLng) && !latLngEquals(latLng, this.originLatLng)) {
           const marker = this.addMarker(latLng, address, 'Station', true, i);
           this.stationMarkers.push(marker);
         }
@@ -106,12 +110,14 @@ export class GoogleMapComponent implements OnChanges, OnInit {
     if (this.trip) {
       this.addMarker(this.trip.originLatLng, this.trip.originAddress, 'Origin', false);
       this.addMarker(this.trip.destinationLatLng, this.trip.destinationAddress, 'Destination', false);
+      const startReservationLatLng = { lat: this.trip.startReservation.station.lat, lng: this.trip.startReservation.station.lng };
       this.addMarker(
-        this.trip.startReservation.station.latLng,
+        startReservationLatLng,
         this.trip.startReservation.station.address,
         'Pickup Station', true);
+      const endReservationLatLng = { lat: this.trip.endReservation.station.lat, lng: this.trip.endReservation.station.lng };
       this.addMarker(
-        this.trip.endReservation.station.latLng,
+        endReservationLatLng,
         this.trip.endReservation.station.address,
         'Dropoff Station', true);
     } else {
@@ -179,10 +185,10 @@ export class GoogleMapComponent implements OnChanges, OnInit {
     const station: StationInfo = this.stations[stationIndex];
     if (direction === 'from') {
       this.store.dispatch(new ChooseOriginLocation(station.address));
-      this.store.dispatch(new SaveOriginLatLng(station.latLng));
+      this.store.dispatch(new SaveOriginLatLng({ lat: station.lat, lng: station.lng }));
     } else { // direction === 'to'
       this.store.dispatch(new ChooseDestinationLocation(station.address));
-      this.store.dispatch(new SaveDestinationLatLng(station.latLng));
+      this.store.dispatch(new SaveDestinationLatLng({ lat: station.lat, lng: station.lng }));
     }
     if (this.openWindow) {
       this.openWindow.close();

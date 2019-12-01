@@ -74,7 +74,7 @@ describe('TripService', () => {
       expect(mockReq.request.responseType).toEqual('json');
       expect(mockReq.request.body).toEqual({
         uid: 'mock-uid',
-        trip: mockTrips[0]
+        tripDetails: mockTrips[0]
       });
       mockReq.flush({});
 

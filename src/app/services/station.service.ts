@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { StationInfo } from '../shared/trip.model';
+import { StationInfo } from '../shared/trip-details.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

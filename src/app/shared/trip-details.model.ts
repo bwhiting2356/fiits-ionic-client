@@ -12,7 +12,9 @@ export interface StationInfo {
     capacity: number;
     currentInventory: number;
     address: string;
-    latLng: LatLng;
+    lat: number;
+    lng: number;
+    // latLng: LatLng;
 }
 
 export type ReservationType = 'PICKUP' | 'DROPOFF';
@@ -24,7 +26,7 @@ export interface ReservationInfo {
     station: StationInfo;
 }
 
-export class Trip {
+export class TripDetails {
     originLatLng: LatLng;
     originAddress: string;
     departureTime: string;

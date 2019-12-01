@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Trip } from 'src/app/shared/trip.model';
+import { TripDetails } from 'src/app/shared/trip-details.model';
 import { totalTripPrice, totalTripDuration, totalTripDistance } from 'src/app/shared/util/util';
 
 @Component({
@@ -8,7 +8,7 @@ import { totalTripPrice, totalTripDuration, totalTripDistance } from 'src/app/sh
   styleUrls: ['./trip-card.component.scss'],
 })
 export class TripCardComponent implements OnInit {
-  @Input() trip: Trip;
+  @Input() trip: TripDetails;
 
   constructor() { }
 
