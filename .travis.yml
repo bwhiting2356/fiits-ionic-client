@@ -1,12 +1,16 @@
 language: node_js
 node_js:
   - "12.13.0"
+dist: trusty
 addons:
   chrome: stable
   apt: 
     packages: 
       - libgconf-2-4
-
+  sonarcloud:
+    organization: "bwhiting2356"
+    token:
+      secure: "NWem7r1zx3EiOY9jVMX72Ra4kh0JP2vFTq6j+xQRscNCKNsWdfERFDfLu8G8kUfw8tcB6DfcbExO0r1Dr4BItYoVXYm6ckJLU24OQoFOGOX+sNPRt+k1EOKfT06zndiTQyaJ7ii0IrvQf1o340WhpeehO5CgBX/KlheMXu9Omi4SSxPb3DzJDl1sjvYi34zlXzjfmm7HNCXlOeOvnXgVQxVx+ungIWZrE71y7Sgp0Ezrz/LcgYt3bvDBVi5g9TZaLEdRJv9y96bQnpef05CeAfY1LmyakOMTY8Lur5ngIfnG1mRu8cAg+d3bC/ICQkUxL6hr7JWxtT+4KjFUSySrmOuXL8s0tpWSkpL+8Ak2OpBzomRUoismJJuO3/zgAriKnV+M8Z9rJaAnILj3EG05UrY7TO1i9cnFileU1nuw/hLJ7SzvOgzz3V0e/l9V3C/3borllOCs4Cdc37NcxmlswHNjNspRKOLtjaLxKlHVPOC3L3HXBdpLV/xar7Uzedc9gsW33syTwLvmw5WQUOKAE95n7MxyHyzRUJTJ2YUWojGWYRauPNM35leusq9bMsIWDytLzoW2LOxTKYK/ElK6LTxOYN472jRrOiz49f7Aco8SjRecELxKX3CX8kLXt37/ZktnVR7DlTMcv7J9IVMVXj2qvUJzV1qZV1gj5UFFQ8E="
 cache:
   npm: true
   directories:
@@ -23,6 +27,7 @@ before_install:
 script:
   - npm install
   - npm run ci:all
+  - sonar-scanner
 deploy:
   skip_cleanup: true
   provider: firebase
