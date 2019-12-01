@@ -27,7 +27,7 @@ import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results
 import { mockTrips } from '../../testing/mock-trips';
 import { TimeTarget } from '../shared/time-target';
 import { SearchQuery } from '../shared/search-query';
-import { StationInfo } from '../shared/trip.model';
+import { StationInfo } from '../shared/trip-details.model';
 
 describe('Search Reducer', () => {
   describe('an unknown action', () => {
@@ -266,10 +266,8 @@ describe('Search Reducer', () => {
       capacity: 10,
       currentInventory: 5,
       address: 'one',
-      latLng: {
-          lat: 40.743647,
-          lng: -74.003238,
-      }
+      lat: 40.743647,
+      lng: -74.003238
     }];
 
     const action = new SaveStations(stations);

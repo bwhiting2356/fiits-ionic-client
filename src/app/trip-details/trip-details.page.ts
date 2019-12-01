@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
 import { Observable, combineLatest } from 'rxjs';
-import { Trip } from '../shared/trip.model';
-import { take, map } from 'rxjs/operators';
+import { TripDetails } from '../shared/trip-details.model';
+import { take } from 'rxjs/operators';
 import { BookTripRequest } from '../actions/search.actions';
 import { LogInFromSearch } from '../actions/auth.actions';
 import { selectTrip, selectBookTripFetching } from '../reducers/search.reducer';
@@ -15,7 +15,7 @@ import { selectUID } from '../reducers/auth.reducer';
   styleUrls: ['./trip-details.page.scss'],
 })
 export class TripDetailsPage {
-  trip: Observable<Trip>;
+  trip: Observable<TripDetails>;
   bookTripFetching: Observable<boolean>;
   uid: Observable<string>;
   showMap = false;

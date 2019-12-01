@@ -1,6 +1,6 @@
-import { Trip } from './trip.model';
+import { TripDetails } from './trip-details.model';
 
 export interface BookTripRequestPayload {
     uid: string;
-    trip: Trip;
+    tripDetails: TripDetails;
 }

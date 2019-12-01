@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { TripService } from '../../services/trip.service';
 import { capitalize } from '../../shared/util/util';
 import { Observable } from 'rxjs';
-import { Trip } from 'src/app/shared/trip.model';
+import { TripDetails } from 'src/app/shared/trip-details.model';
 
 @Component({
   selector: 'app-trip-list',
@@ -12,7 +12,7 @@ import { Trip } from 'src/app/shared/trip.model';
   styleUrls: ['./trip-list.page.scss'],
 })
 export class TripListPage implements OnInit {
-  trips: Observable<Trip[]>;
+  trips: Observable<TripDetails[]>;
 
   constructor(private router: Router, public tripService: TripService) {}
 

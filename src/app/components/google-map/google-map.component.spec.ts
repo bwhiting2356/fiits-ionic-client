@@ -7,7 +7,6 @@ import { GoogleMap, Marker, InfoWindow, MapsEventListener } from '@agm/core/serv
 import { mock } from 'ts-mockito';
 
 import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
-import { DEFAULT_LOCATION } from 'src/app/shared/constants';
 import { State } from '../../reducers';
 import { initialState } from '../../reducers';
 import {
@@ -158,13 +157,13 @@ describe('GoogleMapComponent', () => {
       false
     );
     expect(component.addMarker).toHaveBeenCalledWith(
-      mockTrips[0].startReservation.station.latLng,
+      { lat: mockTrips[0].startReservation.station.lat, lng: mockTrips[0].startReservation.station.lng },
       mockTrips[0].startReservation.station.address,
       'Pickup Station',
       true
     );
     expect(component.addMarker).toHaveBeenCalledWith(
-      mockTrips[0].endReservation.station.latLng,
+      { lat: mockTrips[0].endReservation.station.lat, lng: mockTrips[0].endReservation.station.lng} ,
       mockTrips[0].endReservation.station.address,
       'Dropoff Station',
       true
@@ -263,14 +262,14 @@ describe('GoogleMapComponent', () => {
     component.addOrRemoveStationMarkers();
 
     expect(component.addMarker).toHaveBeenCalledWith(
-      mockStations[0].latLng,
+      { lat: mockStations[0].lat, lng: mockStations[0].lng },
       mockStations[0].address,
       'Station',
       true,
       0
     );
     expect(component.addMarker).toHaveBeenCalledWith(
-      mockStations[1].latLng,
+      { lat: mockStations[1].lat, lng: mockStations[1].lng },
       mockStations[1].address,
       'Station',
       true,
@@ -299,12 +298,12 @@ describe('GoogleMapComponent', () => {
     component.map = mock<GoogleMap>();
     component.map.getZoom = () => 15;
     component.stations = mockStations;
-    component.originLatLng = mockStations[0].latLng;
+    component.originLatLng = { lat: mockStations[0].lat, lng: mockStations[0].lng };
     spyOn(component, 'addMarker');
 
     component.addOrRemoveStationMarkers();
     expect(component.addMarker).toHaveBeenCalledWith(
-      mockStations[1].latLng,
+      { lat: mockStations[1].lat, lng: mockStations[1].lng },
       mockStations[1].address,
       'Station',
       true,
@@ -312,7 +311,7 @@ describe('GoogleMapComponent', () => {
     );
 
     expect(component.addMarker).not.toHaveBeenCalledWith(
-      mockStations[0].latLng,
+      { lat: mockStations[0].lat, lng: mockStations[0].lng },
       mockStations[0].address,
       'Station',
       true,
@@ -398,7 +397,7 @@ describe('GoogleMapComponent', () => {
     (window as any).handleInfoWindowButtonClick('to', 0);
 
     expect(store.dispatch).toHaveBeenCalledWith(new ChooseDestinationLocation(mockStations[0].address));
-    expect(store.dispatch).toHaveBeenCalledWith(new SaveDestinationLatLng(mockStations[0].latLng));
+    expect(store.dispatch).toHaveBeenCalledWith(new SaveDestinationLatLng({ lat: mockStations[0].lat, lng: mockStations[0].lng }));
     expect(openWindow.close).toHaveBeenCalled();
   });
 
@@ -413,7 +412,7 @@ describe('GoogleMapComponent', () => {
     (window as any).handleInfoWindowButtonClick('from', 0);
 
     expect(store.dispatch).toHaveBeenCalledWith(new ChooseOriginLocation(mockStations[0].address));
-    expect(store.dispatch).toHaveBeenCalledWith(new SaveOriginLatLng(mockStations[0].latLng));
+    expect(store.dispatch).toHaveBeenCalledWith(new SaveOriginLatLng({ lat: mockStations[0].lat, lng: mockStations[0].lng }));
     expect(openWindow.close).toHaveBeenCalled();
   });
 

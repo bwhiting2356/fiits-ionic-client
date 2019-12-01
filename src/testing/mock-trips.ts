@@ -1,6 +1,6 @@
-import { Trip } from 'src/app/shared/trip.model';
+import { TripDetails } from 'src/app/shared/trip-details.model';
 
-export const mockTrips: Trip[] = [
+export const mockTrips: TripDetails[] = [
     {
         originLatLng: {
             lat: 40.843647,
@@ -132,10 +132,8 @@ export const mockTrips: Trip[] = [
                 capacity: 10,
                 currentInventory: 5,
                 address: '867 Main Street',
-                latLng: {
-                    lat: 40.743647,
-                    lng: -74.003238,
-                }
+                lat: 40.743647,
+                lng: -74.003238,
             },
             price: 0.75,
             time: '2018-12-30T21:06:29.000+0000',
@@ -162,10 +160,8 @@ export const mockTrips: Trip[] = [
                 capacity: 10,
                 currentInventory: 5,
                 address: '123 Main Street',
-                latLng: {
-                    lat: 40.743647,
-                    lng: -74.003238,
-                }
+                lat: 40.743647,
+                lng: -74.003238,
             },
             price: -0.45,
             time: '2018-12-30T21:06:29.000+0000',
@@ -336,10 +332,8 @@ export const mockTrips: Trip[] = [
                 capacity: 10,
                 currentInventory: 5,
                 address: '345 Victoria Street',
-                latLng: {
-                    lat: 40.743647,
-                    lng: -74.003238,
-                }
+                lat: 40.743647,
+                lng: -74.003238,
             },
             price: 0.75,
             time: '2018-12-30T21:06:29.000+0000',
@@ -366,10 +360,8 @@ export const mockTrips: Trip[] = [
                 capacity: 10,
                 currentInventory: 5,
                 address: '876 Main Street',
-                latLng: {
-                    lat: 40.743647,
-                    lng: -74.003238,
-                }
+                lat: 40.743647,
+                lng: -74.003238
             },
             price: -0.45,
             time: '2018-12-30T21:06:29.000+0000',
@@ -540,10 +532,8 @@ export const mockTrips: Trip[] = [
                 capacity: 10,
                 currentInventory: 5,
                 address: '345 Victoria Street',
-                latLng: {
-                    lat: 40.743647,
-                    lng: -74.003238,
-                }
+                lat: 40.743647,
+                lng: -74.003238,
             },
             price: 0.75,
             time: '2018-12-30T21:06:29.000+0000',
@@ -570,10 +560,8 @@ export const mockTrips: Trip[] = [
                 capacity: 10,
                 currentInventory: 5,
                 address: '234 Market Street',
-                latLng: {
-                    lat: 40.743647,
-                    lng: -74.003238,
-                }
+                lat: 40.743647,
+                lng: -74.003238
             },
             price: -0.45,
             time: '2018-12-30T21:06:29.000+0000',
@@ -745,10 +733,8 @@ export const mockTrips: Trip[] = [
                 capacity: 10,
                 currentInventory: 5,
                 address: '236 Main Street',
-                latLng: {
-                    lat: 40.743647,
-                    lng: -74.003238,
-                }
+                lat: 40.743647,
+                lng: -74.003238,
             },
             price: 0.75,
             time: '2018-12-30T21:06:29.000+0000',
@@ -774,10 +760,8 @@ export const mockTrips: Trip[] = [
                 capacity: 10,
                 currentInventory: 5,
                 address: '576 Market Street',
-                latLng: {
-                    lat: 40.743647,
-                    lng: -74.003238,
-                }
+                lat: 40.743647,
+                lng: -74.003238,
             },
             price: -4.45,
             time: '2018-12-30T21:06:29.000+0000',

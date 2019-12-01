@@ -1,9 +1,8 @@
 import { Action } from '@ngrx/store';
-import { AutocompleteResult } from '../shared/maps/autocomplete-result';
 import { LatLng } from '../shared/latlng.model';
 import { SearchQuery } from '../shared/search-query';
 import { TimeTarget } from '../shared/time-target';
-import { Trip, StationInfo } from '../shared/trip.model';
+import { TripDetails, StationInfo } from '../shared/trip-details.model';
 
 export enum SearchActionTypes {
   ActiveSearchTrue = '[Search] Active Search True',
@@ -52,7 +51,7 @@ export class ActiveSearchFalse implements Action {
 
 export class BookTripRequest implements Action {
   readonly type = SearchActionTypes.BookTripRequest;
-  constructor(public trip: Trip, public uid: string) {}
+  constructor(public trip: TripDetails, public uid: string) {}
 }
 
 export class BookTripSuccess implements Action {
@@ -149,7 +148,7 @@ export class SaveStations implements Action {
 
 export class SaveTrip implements Action {
   readonly type = SearchActionTypes.SaveTrip;
-  constructor(public trip: Trip) {}
+  constructor(public trip: TripDetails) {}
 }
 
 export class SetSearchAddressType implements Action {

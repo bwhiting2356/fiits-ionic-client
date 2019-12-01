@@ -1,4 +1,4 @@
-import { StationInfo } from '../app/shared/trip.model';
+import { StationInfo } from '../app/shared/trip-details.model';
 
 export const mockStations: StationInfo[] = [
     {
@@ -6,19 +6,15 @@ export const mockStations: StationInfo[] = [
         capacity: 10,
         currentInventory: 5,
         address: 'one',
-        latLng: {
-            lat: 40.743647,
-            lng: -74.003238,
-        }
+        lat: 40.743647,
+        lng: -74.003238,
     },
     {
         id: 2,
         capacity: 10,
         currentInventory: 5,
         address: 'one',
-        latLng: {
-            lat: 40.753647,
-            lng: -74.013238,
-        }
+        lat: 40.753647,
+        lng: -74.013238,
     }
 ];
