@@ -14,7 +14,6 @@ export interface StationInfo {
     address: string;
     lat: number;
     lng: number;
-    // latLng: LatLng;
 }
 
 export type ReservationType = 'PICKUP' | 'DROPOFF';
