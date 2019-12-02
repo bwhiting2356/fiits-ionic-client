@@ -22,6 +22,6 @@ export const totalTripDistance = (trip: TripDetails): number => {
 };
 
 export const latLngEquals = (a: LatLng, b: LatLng) => {
-    return a && b && a.lat === b.lat && b.lng === b.lng;
+    return a && b && a.lat === b.lat && a.lng === b.lng;
 };
 
