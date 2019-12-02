@@ -27,7 +27,7 @@ before_install:
 script:
   - npm install
   - npm run ci:all
-  - sonar-scanner
+  - sonar-scanner -X
 deploy:
   skip_cleanup: true
   provider: firebase
