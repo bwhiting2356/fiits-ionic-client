@@ -7,10 +7,6 @@ addons:
   apt: 
     packages: 
       - libgconf-2-4
-  sonarcloud:
-    organization: bwhiting2356
-    token:
-      secure: "nsVCQbCvUrdd7brqvI9Je1qiUrGqVreEvxx+R8YuIbD2deEqqcNxF6nV4sQIPl5duYg7R2k1ONe0Os2zE+bWPPwPPeTYJezSPHFk6wPxit4g4F++V56rLA22nmkUpNt1k03CgFh8ixIHoEtvxNS8TVG3ReoeOJP36ceOGv2jCJDkT92XR1zku2dpKplxAOiS4Rf2TgFt3a3KjLzddHdYGCYi3eqJZntzB7/ha3Bj9Wcg/KEnmsIjgKjbSwKLvSQFWx43nhvqcNMcLDLnQv0d1DLUG/ELQGFEdWv1d4T5dCa9Wk/QilExd5cfGiYomRSf5muAMlD8CshkFRMEonIp8jNyraOIIbaWTS4TK5fREbtlkkw1yVkTF9a47AxslZ6Ibx8v6DceUwI5Fyw/muTbZsqxG0wf2fqiJkew8WxPm4K9eHxBOhDSkUT7umfCW8wz5bw6Eo1h18SR5PzIX4Z+3LfIaHYgtoTgC2BFhsbVeRpmvZuP4JKiBB7ggfXlaen6ytdsr027la03105iUsuSXoRskFlf6qV46tuuLP+tzX5CWP767fJw7WZEM1zR/VMc+di8tKvy8PqPlLkIcQZXYP4Mpa+48GdAQe4aQFfBkNujUwpfg0r7Fu2RrM/5Z8iPaJNuwPGxszKQhNJN54f0I0L4zJ2dLHhq+M/nZNYEKp4="
  
 cache:
   npm: true
