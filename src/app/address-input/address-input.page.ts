@@ -81,6 +81,8 @@ export class AddressInputPage implements OnInit {
   }
 
   chooseLocation(result: AutocompleteResult) {
+    this.navCtrl.back();
+    this.store.dispatch(new ClearResults());
     this.searchAddressType.pipe(take(1))
       .subscribe(type => {
         if (type === 'Origin') {
@@ -90,12 +92,11 @@ export class AddressInputPage implements OnInit {
           this.store.dispatch(new ChooseDestinationLocation(result.structured_formatting.main_text));
           this.store.dispatch(new FetchGeocodeDestinationResult(result.structured_formatting.main_text));
         }
-        this.navCtrl.back();
-        this.store.dispatch(new ClearResults());
       });
   }
 
   chooseCurrentLocation() {
+    this.navCtrl.back();
     combineLatest([
       this.searchAddressType,
       this.store.select(selectPosition)
@@ -109,7 +110,6 @@ export class AddressInputPage implements OnInit {
         this.store.dispatch(new SaveDestinationLatLng(position));
         this.store.dispatch(new ChooseCurrentLocationAsDestination(position));
       }
-      this.navCtrl.back();
     });
   }
 }
