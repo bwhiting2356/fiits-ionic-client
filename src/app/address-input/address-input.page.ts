@@ -81,7 +81,9 @@ export class AddressInputPage implements OnInit {
   }
 
   chooseLocation(result: AutocompleteResult) {
+    console.log('before');
     this.navCtrl.back();
+    console.log('after');
     this.store.dispatch(new ClearResults());
     this.searchAddressType.pipe(take(1))
       .subscribe(type => {
@@ -96,7 +98,9 @@ export class AddressInputPage implements OnInit {
   }
 
   chooseCurrentLocation() {
+    console.log('before');
     this.navCtrl.back();
+    console.log('after')
     combineLatest([
       this.searchAddressType,
       this.store.select(selectPosition)
