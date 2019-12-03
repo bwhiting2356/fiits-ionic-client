@@ -14,8 +14,7 @@ export const initialFeedbackState: FeedbackState = {
     error: undefined
 };
 
-export const feedbackKey = 'feedback';
-const selectFeedback = createFeatureSelector<State, FeedbackState>(feedbackKey);
+const selectFeedback = createFeatureSelector<State, FeedbackState>('feedback');
 
 export const selectFeedbackPosting = createSelector(
     selectFeedback,

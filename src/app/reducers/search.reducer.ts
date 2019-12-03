@@ -46,8 +46,7 @@ export const initialSearchState: SearchState = {
   error: undefined
 };
 
-export const searchKey = 'search';
-const selectSearch = createFeatureSelector<State, SearchState>(searchKey);
+const selectSearch = createFeatureSelector<State, SearchState>('search');
 
 export const selectAddressType = createSelector(
   selectSearch,

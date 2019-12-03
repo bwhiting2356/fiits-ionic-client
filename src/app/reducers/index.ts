@@ -8,30 +8,27 @@ import { SearchState, searchReducer, initialSearchState } from './search.reducer
 import { FeedbackState, feedbackReducer, initialFeedbackState } from './feedback.reducer';
 import { AuthState, initialAuthState, authReducer } from './auth.reducer';
 
-import { searchKey } from './search.reducer';
-import { feedbackKey } from './feedback.reducer';
-import { authKey } from './auth.reducer';
-import { autocompleteKey, AutocompleteState, initialAutocompleteState, autocompleteReducer } from './autocomplete.reducer';
+import { AutocompleteState, initialAutocompleteState, autocompleteReducer } from './autocomplete.reducer';
 
 export interface State {
-  [searchKey]: SearchState;
-  [feedbackKey]: FeedbackState;
-  [authKey]: AuthState;
-  [autocompleteKey]: AutocompleteState;
+  search: SearchState;
+  feedback: FeedbackState;
+  auth: AuthState;
+  autocomplete: AutocompleteState;
 }
 
 export const initialState: State = {
-  [searchKey]: initialSearchState,
-  [feedbackKey]: initialFeedbackState,
-  [authKey]: initialAuthState,
-  [autocompleteKey]: initialAutocompleteState
+  search: initialSearchState,
+  feedback: initialFeedbackState,
+  auth: initialAuthState,
+  autocomplete: initialAutocompleteState
 };
 
 export const reducers: ActionReducerMap<State> = {
-  [searchKey]: searchReducer,
-  [feedbackKey]: feedbackReducer,
-  [authKey]: authReducer,
-  [autocompleteKey]: autocompleteReducer
+  search: searchReducer,
+  feedback: feedbackReducer,
+  auth: authReducer,
+  autocomplete: autocompleteReducer
 };
 
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];

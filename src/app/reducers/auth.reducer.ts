@@ -15,9 +15,7 @@ export const initialAuthState: AuthState = {
     authFetching: false
 };
 
-export const authKey = 'auth';
-
-const selectAuth = createFeatureSelector<State, AuthState>(authKey);
+const selectAuth = createFeatureSelector<State, AuthState>('auth');
 
 export const selectUID = createSelector(
     selectAuth,

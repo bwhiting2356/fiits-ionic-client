@@ -17,8 +17,7 @@ export const initialAutocompleteState: AutocompleteState = {
     error: undefined
 };
 
-export const autocompleteKey = 'autocomplete';
-const selectAutocomplete = createFeatureSelector<State, AutocompleteState>(autocompleteKey);
+const selectAutocomplete = createFeatureSelector<State, AutocompleteState>('autocomplete');
 export const selectAutocompleteResults = createSelector(
     selectAutocomplete,
     state => state.autocompleteResults);
