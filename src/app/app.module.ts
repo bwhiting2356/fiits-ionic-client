@@ -19,7 +19,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ComponentsModule } from './components/components.module';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 import { PipesModule } from './pipes/pipes.module';
 
 import { reducers, metaReducers } from './reducers';
@@ -29,6 +29,8 @@ import { ToastEffects } from './effects/toast.effects';
 import { FeedbackEffects } from './effects/feedback.effects';
 import { AuthEffects } from './effects/auth.effects';
 import { AutocompleteEffects } from './effects/autocomplete.effects';
+
+console.log(environment);
 
 @NgModule({
   declarations: [AppComponent],
@@ -52,10 +54,6 @@ import { AutocompleteEffects } from './effects/autocomplete.effects';
         strictStateImmutability: true,
         strictActionImmutability: true,
       }
-    }),
-    StoreDevtoolsModule.instrument({
-      maxAge: 25, // Retains last 25 states
-      logOnly: environment.production, // Restrict extension to log-only mode
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([SearchEffects, ToastEffects, FeedbackEffects, AuthEffects, AutocompleteEffects]),
