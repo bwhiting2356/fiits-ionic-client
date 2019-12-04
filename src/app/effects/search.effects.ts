@@ -82,7 +82,10 @@ export class SearchEffects {
   bookTrip$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.BookTripRequest),
     switchMap(action => this.tripService.bookTrip(action.trip, action.uid).pipe(
-      map(() => new BookTripSuccess()),
+      map(() => {
+        this.navCtrl.navigateRoot('/scan');
+        return new BookTripSuccess();
+      }),
       catchError(error => of(new BookTripFailure(error)))
     ))
   );
