@@ -20,11 +20,6 @@ const basePages: Page[] = [
       icon: 'search'
     },
     {
-      title: 'Scan',
-      url: '/scan',
-      icon: 'qr-scanner'
-    },
-    {
       title: 'Sign In',
       url: '/sign-in',
       icon: 'person',

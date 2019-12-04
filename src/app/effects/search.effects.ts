@@ -83,7 +83,7 @@ export class SearchEffects {
     ofType(SearchActionTypes.BookTripRequest),
     switchMap(action => this.tripService.bookTrip(action.trip, action.uid).pipe(
       map(() => {
-        this.navCtrl.navigateRoot('/scan');
+        this.navCtrl.navigateRoot('/trips');
         return new BookTripSuccess();
       }),
       catchError(error => of(new BookTripFailure(error)))

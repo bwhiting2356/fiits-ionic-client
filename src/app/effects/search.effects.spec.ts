@@ -180,7 +180,7 @@ describe('SearchEffects success', () => {
         const expected = hot('--b', { b: completion });
 
         expect(searchEffects.bookTrip$).toBeObservable(expected);
-        expect(navCtrl.navigateRoot).toHaveBeenCalledWith('/scan');
+        expect(navCtrl.navigateRoot).toHaveBeenCalledWith('/trips');
   }));
 
   it('should return GeolocationChanged on success', async () => {

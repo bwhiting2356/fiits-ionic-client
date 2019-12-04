@@ -15,7 +15,6 @@ const routes: Routes = [
   { path: 'sign-in', loadChildren: './sign-in/sign-in.module#SignInPageModule' },
   { path: 'address-input', loadChildren: './address-input/address-input.module#AddressInputPageModule' },
   { path: 'trip-details', loadChildren: './trip-details/trip-details.module#TripDetailsPageModule' },
-  { path: 'scan', loadChildren: './scan/scan.module#ScanPageModule' },
 ];
 
 @NgModule({
