@@ -54,18 +54,7 @@ describe('AppComponent: user logged in', () => {
     expect(splashScreenSpy.hide).toHaveBeenCalled();
   });
 
-  it('if the user is logged in, app pages should include /payments and /trips', done => {
-    component.appPages.subscribe(pages => {
-      expect(pages).toContain({
-        title: 'Payments',
-        url: '/payments',
-        icon: 'card',
-      });
-      done();
-    });
-  });
-
-  it('if the user is not logged in, app pages should not include /payments and /trips', async () => {
+  it('if the user is logged in, app pages should include /payments and /trips', async() => {
     component.appPages.subscribe(pages => {
       expect(pages).toContain({
         title: 'Payments',
@@ -79,9 +68,7 @@ describe('AppComponent: user logged in', () => {
       });
     });
   });
-
 });
-
 
 describe('AppComponent: user not logged in', () => {
   let component: AppComponent;
