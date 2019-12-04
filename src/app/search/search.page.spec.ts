@@ -5,7 +5,6 @@ import { SearchPage } from './search.page';
 import { Router } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
-
 import { State } from '../reducers';
 import { By } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
