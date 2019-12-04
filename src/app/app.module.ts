@@ -30,8 +30,6 @@ import { FeedbackEffects } from './effects/feedback.effects';
 import { AuthEffects } from './effects/auth.effects';
 import { AutocompleteEffects } from './effects/autocomplete.effects';
 
-console.log(environment);
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],

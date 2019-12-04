@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 
 import * as firebase from 'firebase';
-import { from, of, Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
 import { selectUID } from '../reducers/auth.reducer';
-import { take, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -27,9 +27,6 @@ export class AuthService {
     }
 
     isLoggedIn$(): Observable<boolean> {
-        return this.store.select(selectUID)
-                        .pipe(
-                            map(uid => uid !== '')
-                        );
+        return this.store.select(selectUID).pipe(map(uid => uid !== ''));
     }
 }
