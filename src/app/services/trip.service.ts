@@ -6,7 +6,6 @@ import { SearchQuery } from '../shared/search-query';
 import { HttpClient } from '@angular/common/http';
 import { mockTrips } from 'src/testing/mock-trips';
 import { environment } from 'src/environments/environment';
-import { BookTripRequest } from '../actions/search.actions';
 import { BookTripRequestPayload } from '../shared/book-trip-request.model';
 
 @Injectable({
