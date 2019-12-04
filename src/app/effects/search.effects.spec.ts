@@ -91,7 +91,8 @@ describe('SearchEffects success', () => {
         {
           provide: NavController,
           useValue: {
-            navigateForward: () => {}
+            navigateForward: () => {},
+            navigateRoot: () => {}
           }
         },
         { provide: SEARCH_EFFECTS_SCHEDULER, useFactory: getTestScheduler },
@@ -168,14 +169,19 @@ describe('SearchEffects success', () => {
     expect(effects.fetchAllStation$).toBeObservable(expected);
   });
 
-  it('should return success response from booking a trip', () => {
-    const action = new BookTripRequest(mockTrips[0], 'mock-uid');
-    const completion = new BookTripSuccess();
+  it('should return BookTripSuccess on success, navigate to /scan', inject(
+    [NavController, SearchEffects],
+    async (navCtrl: NavController, searchEffects: SearchEffects) => {
+        spyOn(navCtrl, 'navigateRoot');
 
-    actions$ = hot('--a-', { a: action });
-    const expected = hot('--b', { b: completion });
-    expect(effects.bookTrip$).toBeObservable(expected);
-  });
+        const action = new BookTripRequest(mockTrips[0], 'mock-uid');
+        const completion = new BookTripSuccess();
+        actions$ = hot('--a-', { a: action });
+        const expected = hot('--b', { b: completion });
+
+        expect(searchEffects.bookTrip$).toBeObservable(expected);
+        expect(navCtrl.navigateRoot).toHaveBeenCalledWith('/scan');
+  }));
 
   it('should return GeolocationChanged on success', async () => {
     const action = new FetchGeolocation();
@@ -278,7 +284,8 @@ describe('SearchEffects errors', () => {
         {
           provide: NavController,
           useValue: {
-            navigateForward: () => {}
+            navigateForward: () => {},
+            navigateRoot: () => {}
           }
         },
         provideMockStore({ initialState })
