@@ -54,7 +54,7 @@ describe('AppComponent: user logged in', () => {
     expect(splashScreenSpy.hide).toHaveBeenCalled();
   });
 
-  it('if the user is logged in, app pages should include /payments and /trips', async() => {
+  it('if the user is logged in, app pages should include /payments and /trips', async () => {
     component.appPages.subscribe(pages => {
       expect(pages).toContain({
         title: 'Payments',
