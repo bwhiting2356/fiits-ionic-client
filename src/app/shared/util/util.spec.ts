@@ -1,4 +1,4 @@
-import { capitalize, totalTripDuration, totalTripDistance, totalTripPrice } from './util';
+import { capitalize, totalTripDuration, totalTripDistance, totalTripPrice, addSeconds } from './util';
 import { mockTrips } from 'src/testing/mock-trips';
 
 describe('util', () => {
@@ -24,5 +24,12 @@ describe('util', () => {
         const trip = mockTrips[0];
         const price = totalTripPrice(trip);
         expect(price).toBe(0.3);
+    });
+
+    it('should add seconds to the time', () => {
+        const time1 = new Date('2018-04-01T00:00:00.000Z');
+        const time2 = new Date('2018-04-01T00:00:30.000Z');
+
+        expect(addSeconds(time1, 30)).toEqual(time2);
     });
 });

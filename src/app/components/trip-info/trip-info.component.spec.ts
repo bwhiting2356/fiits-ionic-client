@@ -68,6 +68,7 @@ describe('TripInfoComponent', () => {
 
   it('should render start reservation time', () => {
     component.trip = mockTrips[0];
+    component.trip.startReservation.time = '2018-12-30T21:06:29.000+0000';
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('#start-reservation-time')).nativeElement.innerText).toEqual('1:06 PM');
   });
