@@ -36,13 +36,8 @@ export class TripCardComponent implements OnInit {
 
   isReadyForScan(): boolean {
     const start = new Date(this.trip.startReservation.time);
-    console.log(`start ${start}`)
     const end = addSeconds(start, RESERVATION_WINDOW);
-    console.log(`end ${end}`)
     const currentTime = new Date();
-    console.log(`currentTime ${currentTime}`)
-    console.log(`result: ${currentTime >= start && currentTime <= end}`);
-
     return currentTime >= start && currentTime <= end;
   }
 }

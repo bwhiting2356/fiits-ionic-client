@@ -53,7 +53,7 @@ describe('TripCardComponent', () => {
   it('should show buttons to scan or cancel if the trip starts in the future', () => {
     component.trip.arrivalTime = '2120-12-15T21:00:40.000+0000';
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('#button-container'))).toBeTruthy()
+    expect(fixture.debugElement.query(By.css('#button-container'))).toBeTruthy();
   });
 
   it('should show buttons to scan or cancel if the trip starts in the future', () => {
