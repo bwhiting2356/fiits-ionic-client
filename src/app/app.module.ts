@@ -27,7 +27,7 @@ import { reducers, metaReducers } from './reducers';
 import { SearchEffects } from './effects/search.effects';
 import { ToastEffects } from './effects/toast.effects';
 import { FeedbackEffects } from './effects/feedback.effects';
-import { AuthEffects } from './effects/auth.effects';
+import { AuthEffects } from './effects/user.effects';
 import { AutocompleteEffects } from './effects/autocomplete.effects';
 
 @NgModule({

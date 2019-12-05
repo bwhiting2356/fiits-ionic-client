@@ -1,4 +1,4 @@
-import { initialAuthState, authReducer } from './auth.reducer';
+import { initialUserState, userReducer } from './user.reducer';
 import {
     LogInFromMenu,
     LogInFromSearch,
@@ -7,32 +7,32 @@ import {
     LogInErrorFromMenu,
     LogInErrorFromSearch,
     LogOut
-} from '../actions/auth.actions';
+} from '../actions/user.actions';
 
-describe('Auth Reducer', () => {
+describe('User Reducer', () => {
     describe('an unknown action', () => {
         it('should return the previous state', () => {
             const action = {} as any;
 
-            const result = authReducer(initialAuthState, action);
+            const result = userReducer(initialUserState, action);
 
-            expect(result).toBe(initialAuthState);
+            expect(result).toBe(initialUserState);
           });
     });
 
-    describe('auth actions', () => {
+    describe('user actions', () => {
         it('should save the uid to state, set fetchig to false', () => {
-            const initialAuthStateWithFetching = {
-                ...initialAuthState,
+            const initialUserStateWithFetching = {
+                ...initialUserState,
                 authFetching: true
             };
 
             const action = new LogInSuccessFromSearch('mock-uid');
 
-            const result = authReducer(initialAuthStateWithFetching, action);
+            const result = userReducer(initialUserStateWithFetching, action);
 
             expect(result).toEqual({
-                ...initialAuthState,
+                ...initialUserState,
                 authFetching: false,
                 uid: 'mock-uid'
             });
@@ -41,10 +41,10 @@ describe('Auth Reducer', () => {
         it('should set fetching to true', () => {
             const action = new LogInFromSearch();
 
-            const result = authReducer(initialAuthState, action);
+            const result = userReducer(initialUserState, action);
 
             expect(result).toEqual({
-                ...initialAuthState,
+                ...initialUserState,
                 authFetching: true,
             });
         });
@@ -52,26 +52,26 @@ describe('Auth Reducer', () => {
         it('should save the error to state, set fetching to false', () => {
             const action = new LogInErrorFromSearch('oops');
 
-            const result = authReducer(initialAuthState, action);
+            const result = userReducer(initialUserState, action);
 
             expect(result).toEqual({
-                ...initialAuthState,
+                ...initialUserState,
                 authFetching: false,
                 error: 'oops'
             });
         });
 
         it('should clear the uid from state', () => {
-            const initialAuthStateWithUid = {
-                ...initialAuthState,
+            const initialUserStateWithUid = {
+                ...initialUserState,
                 uid: 'mock-uid'
             };
 
             const action = new LogOut();
 
-            const result = authReducer(initialAuthStateWithUid, action);
+            const result = userReducer(initialUserStateWithUid, action);
 
-            expect(result).toEqual(initialAuthState);
+            expect(result).toEqual(initialUserState);
         });
     });
 });

@@ -1,48 +1,48 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { AuthActions, AuthActionTypes } from '../actions/auth.actions';
+import { UserActions, UserActionTypes } from '../actions/user.actions';
 import { State } from '.';
 
-export interface AuthState {
+export interface UserState {
     uid: string;
     displayName: string;
     authFetching: boolean;
     error?: any;
 }
 
-export const initialAuthState: AuthState = {
+export const initialUserState: UserState = {
     uid: '',
     displayName: '',
     authFetching: false
 };
 
-const selectAuth = createFeatureSelector<State, AuthState>('auth');
+const selectUser = createFeatureSelector<State, UserState>('user');
 
 export const selectUID = createSelector(
-    selectAuth,
+    selectUser,
     state => state.uid);
 
-export function authReducer(state = initialAuthState, action: AuthActions): AuthState {
+export function userReducer(state = initialUserState, action: UserActions): UserState {
     switch (action.type) {
-        case AuthActionTypes.LogInFromSearch:
+        case UserActionTypes.LogInFromSearch:
             return {
                 ...state,
                 authFetching: true
             };
-        case AuthActionTypes.LogInSuccessFromSearch:
+        case UserActionTypes.LogInSuccessFromSearch:
             return {
                 ...state,
                 uid: action.uid,
                 authFetching: false
             };
-        case AuthActionTypes.LogInErrorFromSearch:
+        case UserActionTypes.LogInErrorFromSearch:
             return {
                 ...state,
                 error: action.error,
                 authFetching: false
             };
-        case AuthActionTypes.LogOut:
+        case UserActionTypes.LogOut:
             return {
-                ...initialAuthState
+                ...initialUserState
             };
         default:
             return state;

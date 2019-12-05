@@ -1,17 +1,17 @@
-import { AuthService } from './auth.service';
+import { UserService } from './user.service';
 import { TestBed, async } from '@angular/core/testing';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { initialState, State } from '../reducers';
 import { Store } from '@ngrx/store';
-import { initialAuthState } from '../reducers/auth.reducer';
+import { initialUserState } from '../reducers/user.reducer';
 
-describe('AuthService', () => {
+describe('UserService', () => {
     let store: MockStore<State>;
     beforeEach(async(() => {
         TestBed.configureTestingModule({
           providers: [
-            AuthService,
+            UserService,
             { provide: AngularFireAuth, useValue: {} },
             provideMockStore({ initialState })
             ]
@@ -21,16 +21,16 @@ describe('AuthService', () => {
     }));
 
     it('should be created', () => {
-        const service: AuthService = TestBed.get(AuthService);
+        const service: UserService = TestBed.get(UserService);
         expect(service).toBeTruthy();
     });
 
     it('should return true if the user is logged in', async () => {
-        const service: AuthService = TestBed.get(AuthService);
+        const service: UserService = TestBed.get(UserService);
         store.setState({
             ...initialState,
-            auth: {
-                ...initialAuthState,
+            user: {
+                ...initialUserState,
                 uid: 'authenticated-user'
             }
         });
@@ -38,11 +38,11 @@ describe('AuthService', () => {
     });
 
     it('should return false if the user is logged in', async () => {
-        const service: AuthService = TestBed.get(AuthService);
+        const service: UserService = TestBed.get(UserService);
         store.setState({
             ...initialState,
-            auth: {
-                ...initialAuthState,
+            user: {
+                ...initialUserState,
                 uid: ''
             }
         });

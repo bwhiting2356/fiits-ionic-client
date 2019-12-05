@@ -5,9 +5,9 @@ import { Observable, combineLatest } from 'rxjs';
 import { TripDetails } from '../shared/trip-details.model';
 import { take } from 'rxjs/operators';
 import { BookTripRequest } from '../actions/search.actions';
-import { LogInFromSearch } from '../actions/auth.actions';
+import { LogInFromSearch } from '../actions/user.actions';
 import { selectTrip, selectBookTripFetching } from '../reducers/search.reducer';
-import { selectUID } from '../reducers/auth.reducer';
+import { selectUID } from '../reducers/user.reducer';
 
 @Component({
   selector: 'app-trip-details',

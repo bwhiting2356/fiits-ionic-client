@@ -12,8 +12,8 @@ import { cold } from 'jasmine-marbles';
 
 import { BookTripRequest } from '../actions/search.actions';
 import { mockTrips } from 'src/testing/mock-trips';
-import { initialAuthState } from '../reducers/auth.reducer';
-import { LogInFromSearch } from '../actions/auth.actions';
+import { initialUserState } from '../reducers/user.reducer';
+import { LogInFromSearch } from '../actions/user.actions';
 
 describe('TripDetailPage', () => {
   let component: TripDetailsPage;
@@ -126,8 +126,8 @@ describe('TripDetailPage', () => {
     spyOn(store, 'dispatch');
     store.setState({
       ...initialState,
-      auth: {
-        ...initialAuthState,
+      user: {
+        ...initialUserState,
         uid: 'mock-uid',
       },
       search: {
@@ -160,8 +160,8 @@ describe('TripDetailPage', () => {
     spyOn(store, 'dispatch');
     store.setState({
       ...initialState,
-      auth: {
-        ...initialAuthState,
+      user: {
+        ...initialUserState,
         uid: '',
       },
       search: {
@@ -212,8 +212,8 @@ describe('TripDetailPage', () => {
   it('should set uid to the uid form auth state', async () => {
     store.setState({
       ...initialState,
-      auth: {
-        ...initialAuthState,
+      user: {
+        ...initialUserState,
         uid: 'mock-uid',
       }
     });

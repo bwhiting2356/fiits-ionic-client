@@ -8,7 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppComponent } from './app.component';
 import { of } from 'rxjs';
-import { AuthService } from './services/auth.service';
+import { UserService } from './services/user.service';
 
 describe('AppComponent: user logged in', () => {
   let component: AppComponent;
@@ -29,7 +29,7 @@ describe('AppComponent: user logged in', () => {
         { provide: StatusBar, useValue: statusBarSpy },
         { provide: SplashScreen, useValue: splashScreenSpy },
         { provide: Platform, useValue: platformSpy },
-        { provide: AuthService, useValue: { isLoggedIn$: () => of(true)}}
+        { provide: UserService, useValue: { isLoggedIn$: () => of(true)}}
       ],
       imports: [ RouterTestingModule.withRoutes([])],
     }).compileComponents();
@@ -89,7 +89,7 @@ describe('AppComponent: user not logged in', () => {
         { provide: StatusBar, useValue: statusBarSpy },
         { provide: SplashScreen, useValue: splashScreenSpy },
         { provide: Platform, useValue: platformSpy },
-        { provide: AuthService, useValue: { isLoggedIn$: () => of(false)}}
+        { provide: UserService, useValue: { isLoggedIn$: () => of(false)}}
       ],
       imports: [ RouterTestingModule.withRoutes([])],
     }).compileComponents();

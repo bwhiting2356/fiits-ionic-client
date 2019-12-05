@@ -5,13 +5,13 @@ import * as firebase from 'firebase';
 import { from, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
-import { selectUID } from '../reducers/auth.reducer';
+import { selectUID } from '../reducers/user.reducer';
 import { map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
-export class AuthService {
+export class UserService {
     constructor(
         private store: Store<State>,
         private firebaseAuth: AngularFireAuth) {}

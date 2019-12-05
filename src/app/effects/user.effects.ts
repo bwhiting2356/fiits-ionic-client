@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Effect, ofType, Actions } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
-import { AuthActionTypes, AuthActions, LogInSuccessFromSearch, LogInErrorFromSearch } from '../actions/auth.actions';
+import { UserActionTypes, UserActions, LogInSuccessFromSearch, LogInErrorFromSearch } from '../actions/user.actions';
 import { switchMap, withLatestFrom, catchError } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user.service';
 import { State } from '../reducers';
 import { BookTripRequest } from '../actions/search.actions';
 import { selectTrip } from '../reducers/search.reducer';
@@ -14,8 +14,8 @@ export class AuthEffects {
 
     @Effect()
     logInFromSearch$: Observable<Action> = this.actions$.pipe(
-      ofType(AuthActionTypes.LogInFromSearch),
-      switchMap(() => this.authService.login$()),
+      ofType(UserActionTypes.LogInFromSearch),
+      switchMap(() => this.userService.login$()),
       withLatestFrom(this.store.select(selectTrip)),
       switchMap(([uid, trip]) => [
         new BookTripRequest(trip, uid),
@@ -26,6 +26,6 @@ export class AuthEffects {
 
     constructor(
         private store: Store<State>,
-        private authService: AuthService,
-        private actions$: Actions<AuthActions>) {}
+        private userService: UserService,
+        private actions$: Actions<UserActions>) {}
 }
