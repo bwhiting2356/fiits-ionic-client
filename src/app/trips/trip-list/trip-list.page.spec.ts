@@ -121,7 +121,7 @@ describe('TripListPage no trips', () => {
     expect(fixture.debugElement.queryAll(By.css('app-trip-card')).length).toBe(0);
   });
 
-  it('should render spinner trips are fetching', async () => {
+  it('should render spinner trips are fetching', () => {
     store.setState({
       ...initialState,
       user: {
