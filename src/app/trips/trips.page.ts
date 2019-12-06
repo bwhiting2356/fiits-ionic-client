@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { capitalize } from '../shared/util/util';
 import { Store } from '@ngrx/store';
@@ -8,6 +8,7 @@ import { State } from '../reducers';
   selector: 'app-trips',
   templateUrl: './trips.page.html',
   styleUrls: ['./trips.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TripsPage implements OnInit {
 

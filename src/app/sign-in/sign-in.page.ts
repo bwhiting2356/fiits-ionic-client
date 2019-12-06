@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
 
@@ -6,6 +6,7 @@ import { State } from '../reducers';
   selector: 'app-sign-in',
   templateUrl: './sign-in.page.html',
   styleUrls: ['./sign-in.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignInPage implements OnInit {
 

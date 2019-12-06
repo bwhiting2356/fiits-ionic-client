@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { NavController, IonInput } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Observable, combineLatest } from 'rxjs';
@@ -36,6 +36,7 @@ import {
   selector: 'app-address-input',
   templateUrl: './address-input.page.html',
   styleUrls: ['./address-input.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddressInputPage implements OnInit {
   @ViewChild('input', { static: false }) input: IonInput;

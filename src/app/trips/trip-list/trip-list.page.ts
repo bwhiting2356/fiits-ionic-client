@@ -1,9 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { TripService } from '../../services/trip.service';
 import { capitalize } from '../../shared/util/util';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable } from 'rxjs';
 import { TripDetails } from 'src/app/shared/trip-details.model';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/reducers';
@@ -13,6 +12,7 @@ import { selectTrips, selectShowNoTrips, selectTripsFetching } from 'src/app/red
   selector: 'app-trip-list',
   templateUrl: './trip-list.page.html',
   styleUrls: ['./trip-list.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TripListPage {
   trips: Observable<TripDetails[]>;
