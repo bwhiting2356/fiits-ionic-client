@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import { TripDetails } from '../shared/trip-details.model';
 
 export enum UserActionTypes {
     LogInFromMenu = '[User] Log In From Menu',
@@ -8,6 +9,9 @@ export enum UserActionTypes {
     LogInErrorFromMenu = '[User] Log In Error From Menu',
     LogInErrorFromSearch = '[User] Log In Error From Search',
     LogOut = '[User] Log Out',
+    FetchTrips = '[User] Fetch Trips',
+    FetchTripsSuccess = '[User] Fetch Trips Success',
+    FetchTripsError = '[User] Fetch Trips Error'
 }
 
 export class LogInFromMenu implements Action {
@@ -42,11 +46,28 @@ export class LogOut implements Action {
     readonly type = UserActionTypes.LogOut;
 }
 
+export class FetchTrips implements Action {
+    readonly type  = UserActionTypes.FetchTrips;
+}
+
+export class FetchTripsSuccess implements Action {
+    readonly type  = UserActionTypes.FetchTripsSuccess;
+    constructor(public trips: TripDetails[]) {}
+}
+
+export class FetchTripsError implements Action {
+    readonly type = UserActionTypes.FetchTripsError;
+    constructor(public error: any) {}
+}
+
 export type UserActions = LogInFromMenu
                         | LogInFromSearch
                         | LogInSuccessFromMenu
                         | LogInSuccessFromSearch
                         | LogInErrorFromMenu
                         | LogInErrorFromSearch
-                        | LogOut ;
+                        | LogOut
+                        | FetchTrips
+                        | FetchTripsSuccess
+                        | FetchTripsError;
 

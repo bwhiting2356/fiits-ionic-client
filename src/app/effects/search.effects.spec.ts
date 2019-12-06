@@ -45,6 +45,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { State } from '../reducers';
 import { initialState } from '../reducers';
 import { Store } from '@ngrx/store';
+import { FetchTrips } from '../actions/user.actions';
 
 describe('SearchEffects success', () => {
   let actions$: Observable<any>;
@@ -92,7 +93,7 @@ describe('SearchEffects success', () => {
           provide: NavController,
           useValue: {
             navigateForward: () => {},
-            navigateRoot: () => {}
+            navigateBack: () => {}
           }
         },
         { provide: SEARCH_EFFECTS_SCHEDULER, useFactory: getTestScheduler },
@@ -172,15 +173,16 @@ describe('SearchEffects success', () => {
   it('should return BookTripSuccess on success, navigate to /scan', inject(
     [NavController, SearchEffects],
     async (navCtrl: NavController, searchEffects: SearchEffects) => {
-        spyOn(navCtrl, 'navigateRoot');
+        spyOn(navCtrl, 'navigateBack');
 
         const action = new BookTripRequest(mockTrips[0], 'mock-uid');
-        const completion = new BookTripSuccess();
-        actions$ = hot('--a-', { a: action });
-        const expected = hot('--b', { b: completion });
+        const tripCompletion = new BookTripSuccess();
+        const fetchTrips = new FetchTrips();
+        actions$ = hot('a', { a: action });
+        const expected = hot('(bc)', { b: tripCompletion, c: fetchTrips });
 
         expect(searchEffects.bookTrip$).toBeObservable(expected);
-        expect(navCtrl.navigateRoot).toHaveBeenCalledWith('/trips');
+        expect(navCtrl.navigateBack).toHaveBeenCalledWith('/trips/upcoming');
   }));
 
   it('should return GeolocationChanged on success', async () => {
@@ -285,7 +287,7 @@ describe('SearchEffects errors', () => {
           provide: NavController,
           useValue: {
             navigateForward: () => {},
-            navigateRoot: () => {}
+            navigateBack: () => {}
           }
         },
         provideMockStore({ initialState })

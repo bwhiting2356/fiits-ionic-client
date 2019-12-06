@@ -27,7 +27,7 @@ import { reducers, metaReducers } from './reducers';
 import { SearchEffects } from './effects/search.effects';
 import { ToastEffects } from './effects/toast.effects';
 import { FeedbackEffects } from './effects/feedback.effects';
-import { AuthEffects } from './effects/user.effects';
+import { UserEffects } from './effects/user.effects';
 import { AutocompleteEffects } from './effects/autocomplete.effects';
 
 @NgModule({
@@ -54,7 +54,7 @@ import { AutocompleteEffects } from './effects/autocomplete.effects';
       }
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([SearchEffects, ToastEffects, FeedbackEffects, AuthEffects, AutocompleteEffects]),
+    EffectsModule.forRoot([SearchEffects, ToastEffects, FeedbackEffects, UserEffects, AutocompleteEffects]),
   ],
   providers: [
     StatusBar,

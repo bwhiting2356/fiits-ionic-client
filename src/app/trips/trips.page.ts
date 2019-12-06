@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { capitalize } from '../shared/util/util';
+import { Store } from '@ngrx/store';
+import { State } from '../reducers';
 
 @Component({
   selector: 'app-trips',
@@ -9,7 +11,9 @@ import { capitalize } from '../shared/util/util';
 })
 export class TripsPage implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(
+    private store: Store<State>,
+    private router: Router) { }
 
   ngOnInit() {
   }

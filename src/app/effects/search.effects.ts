@@ -29,6 +29,7 @@ import { GeolocationService } from '../services/geolocation.service';
 import { State } from '../reducers';
 import { selectSearchTime } from '../reducers/search.reducer';
 import { async } from 'rxjs/internal/scheduler/async';
+import { FetchTrips } from '../actions/user.actions';
 
 const ONE_MINUTE = 60 * 1000;
 
@@ -78,14 +79,13 @@ export class SearchEffects {
     ))
   );
 
-  @Effect()
+  @Effect() // TODO: should this be in user effects?
   bookTrip$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.BookTripRequest),
     switchMap(action => this.tripService.bookTrip(action.trip, action.uid).pipe(
-      map(() => {
-        this.navCtrl.navigateRoot('/trips');
-        return new BookTripSuccess();
-      }),
+      tap(() => this.navCtrl.navigateBack('/trips/upcoming')),
+      switchMap(() => [new BookTripSuccess(), new FetchTrips()]),
+
       catchError(error => of(new BookTripFailure(error)))
     ))
   );

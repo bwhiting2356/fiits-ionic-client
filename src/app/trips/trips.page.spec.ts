@@ -3,6 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
 import { TripsPage } from './trips.page';
+import { provideMockStore } from '@ngrx/store/testing';
+import { initialState } from '../reducers';
 
 describe('TripsPage', () => {
   let component: TripsPage;
@@ -18,7 +20,8 @@ describe('TripsPage', () => {
           useValue: {
             url: 'trips/upcoming'
           }
-        }
+        },
+        provideMockStore({ initialState })
       ]
     })
     .compileComponents();

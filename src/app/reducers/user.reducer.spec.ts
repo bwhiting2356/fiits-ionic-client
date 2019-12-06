@@ -6,8 +6,12 @@ import {
     LogInSuccessFromSearch,
     LogInErrorFromMenu,
     LogInErrorFromSearch,
-    LogOut
+    LogOut,
+    FetchTrips,
+    FetchTripsSuccess,
+    FetchTripsError
 } from '../actions/user.actions';
+import { mockTrips } from 'src/testing/mock-trips';
 
 describe('User Reducer', () => {
     describe('an unknown action', () => {
@@ -72,6 +76,52 @@ describe('User Reducer', () => {
             const result = userReducer(initialUserStateWithUid, action);
 
             expect(result).toEqual(initialUserState);
+        });
+
+        it('should set trips fetching to true', () => {
+            const action = new FetchTrips();
+
+            const result = userReducer(initialUserState, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                tripsFetching: true
+            });
+        });
+
+        it('should set trips fetching to false, save the trips in state', () => {
+            const initialUserStateWithFetching = {
+                ...initialUserState,
+                tripsFetching: true
+            };
+            const action = new FetchTripsSuccess(mockTrips);
+
+            const result = userReducer(initialUserState, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                tripsFetching: false,
+                trips: mockTrips
+            });
+        });
+
+        it('should set trips fetching to false, save the error in state', () => {
+            const initialUserStateWithFetching = {
+                ...initialUserState,
+                tripsFetching: true
+            };
+            const error = new Error('oops');
+
+            const action = new FetchTripsError(error);
+
+            const result = userReducer(initialUserStateWithFetching, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                tripsFetching: false,
+                error
+            });
+
         });
     });
 });
