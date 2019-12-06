@@ -25,12 +25,12 @@ export class TripService {
     return this.http.post(`${this.TRIP_API_URL}/book-trip`, bookTripRequest);
   }
 
-  getTrips(): Observable<TripDetails[]> {
-    return of([...mockTrips, ...mockTrips, ...mockTrips, ...mockTrips]);
+  fetchTrips(userId: string): Observable<TripDetails[]> {
+    return this.http.get<TripDetails[]>(`${this.TRIP_API_URL}/trips/${userId}`);
   }
 
   getFilteredTrips(direction: string, currentDate: Date): Observable<TripDetails[]> {
-    return this.getTrips().pipe(
+    return this.fetchTrips('').pipe( // TODO: fix
       map(trips => trips.filter(trip => {
         const tripDate = new Date(trip.arrivalTime);
         if (direction === 'Upcoming') {

@@ -9,10 +9,15 @@ import { TripService } from '../../services/trip.service';
 
 import { of } from 'rxjs';
 import { mockTrips } from 'src/testing/mock-trips';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { initialState, State } from '../../reducers';
+import { Store } from '@ngrx/store';
+import { initialUserState } from 'src/app/reducers/user.reducer';
 
 describe('TripListPage trip list', () => {
   let component: TripListPage;
   let fixture: ComponentFixture<TripListPage>;
+  let store: MockStore<State>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -31,10 +36,12 @@ describe('TripListPage trip list', () => {
             getTrips: () => {},
             getFilteredTrips: () => of(mockTrips)
           }
-        }
+        },
+        provideMockStore({ initialState })
       ]
     })
     .compileComponents();
+    store = TestBed.get<Store<State>>(Store);
   }));
 
   beforeEach(() => {
@@ -52,6 +59,13 @@ describe('TripListPage trip list', () => {
   });
 
   it('should render list of trips', () => {
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        trips: mockTrips
+      }
+    });
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('ion-text'))).toBeFalsy();
     expect(fixture.debugElement.queryAll(By.css('app-trip-card')).length).toBe(4);
@@ -61,6 +75,7 @@ describe('TripListPage trip list', () => {
 describe('TripListPage no trips', () => {
   let component: TripListPage;
   let fixture: ComponentFixture<TripListPage>;
+  let store: MockStore<State>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -79,10 +94,12 @@ describe('TripListPage no trips', () => {
             getTrips: () => {},
             getFilteredTrips: () => of([])
           }
-        }
+        },
+        provideMockStore({ initialState })
       ]
     })
     .compileComponents();
+    store = TestBed.get<Store<State>>(Store);
   }));
 
   beforeEach(() => {
@@ -92,6 +109,13 @@ describe('TripListPage no trips', () => {
   });
 
   it('should render "no trips" if no trips are provided', () => {
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        trips: []
+      }
+    });
     expect(fixture.debugElement.query(By.css('ion-text')).nativeElement.innerText).toBe('No trips');
     expect(fixture.debugElement.queryAll(By.css('app-trip-card')).length).toBe(0);
   });
