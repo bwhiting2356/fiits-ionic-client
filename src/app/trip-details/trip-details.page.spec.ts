@@ -50,33 +50,33 @@ describe('TripDetailPage', () => {
   });
 
   it('should change showMap from false to true when ionViewDidEnter is called', () => {
-    expect(component.showMap).toBeFalsy();
+    spyOn(component.showMap, 'next');
     component.ionViewDidEnter();
-    expect(component.showMap).toBeTruthy();
+    expect(component.showMap.next).toHaveBeenCalledWith(true);
   });
 
   it('should not show the map, should show the placeholder, if showMap is false', async () => {
-    component.showMap = false;
+    component.showMap.next(false);
     fixture.detectChanges();
     expect(fixture.debugElement
       .query(By.css('app-google-map')))
-    .toBeFalsy();
+      .toBeFalsy();
 
     expect(fixture.debugElement
       .query(By.css('#placeholder')))
-    .toBeTruthy();
+      .toBeTruthy();
   });
 
   it('should show the map, should not show the placeholder, if showMap is false', async () => {
-    component.showMap = true;
+    component.showMap.next(true);
     fixture.detectChanges();
     expect(fixture.debugElement
       .query(By.css('app-google-map')))
-    .toBeTruthy();
+      .toBeTruthy();
 
     expect(fixture.debugElement
       .query(By.css('#placeholder')))
-    .toBeFalsy();
+      .toBeFalsy();
   });
 
   it('should contain the value of bookTripFetching from state', () => {

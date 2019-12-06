@@ -10,7 +10,7 @@
 <ion-content>
     <div id="trip-info-container">
       <app-google-map 
-        *ngIf="showMap; else placeholder"
+        *ngIf="showMap | async; else placeholder"
         [fullscreenControl]="false"
         [trip]="trip | async">
       </app-google-map>

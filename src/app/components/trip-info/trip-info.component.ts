@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { TripDetails } from 'src/app/shared/trip-details.model';
 import { totalTripPrice, totalTripDuration, totalTripDistance } from 'src/app/shared/util/util';
 
@@ -6,6 +6,7 @@ import { totalTripPrice, totalTripDuration, totalTripDistance } from 'src/app/sh
   selector: 'app-trip-info',
   templateUrl: './trip-info.component.html',
   styleUrls: ['./trip-info.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TripInfoComponent implements OnInit {
   @Input() trip: TripDetails;

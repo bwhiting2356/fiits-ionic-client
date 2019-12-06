@@ -85,11 +85,11 @@ describe('SearchPage', () => {
     expect(component.stations).toBeObservable(expected);
   });
 
-  it('should render a spinner if showSpinner is true', () => {
-    component.showSpinner = of(true);
-    fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('#spinner'))).toBeTruthy();
-  });
+  // it('should render a spinner if showSpinner is true', () => {
+  //   component.showSpinner = of(true);
+  //   fixture.detectChanges();
+  //   expect(fixture.debugElement.query(By.css('#spinner'))).toBeTruthy();
+  // });
 
   it('should set showSpinner true if geocoding is fetching', () => {
     store.setState({
@@ -102,6 +102,7 @@ describe('SearchPage', () => {
     fixture.detectChanges();
     const expected = cold('a', { a: true } );
     expect(component.showSpinner).toBeObservable(expected);
+    expect(fixture.debugElement.query(By.css('#spinner'))).toBeTruthy();
   });
 
   it('should set showSpinner true if search query is fetching', () => {

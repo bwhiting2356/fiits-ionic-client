@@ -1,5 +1,5 @@
 import { MapsAPILoader } from '@agm/core';
-import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 
@@ -26,6 +26,7 @@ declare var google;
   selector: 'app-google-map',
   templateUrl: './google-map.component.html',
   styleUrls: ['./google-map.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GoogleMapComponent implements OnChanges, OnInit {
   @ViewChild('mapContainer', { static: false }) mapContainer: ElementRef;
@@ -64,8 +65,6 @@ export class GoogleMapComponent implements OnChanges, OnInit {
   ionViewDidEnter() {
     this.fitBounds();
   }
-
-
 
   addOrRemoveStationMarkers = () => {
     if (this.stations && this.map.getZoom() >= 14) {

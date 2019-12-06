@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
 import { SendFeedback, ChangeComment } from '../actions/feedback.actions';
@@ -11,6 +11,7 @@ import { selectFeedbackPosting, selectFeedbackComment, selectFeedbackDisableSend
   selector: 'app-feedback',
   templateUrl: './feedback.page.html',
   styleUrls: ['./feedback.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FeedbackPage {
   disableSend: Observable<boolean>;

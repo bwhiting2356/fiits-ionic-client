@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
 import { TripDetails } from '../shared/trip-details.model';
 import { take } from 'rxjs/operators';
 import { BookTripRequest } from '../actions/search.actions';
@@ -13,12 +13,13 @@ import { selectUID } from '../reducers/user.reducer';
   selector: 'app-trip-details',
   templateUrl: './trip-details.page.html',
   styleUrls: ['./trip-details.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TripDetailsPage {
   trip: Observable<TripDetails>;
   bookTripFetching: Observable<boolean>;
   uid: Observable<string>;
-  showMap = false;
+  showMap = new BehaviorSubject(false);
 
   constructor(private store: Store<State>) {
     this.trip = store.select(selectTrip);
@@ -27,7 +28,7 @@ export class TripDetailsPage {
   }
 
   ionViewDidEnter() {
-    this.showMap = true;
+    this.showMap.next(true);
   }
 
   bookTrip() {

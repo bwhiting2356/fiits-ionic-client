@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
@@ -36,6 +36,7 @@ import {
   selector: 'app-search',
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchPage implements OnInit {
   originLatLng: Observable<LatLng>;

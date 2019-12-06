@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { TripDetails } from 'src/app/shared/trip-details.model';
 import { totalTripPrice, totalTripDuration, totalTripDistance, addSeconds } from 'src/app/shared/util/util';
 

@@ -117,25 +117,22 @@ describe('AddressInputPage', () => {
   });
 
   it('should show the no-results text if showNoResults is true', () => {
-    component.showNoResults = of(true);
-    component.searchAddressType = of('Origin');
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: 'Origin'
+      },
+      autocomplete: {
+        ...initialAutocompleteState,
+        autocompleteDirty: true,
+        autocompleteFetching: false,
+        autocompleteResults: []
+      }
+    });
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('#no-results'))
       .nativeElement.innerText).toBe('No addresses found for this search');
-  });
-
-  it('should not show the no-results text if showNoResults is false', () => {
-    component.showNoResults = of(false);
-    component.searchAddressType = of('Origin');
-    fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('#no-results'))).toBeFalsy();
-  });
-
-  it('should show the suggestions section if showSuggestions is true', () => {
-    component.showSuggestions = of(true);
-    component.searchAddressType = of('Origin');
-    fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('#suggestions'))).toBeTruthy();
   });
 
   it('should not show the suggestions section if showSuggestions is false', () => {
@@ -148,6 +145,10 @@ describe('AddressInputPage', () => {
   it('should make showNoResults false if there are no results but is pristine', () => {
     store.setState({
       ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: 'Origin'
+      },
       autocomplete: {
         ...initialAutocompleteState,
         autocompleteResults: [],
@@ -157,11 +158,16 @@ describe('AddressInputPage', () => {
     fixture.detectChanges();
     const expected = cold('a', { a: false } );
     expect(component.showNoResults).toBeObservable(expected);
+    expect(fixture.debugElement.query(By.css('#no-results'))).toBeFalsy();
   });
 
   it('should make showNoResults false if there are results', () => {
     store.setState({
       ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: 'Origin'
+      },
       autocomplete: {
         ...initialAutocompleteState,
         autocompleteResults: mockAutocompleteResults,
@@ -171,11 +177,16 @@ describe('AddressInputPage', () => {
     fixture.detectChanges();
     const expected = cold('a', { a: false } );
     expect(component.showNoResults).toBeObservable(expected);
+    expect(fixture.debugElement.query(By.css('#no-results'))).toBeFalsy();
   });
 
-  it('should make snowNoResults true if there are no results and is dirty', () => {
+  it('should make snowNoResults true if there are no results and is dirty', async () => {
     store.setState({
       ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: 'Origin'
+      },
       autocomplete: {
         ...initialAutocompleteState,
         autocompleteResults: [],
@@ -185,11 +196,17 @@ describe('AddressInputPage', () => {
     fixture.detectChanges();
     const expected = cold('a', { a: true } );
     expect(component.showNoResults).toBeObservable(expected);
+    expect(fixture.debugElement.query(By.css('#no-results'))
+      .nativeElement.innerText).toBe('No addresses found for this search');
   });
 
-  it('should make showSuggestions true if there are no results and is not fetching', () => {
+  it('should make showSuggestions true if there are no results and is not fetching', async () => {
     store.setState({
       ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: 'Origin',
+      },
       autocomplete: {
         ...initialAutocompleteState,
         autocompleteResults: [],
@@ -199,11 +216,16 @@ describe('AddressInputPage', () => {
     fixture.detectChanges();
     const expected = cold('a', { a: true } );
     expect(component.showSuggestions).toBeObservable(expected);
+    expect(fixture.debugElement.query(By.css('#suggestions'))).toBeTruthy();
   });
 
   it('should make showSuggestions false if there are results and is not fetching', () => {
     store.setState({
       ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: 'Origin',
+      },
       autocomplete: {
         ...initialAutocompleteState,
         autocompleteResults: mockAutocompleteResults,
@@ -218,6 +240,10 @@ describe('AddressInputPage', () => {
   it('should make showSuggestions false if there are no results and is fetching', () => {
     store.setState({
       ...initialState,
+      search: {
+        ...initialSearchState,
+        searchAddressType: 'Origin'
+      },
       autocomplete: {
         ...initialAutocompleteState,
         autocompleteResults: [],
