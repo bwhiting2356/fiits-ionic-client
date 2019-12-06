@@ -108,15 +108,31 @@ describe('TripListPage no trips', () => {
     fixture.detectChanges();
   });
 
-  it('should render "no trips" if no trips are provided', () => {
+  it('should render "no trips" if no trips are provided, is not fetching', () => {
     store.setState({
       ...initialState,
       user: {
         ...initialUserState,
+        tripsFetching: false,
         trips: []
       }
     });
     expect(fixture.debugElement.query(By.css('ion-text')).nativeElement.innerText).toBe('No trips');
+    expect(fixture.debugElement.queryAll(By.css('app-trip-card')).length).toBe(0);
+  });
+
+  it('should render spinner trips are fetching', () => {
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        tripsFetching: true,
+        trips: []
+      }
+    });
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#fetching'))).toBeTruthy();
+    expect(fixture.debugElement.query(By.css('ion-text'))).toBeFalsy();
     expect(fixture.debugElement.queryAll(By.css('app-trip-card')).length).toBe(0);
   });
 });
