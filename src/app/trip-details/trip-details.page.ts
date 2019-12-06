@@ -32,6 +32,7 @@ export class TripDetailsPage {
   }
 
   bookTrip() {
+    // TODO: should this logic be handled by an effect?
     combineLatest([this.uid, this.bookTripFetching, this.trip])
       .pipe(take(1))
       .subscribe(([uid, fetching, trip]) => {
