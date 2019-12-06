@@ -30,6 +30,15 @@ export const selectTrips = createSelector(
     selectUser,
     state => state.trips);
 
+export const selectTripsFetching = createSelector(
+    selectUser,
+    state => state.tripsFetching);
+
+export const selectShowNoTrips = createSelector(
+    selectTrips,
+    selectTripsFetching,
+    (trips, fetching) => trips.length === 0 && !fetching);
+
 export function userReducer(state = initialUserState, action: UserActions): UserState {
     switch (action.type) {
         case UserActionTypes.LogInFromSearch:

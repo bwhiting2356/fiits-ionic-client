@@ -1,6 +1,9 @@
 <ion-content>
-    <ion-text *ngIf="(trips | async).length == 0">
-      <h3>No trips</h3>
+    <div id="fetching" *ngIf="showFetching | async">
+      <ion-spinner></ion-spinner>
+    </div>
+    <ion-text *ngIf="showNoTrips | async">
+      <p>No trips</p>
     </ion-text>
     <ion-list>
       <ion-grid>
