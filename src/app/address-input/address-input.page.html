@@ -13,7 +13,9 @@
       <ion-item >
         <ion-input #input id="address-input" [placeholder]="placeholderText | async" (input)="inputChange($event)"></ion-input>
       </ion-item>
-      <ion-item id="fetching" *ngIf="(autocompleteFetching | async)">Fetching results...</ion-item>
+      <div id="fetching" *ngIf="(autocompleteFetching | async)">
+        <ion-spinner></ion-spinner>
+      </div>
       <ion-item id="no-results" *ngIf="(showNoResults | async)">No addresses found for this search</ion-item>
       <ion-list id="autocomplete-results" *ngIf="(autocompleteResults | async).length > 0">
         <ion-item *ngFor="let result of autocompleteResults | async" (click)="chooseLocation(result)">
