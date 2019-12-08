@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { State } from './reducers';
 import { selectLoggedIn } from './reducers/user.reducer';
+import { LogOut } from './actions/user.actions';
 
 interface Page {
   title: string;
@@ -16,25 +17,15 @@ interface Page {
   icon: string;
 }
 
-const basePages: Page[] = [
-    {
-      title: 'Search',
-      url: '/search',
-      icon: 'search'
-    },
-    {
-      title: 'Sign In',
-      url: '/sign-in',
-      icon: 'person',
-    },
-    {
-      title: 'Feedback',
-      url: '/feedback',
-      icon: 'bulb'
-    }
+export const loggedOutPages: Page[] = [
+  {
+    title: 'Log In/Sign Up',
+    url: '/sign-in',
+    icon: 'person',
+  }
 ];
 
-const protectedPages: Page[] = [
+export const loggedInPages: Page[] = [
   {
     title: 'Payments',
     url: '/payments',
@@ -45,7 +36,24 @@ const protectedPages: Page[] = [
     url: '/trips',
     icon: 'bicycle',
   },
+  {
+    title: 'Log Out',
+    url: '/search',
+    icon: 'person',
+  }
+];
 
+export const commonPages: Page[] = [
+  {
+    title: 'Search',
+    url: '/search',
+    icon: 'search'
+  },
+  {
+    title: 'Feedback',
+    url: '/feedback',
+    icon: 'bulb'
+  }
 ];
 
 @Component({
@@ -68,9 +76,9 @@ export class AppComponent {
       .pipe(
         map(loggedIn => {
           if (loggedIn) {
-            return [...basePages, ...protectedPages ];
+            return [ ...commonPages, ...loggedInPages ];
           } else {
-            return basePages;
+            return [ ...commonPages, ...loggedOutPages ];
           }
         })
       );
@@ -81,5 +89,11 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+  }
+
+  handleClick(title: string) {
+    if (title === 'Log Out') {
+      this.store.dispatch(new LogOut());
+    }
   }
 }

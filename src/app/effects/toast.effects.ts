@@ -109,6 +109,12 @@ export class ToastEffects {
         tap(_ => this.presentToast('Signed up successfully!', 'success'))
     );
 
+    @Effect({ dispatch: false })
+    logOut$: Observable<any> = this.actions$.pipe(
+        ofType(UserActionTypes.LogOut),
+        tap(_ => this.presentToast('Logged out successfully!', 'success'))
+    );
+
     async presentToast(message, color) {
         const toast = await this.toastCtrl.create({
             message,

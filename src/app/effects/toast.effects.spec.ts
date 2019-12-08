@@ -16,7 +16,7 @@ import {
     ResultsError
 } from '../actions/autocomplete.actions';
 import { FeedbackError, FeedbackSuccess } from '../actions/feedback.actions';
-import { LogInSuccess, SignUpSuccess, LogInError, SignUpError } from '../actions/user.actions';
+import { LogInSuccess, SignUpSuccess, LogInError, SignUpError, LogOut } from '../actions/user.actions';
 
 describe('Toast Effects ', () => {
     let actions$: Observable<any>;
@@ -183,7 +183,7 @@ describe('Toast Effects ', () => {
         expect(effects.presentToast).toHaveBeenCalledWith('Error signing up', 'danger');
     });
 
-    it('shoudl call presentToast with the message \'Trip booked successfully!\'', async () => {
+    it('should call presentToast with the message \'Trip booked successfully!\'', async () => {
         const action = new BookTripSuccess();
         spyOn(effects, 'presentToast');
 
@@ -191,6 +191,17 @@ describe('Toast Effects ', () => {
 
         expect(effects.bookTripSuccess$).toBeObservable(actions$);
         expect(effects.presentToast).toHaveBeenCalledWith('Trip booked successfully!', 'success');
+    });
+
+    it('should call presentToast with the message \'Logged out successfully!\'', async () => {
+        const action = new LogOut();
+        spyOn(effects, 'presentToast');
+
+        actions$ = hot('--a-', { a: action });
+
+        expect(effects.logOut$).toBeObservable(actions$);
+        expect(effects.presentToast).toHaveBeenCalledWith('Logged out successfully!', 'success');
+
     });
 
     it('should call presentToast with the message \'Time cannot be in the past.\'', () => {
