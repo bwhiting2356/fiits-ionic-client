@@ -7,12 +7,15 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppComponent } from './app.component';
-import { of } from 'rxjs';
-import { UserService } from './services/user.service';
+import { initialState, State } from './reducers';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { Store } from '@ngrx/store';
+import { initialUserState } from './reducers/user.reducer';
 
 describe('AppComponent: user logged in', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
+  let store: MockStore<State>;
 
   let statusBarSpy, splashScreenSpy, platformReadySpy, platformSpy;
 
@@ -29,10 +32,11 @@ describe('AppComponent: user logged in', () => {
         { provide: StatusBar, useValue: statusBarSpy },
         { provide: SplashScreen, useValue: splashScreenSpy },
         { provide: Platform, useValue: platformSpy },
-        { provide: UserService, useValue: { isLoggedIn$: () => of(true)}}
+        provideMockStore({ initialState })
       ],
       imports: [ RouterTestingModule.withRoutes([])],
     }).compileComponents();
+    store = TestBed.get<Store<State>>(Store);
   }));
 
   beforeEach(() => {
@@ -55,6 +59,16 @@ describe('AppComponent: user logged in', () => {
   });
 
   it('if the user is logged in, app pages should include /payments and /trips', async () => {
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        uid: 'mock-uid'
+      }
+    });
+
+    fixture.detectChanges();
+
     component.appPages.subscribe(pages => {
       expect(pages).toContain({
         title: 'Payments',
@@ -67,41 +81,19 @@ describe('AppComponent: user logged in', () => {
         icon: 'bicycle',
       });
     });
-  });
-});
-
-describe('AppComponent: user not logged in', () => {
-  let component: AppComponent;
-  let fixture: ComponentFixture<AppComponent>;
-
-  let statusBarSpy, splashScreenSpy, platformReadySpy, platformSpy;
-
-  beforeEach(async(() => {
-    statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault']);
-    splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide']);
-    platformReadySpy = Promise.resolve();
-    platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });
-
-    TestBed.configureTestingModule({
-      declarations: [AppComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      providers: [
-        { provide: StatusBar, useValue: statusBarSpy },
-        { provide: SplashScreen, useValue: splashScreenSpy },
-        { provide: Platform, useValue: platformSpy },
-        { provide: UserService, useValue: { isLoggedIn$: () => of(false)}}
-      ],
-      imports: [ RouterTestingModule.withRoutes([])],
-    }).compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AppComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('if the user is not logged in, app pages should not include /payments and /trips', async () => {
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        uid: ''
+      }
+    });
+
+    fixture.detectChanges();
+
     component.appPages.subscribe(pages => {
       expect(pages).not.toContain({
         title: 'Payments',
@@ -115,5 +107,4 @@ describe('AppComponent: user not logged in', () => {
       });
     });
   });
-
 });

@@ -1,17 +1,19 @@
 import { initialUserState, userReducer } from './user.reducer';
 import {
-    LogInFromMenu,
-    LogInFromSearch,
-    LogInSuccessFromMenu,
-    LogInSuccessFromSearch,
-    LogInErrorFromMenu,
-    LogInErrorFromSearch,
+    LogIn,
+    LogInSuccess,
+    LogInError,
     LogOut,
     FetchTrips,
     FetchTripsSuccess,
-    FetchTripsError
+    FetchTripsError,
+    ChangeEmail,
+    ChangePassword,
+    SignUpSuccess,
+    SignUp
 } from '../actions/user.actions';
 import { mockTrips } from 'src/testing/mock-trips';
+import { initialState } from '.';
 
 describe('User Reducer', () => {
     describe('an unknown action', () => {
@@ -25,25 +27,50 @@ describe('User Reducer', () => {
     });
 
     describe('user actions', () => {
-        it('should save the uid to state, set fetchig to false', () => {
+        it('should save the uid to state, set fetching to false, clear email and password', () => {
             const initialUserStateWithFetching = {
                 ...initialUserState,
+                email: 'test@testy.com',
+                password: 'secret',
                 authFetching: true
             };
 
-            const action = new LogInSuccessFromSearch('mock-uid');
+            const action = new LogInSuccess('mock-uid');
 
             const result = userReducer(initialUserStateWithFetching, action);
 
             expect(result).toEqual({
                 ...initialUserState,
+                email: '',
+                password: '',
                 authFetching: false,
                 uid: 'mock-uid'
             });
         });
 
-        it('should set fetching to true', () => {
-            const action = new LogInFromSearch();
+        it('should save the uid to state, set fetching to false, clear email and password', () => {
+            const initialUserStateWithFetching = {
+                ...initialUserState,
+                email: 'test@testy.com',
+                password: 'secret',
+                authFetching: true
+            };
+
+            const action = new SignUpSuccess('mock-uid');
+
+            const result = userReducer(initialUserStateWithFetching, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                email: '',
+                password: '',
+                authFetching: false,
+                uid: 'mock-uid'
+            });
+        });
+
+        it('login should set fetching to true', () => {
+            const action = new LogIn();
 
             const result = userReducer(initialUserState, action);
 
@@ -53,8 +80,31 @@ describe('User Reducer', () => {
             });
         });
 
-        it('should save the error to state, set fetching to false', () => {
-            const action = new LogInErrorFromSearch('oops');
+        it('signup should set fetching to true', () => {
+            const action = new SignUp();
+
+            const result = userReducer(initialUserState, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                authFetching: true,
+            });
+        });
+
+        it('login error should save the error to state, set fetching to false', () => {
+            const action = new LogInError('oops');
+
+            const result = userReducer(initialUserState, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                authFetching: false,
+                error: 'oops'
+            });
+        });
+
+        it('sigup error should save the error to state, set fetching to false', () => {
+            const action = new LogInError('oops');
 
             const result = userReducer(initialUserState, action);
 
@@ -96,7 +146,7 @@ describe('User Reducer', () => {
             };
             const action = new FetchTripsSuccess(mockTrips);
 
-            const result = userReducer(initialUserState, action);
+            const result = userReducer(initialUserStateWithFetching, action);
 
             expect(result).toEqual({
                 ...initialUserState,
@@ -122,6 +172,28 @@ describe('User Reducer', () => {
                 error
             });
 
+        });
+
+        it('should change the email to the new value', () => {
+            const action = new ChangeEmail('test@test.com');
+
+            const result = userReducer(initialUserState, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                email: 'test@test.com'
+            });
+        });
+
+        it('should change the password to the new value', () => {
+            const action = new ChangePassword('secret-password');
+
+            const result = userReducer(initialUserState, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                password: 'secret-password'
+            });
         });
     });
 });

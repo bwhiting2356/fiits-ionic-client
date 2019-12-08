@@ -5,32 +5,65 @@ import { Action, Store } from '@ngrx/store';
 import {
   UserActionTypes,
   UserActions,
-  LogInSuccessFromSearch,
-  LogInErrorFromSearch,
   FetchTripsSuccess,
-  FetchTripsError
+  FetchTripsError,
+  SignUpSuccess,
+  SignUpError,
+  LogInSuccess,
+  LogInError
 } from '../actions/user.actions';
-import { switchMap, withLatestFrom, catchError, map } from 'rxjs/operators';
-import { UserService } from '../services/user.service';
+import { switchMap, withLatestFrom, catchError, map, tap } from 'rxjs/operators';
+import { AuthService } from '../services/auth.service';
 import { State } from '../reducers';
-import { BookTripRequest } from '../actions/search.actions';
-import { selectTrip } from '../reducers/search.reducer';
 import { TripService } from '../services/trip.service';
-import { selectUID } from '../reducers/user.reducer';
+import { selectUID, selectEmail, selectPassword } from '../reducers/user.reducer';
+import { selectTrip } from '../reducers/search.reducer';
+import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 @Injectable()
 export class UserEffects {
 
     @Effect()
-    logInFromSearch$: Observable<Action> = this.actions$.pipe(
-      ofType(UserActionTypes.LogInFromSearch),
-      switchMap(() => this.userService.login$()),
-      withLatestFrom(this.store.select(selectTrip)),
-      switchMap(([uid, trip]) => [
-        new BookTripRequest(trip, uid),
-        new LogInSuccessFromSearch(uid),
-      ]),
-      catchError(error => of(new LogInErrorFromSearch(error)))
+    signUp$: Observable<Action> = this.actions$.pipe(
+      ofType(UserActionTypes.SignUp),
+      withLatestFrom(
+        this.store.select(selectEmail),
+        this.store.select(selectPassword),
+      ),
+      switchMap(([, email, password]) => this.authService.emailSignUp$(email, password).pipe(
+        withLatestFrom(this.store.select(selectTrip)),
+        tap(([_, trip]) => {
+          if (trip) {
+            this.navCtrl.navigateForward('/confirm-booking');
+          } else {
+            this.navCtrl.navigateBack('/search');
+          }
+        }),
+        map(([credential]) => new SignUpSuccess(credential.user.uid)),
+        catchError(error => of(new SignUpError(error)))
+      ))
+    );
+
+    @Effect()
+    logIn$: Observable<Action> = this.actions$.pipe(
+      ofType(UserActionTypes.LogIn),
+      withLatestFrom(
+        this.store.select(selectEmail),
+        this.store.select(selectPassword),
+      ),
+      switchMap(([, email, password]) => this.authService.emailLogin$(email, password).pipe(
+        withLatestFrom(this.store.select(selectTrip)),
+        tap(([_, trip]) => {
+          if (trip) {
+            this.navCtrl.navigateForward('/confirm-booking');
+          } else {
+            this.navCtrl.navigateBack('/search');
+          }
+        }),
+        map(([credential]) => new LogInSuccess(credential.user.uid)),
+        catchError(error => of(new LogInError(error)))
+      ))
     );
 
     @Effect()
@@ -45,7 +78,8 @@ export class UserEffects {
 
     constructor(
         private store: Store<State>,
-        private userService: UserService,
+        private navCtrl: NavController,
+        private authService: AuthService,
         private tripService: TripService,
         private actions$: Actions<UserActions>) {}
 }

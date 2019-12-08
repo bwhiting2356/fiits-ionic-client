@@ -1,26 +1,57 @@
 import { AuthGuard } from './auth.guard';
-import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { mock } from 'ts-mockito';
+import { TestBed, inject, async } from '@angular/core/testing';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { initialState, State } from '../reducers';
+import { Store } from '@ngrx/store';
+import { initialUserState } from '../reducers/user.reducer';
 
 describe('AuthGuard', () => {
+  let store: MockStore<State>;
 
-  it('should return an observable of true', async () => {
-    const mockAuthService = { isLoggedIn$: () => of(true) } as UserService;
-    const mockRouter = mock<Router>();
-    spyOn(mockRouter, 'navigate');
-    const guard: AuthGuard = new AuthGuard(mockAuthService, mockRouter);
-    guard.canActivate().subscribe(result => expect(result).toBeTruthy());
-    expect(mockRouter.navigate).not.toHaveBeenCalled();
-  });
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        AuthGuard,
+        { provide: Router, useValue: { navigate: () => {}} },
+        provideMockStore({ initialState })
+      ]
+    });
+    store = TestBed.get<Store<State>>(Store);
+  }));
 
-  it('should return an observable of false', async () => {
-    const mockAuthService = { isLoggedIn$: () => of(false) } as UserService;
-    const mockRouter = mock<Router>();
-    spyOn(mockRouter, 'navigate');
-    const guard: AuthGuard = new AuthGuard(mockAuthService, mockRouter);
-    guard.canActivate().subscribe(result => expect(result).toBeFalsy());
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/sign-in']);
-  });
+  it('should return true, not navigate away', inject(
+    [Router, AuthGuard],
+    async (router: Router, authGuard: AuthGuard) => {
+      store.setState({
+        ...initialState,
+        user: {
+          ...initialUserState,
+          uid: 'mock-uid'
+        }
+      });
+
+      spyOn(router, 'navigate');
+      authGuard.canActivate().subscribe(result => expect(result).toBeTruthy());
+      expect(router.navigate).not.toHaveBeenCalled();
+  }));
+
+  it('should return false, navigate away', inject(
+    [Router, AuthGuard],
+    async (router: Router, authGuard: AuthGuard) => {
+      store.setState({
+        ...initialState,
+        user: {
+          ...initialUserState,
+          uid: ''
+        }
+      });
+
+      spyOn(router, 'navigate');
+      authGuard.canActivate().subscribe(result => expect(result).toBeFalsy());
+      expect(router.navigate).toHaveBeenCalled();
+  }));
 });

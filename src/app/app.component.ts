@@ -3,9 +3,12 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { UserService } from './services/user.service';
+import { AuthService } from './services/auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { State } from './reducers';
+import { selectLoggedIn } from './reducers/user.reducer';
 
 interface Page {
   title: string;
@@ -55,13 +58,13 @@ export class AppComponent {
   public appPages: Observable<Page[]>;
 
   constructor(
-    private userService: UserService,
+    private store: Store<State>,
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar
   ) {
     this.initializeApp();
-    this.appPages = userService.isLoggedIn$()
+    this.appPages = store.select(selectLoggedIn)
       .pipe(
         map(loggedIn => {
           if (loggedIn) {
