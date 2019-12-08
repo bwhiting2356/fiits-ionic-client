@@ -2,7 +2,7 @@ import { Injectable, Optional, Inject, InjectionToken } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { map, catchError, switchMap, debounceTime } from 'rxjs/operators';
 import { AutocompleteService } from '../services/autocomplete.service';
-import { Observable, of, Scheduler, SchedulerLike } from 'rxjs';
+import { Observable, of, SchedulerLike } from 'rxjs';
 import { Action } from '@ngrx/store';
 
 import { AutocompleteActionTypes, SaveResults, ResultsError, AutocompleteActions } from '../actions/autocomplete.actions';

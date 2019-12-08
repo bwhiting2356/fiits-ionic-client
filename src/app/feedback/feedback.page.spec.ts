@@ -86,18 +86,6 @@ describe('FeedbackPage', () => {
     expect(fixture.debugElement.query(By.css('ion-button')).nativeElement.disabled).toBeFalsy();
   });
 
-  // it('should disable the send button if disableSend is true', () => {
-  //   component.disableSend = of(true);
-  //   fixture.detectChanges();
-  //   expect(fixture.debugElement.query(By.css('ion-button')).nativeElement.disabled).toBeTruthy();
-  // });
-
-  // it('should not disable the send button if disableSend is false', () => {
-  //   component.disableSend = of(false);
-  //   fixture.detectChanges();
-  //   expect(fixture.debugElement.query(By.css('ion-button')).nativeElement.disabled).toBeFalsy();
-  // });
-
   it('should call the sendFeedback method when they click the send feedback button', () => {
     spyOn(component, 'sendFeedback');
     const button = fixture.debugElement.query(By.css('ion-button')).nativeElement;
