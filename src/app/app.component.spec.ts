@@ -6,11 +6,12 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { AppComponent } from './app.component';
+import { AppComponent, commonPages, loggedInPages, loggedOutPages } from './app.component';
 import { initialState, State } from './reducers';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Store } from '@ngrx/store';
 import { initialUserState } from './reducers/user.reducer';
+import { LogOut } from './actions/user.actions';
 
 describe('AppComponent: user logged in', () => {
   let component: AppComponent;
@@ -70,16 +71,7 @@ describe('AppComponent: user logged in', () => {
     fixture.detectChanges();
 
     component.appPages.subscribe(pages => {
-      expect(pages).toContain({
-        title: 'Payments',
-        url: '/payments',
-        icon: 'card',
-      });
-      expect(pages).toContain({
-        title: 'Trips',
-        url: '/trips',
-        icon: 'bicycle',
-      });
+      expect(pages).toEqual([ ...commonPages, ...loggedInPages ]);
     });
   });
 
@@ -95,16 +87,24 @@ describe('AppComponent: user logged in', () => {
     fixture.detectChanges();
 
     component.appPages.subscribe(pages => {
-      expect(pages).not.toContain({
-        title: 'Payments',
-        url: '/payments',
-        icon: 'card',
-      });
-      expect(pages).not.toContain({
-        title: 'Trips',
-        url: '/trips',
-        icon: 'bicycle',
-      });
+      expect(pages).toEqual([ ...commonPages, ...loggedOutPages ]);
     });
+  });
+
+  it('should dispatch an action to log out when the logout menu item is clicked', () => {
+    spyOn(store, 'dispatch');
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        uid: 'mock-uid'
+      }
+    });
+
+    fixture.detectChanges();
+
+    component.handleClick('Log Out');
+
+    expect(store.dispatch).toHaveBeenCalledWith(new LogOut());
   });
 });
