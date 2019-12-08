@@ -6,6 +6,7 @@ import { ToastController } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
 import { FeedbackActions, FeedbackActionTypes } from '../actions/feedback.actions';
 import { AutocompleteActions, AutocompleteActionTypes } from '../actions/autocomplete.actions';
+import { UserActionTypes, UserActions } from '../actions/user.actions';
 
 @Injectable()
 export class ToastEffects {
@@ -74,6 +75,40 @@ export class ToastEffects {
         tap(_ => this.presentToast('Feedback sent successfully!', 'success'))
     );
 
+    @Effect({ dispatch: false })
+    loginSuccess$: Observable<any> = this.actions$.pipe(
+        ofType(UserActionTypes.LogInSuccess),
+        tap(_ => this.presentToast('Logged in successfully!', 'success'))
+    );
+
+    @Effect({ dispatch: false })
+    loginError$: Observable<any> = this.actions$.pipe(
+        ofType(UserActionTypes.LogInError),
+        tap(action => this.presentToast(
+            action.error.message
+                ? action.error.message
+                : 'Error logging in',
+            'danger'
+        ))
+    );
+
+    @Effect({ dispatch: false })
+    signupError$: Observable<any> = this.actions$.pipe(
+        ofType(UserActionTypes.SignUpError),
+        tap(action => this.presentToast(
+            action.error.message
+                ? action.error.message
+                : 'Error signing up',
+            'danger'
+        ))
+    );
+
+    @Effect({ dispatch: false })
+    signupSuccess$: Observable<any> = this.actions$.pipe(
+        ofType(UserActionTypes.SignUpSuccess),
+        tap(_ => this.presentToast('Signed up successfully!', 'success'))
+    );
+
     async presentToast(message, color) {
         const toast = await this.toastCtrl.create({
             message,
@@ -85,5 +120,5 @@ export class ToastEffects {
     }
     constructor(
         private toastCtrl: ToastController,
-        private actions$: Actions<SearchActions | FeedbackActions | AutocompleteActions>) {}
+        private actions$: Actions<SearchActions | FeedbackActions | AutocompleteActions | UserActions>) {}
 }

@@ -213,13 +213,13 @@ describe('SearchEffects success', () => {
     });
   });
 
-  it('should return an action to change time to the present if time is in the past', () => {
+  it('should return an action to change time to the present if time is in the past', async () => {
     const dateInThePast = new Date(0);
     const newAction = effects.checkTimeIsNotPast(dateInThePast);
     expect(newAction.time).toEqual(new Date());
   });
 
-  it('should return an action to change time to the same time if time is not in the past', () => {
+  it('should return an action to change time to the same time if time is not in the past', async () => {
     const later = new Date(Date.now() + 1000 * 60 * 60 * 24 * 10);
     const newAction = effects.checkTimeIsNotPast(later);
     expect(newAction.time).toEqual(later);

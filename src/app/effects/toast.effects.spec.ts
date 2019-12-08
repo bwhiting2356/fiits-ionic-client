@@ -16,6 +16,7 @@ import {
     ResultsError
 } from '../actions/autocomplete.actions';
 import { FeedbackError, FeedbackSuccess } from '../actions/feedback.actions';
+import { LogInSuccess, SignUpSuccess, LogInError, SignUpError } from '../actions/user.actions';
 
 describe('Toast Effects ', () => {
     let actions$: Observable<any>;
@@ -140,6 +141,46 @@ describe('Toast Effects ', () => {
 
         expect(effects.feedbackSuccess$).toBeObservable(actions$);
         expect(effects.presentToast).toHaveBeenCalledWith('Feedback sent successfully!', 'success');
+    });
+
+    it('should call presentToast with the message \'Logged in successfully!\'', () => {
+        const action = new LogInSuccess('mock-uid');
+        spyOn(effects, 'presentToast');
+
+        actions$ = hot('--a-', { a: action });
+
+        expect(effects.loginSuccess$).toBeObservable(actions$);
+        expect(effects.presentToast).toHaveBeenCalledWith('Logged in successfully!', 'success');
+    });
+
+    it('should call presentToast with the message \'Signed up successfully!\'', () => {
+        const action = new SignUpSuccess('mock-uid');
+        spyOn(effects, 'presentToast');
+
+        actions$ = hot('--a-', { a: action });
+
+        expect(effects.signupSuccess$).toBeObservable(actions$);
+        expect(effects.presentToast).toHaveBeenCalledWith('Signed up successfully!', 'success');
+    });
+
+    it('should call presentToast with the message \'Error logging in\'', async () => {
+        const action = new LogInError('oops');
+        spyOn(effects, 'presentToast');
+
+        actions$ = hot('--a-', { a: action });
+
+        expect(effects.loginError$).toBeObservable(actions$);
+        expect(effects.presentToast).toHaveBeenCalledWith('Error logging in', 'danger');
+    });
+
+    it('should call presentToast with the message \'Error signing up\'', async () => {
+        const action = new SignUpError('oops');
+        spyOn(effects, 'presentToast');
+
+        actions$ = hot('--a-', { a: action });
+
+        expect(effects.signupError$).toBeObservable(actions$);
+        expect(effects.presentToast).toHaveBeenCalledWith('Error signing up', 'danger');
     });
 
     it('shoudl call presentToast with the message \'Trip booked successfully!\'', async () => {

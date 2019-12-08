@@ -5,7 +5,7 @@ import { AuthGuard } from './services/auth.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'search',
+    redirectTo: 'sign-in',
     pathMatch: 'full'
   },
   { path: 'search', loadChildren: './search/search.module#SearchPageModule' },

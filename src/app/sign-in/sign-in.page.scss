@@ -1,0 +1,17 @@
+.sign-in-container {
+    margin: auto;
+    max-width: 600px;
+
+    ion-list {
+        padding-right: 10px;
+    }
+}
+
+.buttons {
+    padding: 0 10px;
+    display: flex;
+
+    ion-button {
+        flex-grow: 1;
+    }
+}

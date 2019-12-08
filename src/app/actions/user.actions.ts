@@ -2,43 +2,55 @@ import { Action } from '@ngrx/store';
 import { TripDetails } from '../shared/trip-details.model';
 
 export enum UserActionTypes {
-    LogInFromMenu = '[User] Log In From Menu',
-    LogInFromSearch = '[User] Log In From Search',
-    LogInSuccessFromMenu = '[User] Log In Success From Menu',
-    LogInSuccessFromSearch = '[User] Log In Success From Search',
-    LogInErrorFromMenu = '[User] Log In Error From Menu',
-    LogInErrorFromSearch = '[User] Log In Error From Search',
+    ChangeEmail = '[User] Change Email',
+    ChangePassword = '[User] Change Password',
+    LogIn = '[User] Log In',
+    LogInSuccess = '[User] Log In Success',
+    LogInError = '[User] Log In Error',
+    SignUp = '[User] Sign Up',
+    SignUpSuccess = '[User] Sign Up Success',
+    SignUpError = '[User] Sign Up Error',
     LogOut = '[User] Log Out',
     FetchTrips = '[User] Fetch Trips',
     FetchTripsSuccess = '[User] Fetch Trips Success',
     FetchTripsError = '[User] Fetch Trips Error'
 }
 
-export class LogInFromMenu implements Action {
-    readonly type = UserActionTypes.LogInFromMenu;
+export class ChangeEmail implements Action {
+    readonly type = UserActionTypes.ChangeEmail;
+    constructor(public newValue: string) {}
 }
 
-export class LogInFromSearch implements Action {
-    readonly type = UserActionTypes.LogInFromSearch;
+export class ChangePassword implements Action {
+    readonly type = UserActionTypes.ChangePassword;
+    constructor(public newValue: string) {}
 }
 
-export class LogInSuccessFromMenu implements Action {
-    readonly type = UserActionTypes.LogInSuccessFromMenu;
+export class LogIn implements Action {
+    readonly type = UserActionTypes.LogIn;
+}
+
+export class SignUp implements Action {
+    readonly type = UserActionTypes.SignUp;
+}
+
+export class LogInSuccess implements Action {
+    readonly type = UserActionTypes.LogInSuccess;
     constructor(public uid: string) {}
 }
 
-export class LogInSuccessFromSearch implements Action {
-    readonly type = UserActionTypes.LogInSuccessFromSearch;
+export class SignUpSuccess implements Action {
+    readonly type = UserActionTypes.SignUpSuccess;
     constructor(public uid: string) {}
 }
 
-export class LogInErrorFromMenu implements Action {
-    readonly type = UserActionTypes.LogInErrorFromMenu;
+export class SignUpError implements Action {
+    readonly type = UserActionTypes.SignUpError;
     constructor(public error: any) {}
 }
 
-export class LogInErrorFromSearch implements Action {
-    readonly type = UserActionTypes.LogInErrorFromSearch;
+export class LogInError implements Action {
+    readonly type = UserActionTypes.LogInError;
     constructor(public error: any) {}
 }
 
@@ -60,12 +72,15 @@ export class FetchTripsError implements Action {
     constructor(public error: any) {}
 }
 
-export type UserActions = LogInFromMenu
-                        | LogInFromSearch
-                        | LogInSuccessFromMenu
-                        | LogInSuccessFromSearch
-                        | LogInErrorFromMenu
-                        | LogInErrorFromSearch
+export type UserActions = ChangeEmail
+                        | ChangePassword
+                        | LogIn
+                        | LogInSuccess
+                        | LogInError
+                        | LogOut
+                        | SignUp
+                        | SignUpSuccess
+                        | SignUpError
                         | LogOut
                         | FetchTrips
                         | FetchTripsSuccess

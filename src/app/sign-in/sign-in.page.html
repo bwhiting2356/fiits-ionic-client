@@ -10,4 +10,35 @@
 </ion-header>
 
 <ion-content>
+    <div class="sign-in-container">
+      <ion-list>
+        <ion-item>
+          <ion-label>Email</ion-label>
+          <ion-input
+            [value]="email | async"
+            (keyup)="changeEmail($event.target.value)"
+            type="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Password</ion-label>
+          <ion-input
+            [value]="password | async"
+            (keyup)="changePassword($event.target.value)"
+            type="password"></ion-input>
+        </ion-item>
+      </ion-list>
+      <div class="buttons">
+        <ion-button color="primary" (click)="logIn()">Log In</ion-button>
+        <ion-button color="secondary" (click)="signUp()">Sign Up</ion-button>
+      </div>
+    </div>
 </ion-content>
+
+<!-- <ion-textarea
+[value]="comment | async"
+[disabled]="feedbackPosting | async"
+(keyup)="changeComment($event.target.value)"
+autofocus
+placeholder="How was your experience using the app?"
+rows="7">
+</ion-textarea> -->

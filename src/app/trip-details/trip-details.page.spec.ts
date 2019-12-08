@@ -1,19 +1,14 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 
 import { TripDetailsPage } from './trip-details.page';
 import { By } from '@angular/platform-browser';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { State } from '../reducers';
 import { initialState } from '../reducers';
-import { initialSearchState } from '../reducers/search.reducer';
 import { Store } from '@ngrx/store';
-import { cold } from 'jasmine-marbles';
-
-import { BookTripRequest } from '../actions/search.actions';
-import { mockTrips } from 'src/testing/mock-trips';
+import { NavController } from '@ionic/angular';
 import { initialUserState } from '../reducers/user.reducer';
-import { LogInFromSearch } from '../actions/user.actions';
 
 describe('TripDetailPage', () => {
   let component: TripDetailsPage;
@@ -25,6 +20,7 @@ describe('TripDetailPage', () => {
       declarations: [ TripDetailsPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
+        { provide: NavController, useValue: { navigateForward: () => {} }},
         provideMockStore({ initialState })
       ]
     })
@@ -79,146 +75,35 @@ describe('TripDetailPage', () => {
       .toBeFalsy();
   });
 
-  it('should contain the value of bookTripFetching from state', () => {
-    store.setState({
-      ...initialState,
-      search: {
-        ...initialSearchState,
-        bookTripFetching: false
-      }
-    });
-    fixture.detectChanges();
-    const expected = cold('a', { a: false } );
-    expect(component.bookTripFetching).toBeObservable(expected);
-  });
+  it('should navigate to /sign-in if the user was not logged in', inject(
+    [NavController],
+    async (navCtrl: NavController) => {
+      store.setState({
+        ...initialState,
+        user: {
+          ...initialUserState,
+          uid: ''
+        }
+      });
+      spyOn(navCtrl, 'navigateForward');
+      fixture.detectChanges();
+      component.confirmBooking();
+      expect(navCtrl.navigateForward).toHaveBeenCalledWith('/sign-in');
+  }));
 
-  it('should render \'Book this trip\' if bookTripFetching is false', async () => {
-    store.setState({
-      ...initialState,
-      search: {
-        ...initialSearchState,
-        bookTripFetching: false
-      }
-    });
-    fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('#book-trip')).nativeElement.innerText)
-      .toBe('Book this trip');
-    expect(fixture.debugElement.query(By.css('#book-trip-fetching')))
-      .toBeFalsy();
-  });
-
-  it('should render \'Booking your trip...\' if bookTripFetching is false', async () => {
-    store.setState({
-      ...initialState,
-      search: {
-        ...initialSearchState,
-        bookTripFetching: true
-      }
-    });
-    fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('#book-trip')))
-      .toBeFalsy();
-    expect(fixture.debugElement.query(By.css('#book-trip-fetching')).nativeElement.innerText)
-      .toBe('Booking your trip...');
-  });
-
-  it('should dispatch an action to book the trip if not already fetching and user logged in', async () => {
-    spyOn(store, 'dispatch');
-    store.setState({
-      ...initialState,
-      user: {
-        ...initialUserState,
-        uid: 'mock-uid',
-      },
-      search: {
-        ...initialSearchState,
-        trip: mockTrips[0],
-        bookTripFetching: false
-      }
-    });
-    fixture.detectChanges();
-    component.bookTrip();
-    expect(store.dispatch).toHaveBeenCalledWith(new BookTripRequest(mockTrips[0], 'mock-uid'));
-  });
-
-  it('should not dispatch an action to book the trip if a request is already fetching', () => {
-    spyOn(store, 'dispatch');
-    store.setState({
-      ...initialState,
-      search: {
-        ...initialSearchState,
-        bookTripFetching: true,
-        trip: mockTrips[0]
-      }
-    });
-    fixture.detectChanges();
-    component.bookTrip();
-    expect(store.dispatch).not.toHaveBeenCalled();
-  });
-
-  it('should dispatch an action to log in from search if the user is not logged in', () => {
-    spyOn(store, 'dispatch');
-    store.setState({
-      ...initialState,
-      user: {
-        ...initialUserState,
-        uid: '',
-      },
-      search: {
-        ...initialSearchState,
-        trip: mockTrips[0],
-        bookTripFetching: false
-      }
-    });
-    fixture.detectChanges();
-    component.bookTrip();
-    expect(store.dispatch).toHaveBeenCalledWith(new LogInFromSearch());
-
-  });
-
-  it('should call bookTrip when the button is clicked', () => {
-    spyOn(component, 'bookTrip');
-    const button = fixture.debugElement.query(By.css('ion-button')).nativeElement;
-    button.click();
-    expect(component.bookTrip).toHaveBeenCalled();
-  });
-
-  it('should have the button disabled if the trip booking request is fetching', () => {
-    store.setState({
-      ...initialState,
-      search: {
-        ...initialSearchState,
-        bookTripFetching: true
-      }
-    });
-    fixture.detectChanges();
-    const button = fixture.debugElement.query(By.css('ion-button')).nativeElement;
-    expect(button.disabled).toBeTruthy();
-  });
-
-  it('should have the button not disabled if the trip booking request is not fetching', () => {
-    store.setState({
-      ...initialState,
-      search: {
-        ...initialSearchState,
-        bookTripFetching: false
-      }
-    });
-    fixture.detectChanges();
-    const button = fixture.debugElement.query(By.css('ion-button')).nativeElement;
-    expect(button.disabled).toBeFalsy();
-  });
-
-  it('should set uid to the uid form auth state', async () => {
-    store.setState({
-      ...initialState,
-      user: {
-        ...initialUserState,
-        uid: 'mock-uid',
-      }
-    });
-    fixture.detectChanges();
-    const expected = cold('a', { a: 'mock-uid' } );
-    expect(component.uid).toBeObservable(expected);
-  });
+  it('should navigate to /confirm-booking if the user was logged in', inject(
+    [NavController],
+    async (navCtrl: NavController) => {
+      store.setState({
+        ...initialState,
+        user: {
+          ...initialUserState,
+          uid: 'mock-uid'
+        }
+      });
+      spyOn(navCtrl, 'navigateForward');
+      fixture.detectChanges();
+      component.confirmBooking();
+      expect(navCtrl.navigateForward).toHaveBeenCalledWith('/confirm-booking');
+  }));
 });
