@@ -204,8 +204,6 @@ describe('Toast Effects ', () => {
 
     });
 
-
-
     it('should call presentToast with the message \'Time cannot be in the past.\'', () => {
         const action = new TimeInPastError();
         spyOn(effects, 'presentToast');
