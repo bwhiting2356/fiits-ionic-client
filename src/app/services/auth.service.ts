@@ -29,10 +29,6 @@ export class AuthService {
         return from(this.login());
     }
 
-    // isLoggedIn$(): Observable<boolean> {
-    //     return this.store.select(selectUID).pipe(map(uid => uid !== ''));
-    // }
-
     emailSignUp(email: string, password: string) {
         return this.firebaseAuth.auth.createUserWithEmailAndPassword(email, password);
     }
