@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
 import { hot, cold, getTestScheduler } from 'jasmine-marbles';
@@ -12,7 +12,7 @@ import {
 import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 import { AutocompleteEffects, AUTOCOMPLETE_DEBOUNCE, AUTOCOMPLETE_EFFECTS_SCHEDULER } from './autocomplete.effects';
 
-describe('AutocompleteEffects success', () => {
+describe('AutocompleteEffects', () => {
   let actions$: Observable<any>;
   let effects: AutocompleteEffects;
 
@@ -21,12 +21,7 @@ describe('AutocompleteEffects success', () => {
       providers: [
         AutocompleteEffects,
         provideMockActions(() => actions$),
-        {
-          provide: AutocompleteService,
-          useValue: {
-            getPlacePredictions$: () => of(mockAutocompleteResults)
-          },
-        },
+        { provide: AutocompleteService, useValue: { getPlacePredictions$: () => {} }},
         { provide: AUTOCOMPLETE_DEBOUNCE, useValue: 30 },
         { provide: AUTOCOMPLETE_EFFECTS_SCHEDULER, useFactory: getTestScheduler },
       ]
@@ -35,61 +30,44 @@ describe('AutocompleteEffects success', () => {
     effects = TestBed.get<AutocompleteEffects>(AutocompleteEffects);
   });
 
-  it('should return SaveAutocompleteResults on success', () => {
-    const action = new FetchResults('123 Main Street');
-    const completion = new SaveResults(mockAutocompleteResults);
-    actions$ = hot('--a-', { a: action });
-    const expected = hot('-----b', { b: completion });
-    expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
-  });
+  it('should return SaveAutocompleteResults on success', inject(
+    [AutocompleteService, AutocompleteEffects],
+    async (autocompleteService: AutocompleteService, autocompleteEffects: AutocompleteEffects) => {
+      spyOn(autocompleteService, 'getPlacePredictions$').and.returnValue(of(mockAutocompleteResults));
+      const action = new FetchResults('123 Main Street');
+      const completion = new SaveResults(mockAutocompleteResults);
+      actions$ = hot('--a-', { a: action });
+      const expected = hot('-----b', { b: completion });
+      expect(autocompleteEffects.fetchAutocompleteResults$).toBeObservable(expected);
+  }));
 
-  it('should debounce the autocomplete requests', async () => {
-    const action1 = new FetchResults('123 Main Str');
-    const action2 = new FetchResults('123 Main Stre');
-    const action3 = new FetchResults('123 Main Stree');
+  it('should return AutocompleteError on error', inject(
+    [AutocompleteService, AutocompleteEffects],
+    async (autocompleteService: AutocompleteService, autocompleteEffects: AutocompleteEffects) => {
+      const error = new Error();
+      const errorResponse = cold('#|', {}, error);
+      spyOn(autocompleteService, 'getPlacePredictions$').and.returnValue(errorResponse);
+      const action = new FetchResults('123 Main Street');
+      const completion = new ResultsError(error);
+      actions$ = hot('--a-', { a: action });
+      const expected = cold('-----b', { b: completion });
+      expect(autocompleteEffects.fetchAutocompleteResults$).toBeObservable(expected);
+  }));
 
-    const completion = new SaveResults(mockAutocompleteResults);
+  it('should debounce the autocomplete requests', inject(
+    [AutocompleteService, AutocompleteEffects],
+    async (autocompleteService: AutocompleteService, autocompleteEffects: AutocompleteEffects) => {
+      spyOn(autocompleteService, 'getPlacePredictions$').and.returnValue(of(mockAutocompleteResults));
+      const action1 = new FetchResults('123 Main Str');
+      const action2 = new FetchResults('123 Main Stre');
+      const action3 = new FetchResults('123 Main Stree');
 
-    actions$ = hot('--abc-', { a: action1, b: action2, c: action3 });
+      const completion = new SaveResults(mockAutocompleteResults);
 
-    const expected = hot('-------b', { b: completion });
-    expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
-  });
+      actions$ = hot('--abc-', { a: action1, b: action2, c: action3 });
 
-});
-
-describe('AutocompleteEffects errors', () => {
-  let actions$: Observable<any>;
-  let effects: AutocompleteEffects;
-  const error = new Error();
-
-  beforeEach(() => {
-    const errorResponse = cold('#|', {}, error);
-
-    TestBed.configureTestingModule({
-      providers: [
-        AutocompleteEffects,
-        provideMockActions(() => actions$),
-        {
-          provide: AutocompleteService,
-          useValue: {
-            getPlacePredictions$: () => errorResponse
-          }
-        },
-        { provide: AUTOCOMPLETE_DEBOUNCE, useValue: 30 },
-        { provide: AUTOCOMPLETE_EFFECTS_SCHEDULER, useFactory: getTestScheduler },
-      ]
-    });
-
-    effects = TestBed.get<AutocompleteEffects>(AutocompleteEffects);
-  });
-
-  it('should return AutocompleteError on error', async () => {
-    const action = new FetchResults('123 Main Street');
-    const completion = new ResultsError(error);
-    actions$ = hot('--a-', { a: action });
-    const expected = cold('-----b', { b: completion });
-    expect(effects.fetchAutocompleteResults$).toBeObservable(expected);
-  });
+      const expected = hot('-------b', { b: completion });
+      expect(autocompleteEffects.fetchAutocompleteResults$).toBeObservable(expected);
+  }));
 
 });

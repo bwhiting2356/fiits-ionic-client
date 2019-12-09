@@ -10,7 +10,7 @@ import { Action } from '@ngrx/store';
 export class FeedbackEffects {
 
     @Effect()
-    tripSearchQuery$: Observable<Action> = this.actions$.pipe(
+    feedback$: Observable<Action> = this.actions$.pipe(
       ofType(FeedbackActionTypes.SendFeedback),
       map(action => action.feedback),
       switchMap(feedback => this.feedbackService.sendFeedback(feedback).pipe(

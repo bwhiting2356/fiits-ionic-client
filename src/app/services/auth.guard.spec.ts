@@ -1,8 +1,5 @@
 import { AuthGuard } from './auth.guard';
-import { AuthService } from './auth.service';
-import { of } from 'rxjs';
 import { Router } from '@angular/router';
-import { mock } from 'ts-mockito';
 import { TestBed, inject, async } from '@angular/core/testing';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { initialState, State } from '../reducers';

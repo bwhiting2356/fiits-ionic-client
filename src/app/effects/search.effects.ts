@@ -19,7 +19,7 @@ import {
   ChangeTime
 } from '../actions/search.actions';
 import { map, catchError, tap, switchMap, withLatestFrom, takeUntil } from 'rxjs/operators';
-import { Observable, of, interval, timer, SchedulerLike } from 'rxjs';
+import { Observable, of, interval, SchedulerLike } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { GeocodeService } from '../services/geocode.service';
 import { TripService } from '../services/trip.service';

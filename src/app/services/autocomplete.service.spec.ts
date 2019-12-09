@@ -6,12 +6,9 @@ import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results
 
 describe('AutocompleteService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-      providers: [{
-       provide: MapsAPILoader,
-       useValue: {
-         load: () => Promise.resolve(),
-       }
-      }]
+      providers: [
+        { provide: MapsAPILoader, useValue: { load: () => Promise.resolve() }}
+      ]
   }));
 
   it('should be created', () => {
