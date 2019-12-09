@@ -61,4 +61,18 @@ describe('SignInPage', () => {
     expect(fixture.debugElement.query(By.css('.sign-in-container'))).toBeFalsy();
 
   });
+
+  it('should not render spinner auth are fetching', () => {
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        authFetching: false,
+      }
+    });
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#fetching'))).toBeFalsy();
+    expect(fixture.debugElement.query(By.css('.sign-in-container'))).toBeTruthy();
+
+  });
 });
