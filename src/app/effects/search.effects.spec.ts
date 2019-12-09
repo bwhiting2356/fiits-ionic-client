@@ -278,6 +278,23 @@ describe('SearchEffects', () => {
     }
   ));
 
+  it('should return the geocode error from origin', inject(
+    [GeocodeService, SearchEffects],
+    async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
+      const error = new Error();
+      const errorResponse = cold('#|', {}, error);
+      spyOn(geocodeService, 'getAddressFromLatLng$').and.returnValue(errorResponse);
+
+      const action = new ChooseCurrentLocationAsOrigin({ lat: 0, lng: 0 });
+      actions$ = hot('a', { a: action });
+
+      const completion = new GeocodeError(error);
+      searchEffects.originReverseGeocode$.subscribe(completionAction => {
+        expect(completionAction).toEqual(completion);
+      });
+    }
+  ));
+
   it('should return the destination address reverse geocoded on success', inject(
     [GeocodeService, SearchEffects],
     async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
@@ -289,6 +306,23 @@ describe('SearchEffects', () => {
 
       const completion = new ChooseDestinationLocation('123 Main Street');
       searchEffects.destinationReverseGeocode$.subscribe(completionAction => {
+        expect(completionAction).toEqual(completion);
+      });
+    }
+  ));
+
+  it('should return the geocode error from destination', inject(
+    [GeocodeService, SearchEffects],
+    async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
+      const error = new Error();
+      const errorResponse = cold('#|', {}, error);
+      spyOn(geocodeService, 'getAddressFromLatLng$').and.returnValue(errorResponse);
+
+      const action = new ChooseCurrentLocationAsDestination({ lat: 0, lng: 0 });
+      actions$ = hot('a', { a: action });
+
+      const completion = new GeocodeError(error);
+      searchEffects.originReverseGeocode$.subscribe(completionAction => {
         expect(completionAction).toEqual(completion);
       });
     }
