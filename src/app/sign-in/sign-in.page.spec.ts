@@ -6,6 +6,8 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { initialState, State } from '../reducers';
 import { Store } from '@ngrx/store';
 import { ChangePassword, ChangeEmail } from '../actions/user.actions';
+import { initialUserState } from '../reducers/user.reducer';
+import { By } from '@angular/platform-browser';
 
 describe('SignInPage', () => {
   let component: SignInPage;
@@ -44,6 +46,33 @@ describe('SignInPage', () => {
     spyOn(store, 'dispatch');
     component.changeEmail('mock@email.com');
     expect(store.dispatch).toHaveBeenCalledWith(new ChangeEmail('mock@email.com'));
+  });
+
+  it('should render spinner auth are fetching', () => {
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        authFetching: true,
+      }
+    });
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#fetching'))).toBeTruthy();
+    expect(fixture.debugElement.query(By.css('.sign-in-container'))).toBeFalsy();
+
+  });
+
+  it('should not render spinner auth are fetching', () => {
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        authFetching: false,
+      }
+    });
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('#fetching'))).toBeFalsy();
+    expect(fixture.debugElement.query(By.css('.sign-in-container'))).toBeTruthy();
 
   });
 });
