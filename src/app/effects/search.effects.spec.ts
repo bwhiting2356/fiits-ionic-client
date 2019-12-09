@@ -322,7 +322,7 @@ describe('SearchEffects', () => {
       actions$ = hot('a', { a: action });
 
       const completion = new GeocodeError(error);
-      searchEffects.originReverseGeocode$.subscribe(completionAction => {
+      searchEffects.destinationReverseGeocode$.subscribe(completionAction => {
         expect(completionAction).toEqual(completion);
       });
     }
