@@ -5,7 +5,7 @@ import { SignInPage } from './sign-in.page';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { initialState, State } from '../reducers';
 import { Store } from '@ngrx/store';
-import { ChangePassword, ChangeEmail } from '../actions/user.actions';
+import { ChangePassword, ChangeEmail, LogIn, SignUp } from '../actions/user.actions';
 import { initialUserState } from '../reducers/user.reducer';
 import { By } from '@angular/platform-browser';
 
@@ -48,6 +48,18 @@ describe('SignInPage', () => {
     expect(store.dispatch).toHaveBeenCalledWith(new ChangeEmail('mock@email.com'));
   });
 
+  it('should dispatch an action to sign up', () => {
+    spyOn(store, 'dispatch');
+    component.signUp();
+    expect(store.dispatch).toHaveBeenCalledWith(new SignUp());
+  });
+
+  it('should dispatch an action to log in', () => {
+    spyOn(store, 'dispatch');
+    component.logIn();
+    expect(store.dispatch).toHaveBeenCalledWith(new LogIn());
+  });
+
   it('should render spinner auth are fetching', () => {
     store.setState({
       ...initialState,
@@ -73,6 +85,5 @@ describe('SignInPage', () => {
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('#fetching'))).toBeFalsy();
     expect(fixture.debugElement.query(By.css('.sign-in-container'))).toBeTruthy();
-
   });
 });
