@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { State } from '../reducers';
 import { LogIn, SignUp, ChangeEmail, ChangePassword } from '../actions/user.actions';
 import { Observable, combineLatest } from 'rxjs';
-import { selectEmail, selectPassword } from '../reducers/user.reducer';
+import { selectEmail, selectPassword, selectAuthFetching } from '../reducers/user.reducer';
 import { map, take } from 'rxjs/operators';
 
 @Component({
@@ -15,10 +15,12 @@ import { map, take } from 'rxjs/operators';
 export class SignInPage {
   email: Observable<string>;
   password: Observable<string>;
+  authFetching: Observable<boolean>;
 
   constructor(private store: Store<State>) {
     this.email = store.select(selectEmail);
     this.password = store.select(selectPassword);
+    this.authFetching = store.select(selectAuthFetching);
   }
 
   changeEmail(newValue: string) {

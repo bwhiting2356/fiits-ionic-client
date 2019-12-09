@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-    <div class="sign-in-container">
+    <div class="sign-in-container" *ngIf="!(authFetching | async); else fetching;">
       <ion-list>
         <ion-item>
           <ion-label>Email</ion-label>
@@ -32,4 +32,10 @@
         <ion-button color="secondary" (click)="signUp()">Sign Up</ion-button>
       </div>
     </div>
+    <ng-template #fetching>
+      <div id="fetching">
+        <ion-spinner></ion-spinner>
+      </div>
+    </ng-template>
+
 </ion-content>

@@ -55,6 +55,10 @@ export const selectPassword = createSelector(
     selectUser,
     state => state.password);
 
+export const selectAuthFetching = createSelector(
+    selectUser,
+    state => state.authFetching);
+
 export function userReducer(state = initialUserState, action: UserActions): UserState {
     switch (action.type) {
         case UserActionTypes.LogIn:
