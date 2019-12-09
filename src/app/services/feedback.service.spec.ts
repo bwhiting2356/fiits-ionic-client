@@ -18,9 +18,7 @@ describe('FeedbackService', () => {
   it('should make a request to post the feedback', inject(
     [HttpTestingController, FeedbackService],
     (httpMock: HttpTestingController, feedbackService: FeedbackService) => {
-      const feedback: Feedback = {
-        comment: 'cool app',
-      };
+      const feedback: Feedback = { comment: 'cool app' };
 
       feedbackService.sendFeedback(feedback).subscribe(response => {
         expect(response).toEqual(200);

@@ -15,19 +15,7 @@ export class EmailPasswordCredentials {
     providedIn: 'root'
 })
 export class AuthService {
-    constructor(
-        private store: Store<State>,
-        private firebaseAuth: AngularFireAuth) {}
-
-    async login() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        const result = await this.firebaseAuth.auth.signInWithPopup(provider);
-        return result.user.uid;
-    }
-
-    login$() {
-        return from(this.login());
-    }
+    constructor(private firebaseAuth: AngularFireAuth) {}
 
     emailSignUp(email: string, password: string) {
         return this.firebaseAuth.auth.createUserWithEmailAndPassword(email, password);
