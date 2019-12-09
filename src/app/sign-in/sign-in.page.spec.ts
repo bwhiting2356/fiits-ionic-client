@@ -57,7 +57,7 @@ describe('SignInPage', () => {
       }
     });
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('#fetching'))).toBeTruthy(); 
+    expect(fixture.debugElement.query(By.css('#fetching'))).toBeTruthy();
     expect(fixture.debugElement.query(By.css('.sign-in-container'))).toBeFalsy();
 
   });
