@@ -120,7 +120,13 @@ export class ToastEffects {
             message,
             color,
             duration: 5000,
-            position: 'bottom'
+            position: 'top',
+            buttons: [
+                {
+                    text: 'OK',
+                    role: 'cancel'
+                }
+            ]
         });
         toast.present();
     }
