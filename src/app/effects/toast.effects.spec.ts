@@ -46,8 +46,14 @@ describe('Toast Effects ', () => {
             expect(toastController.create).toHaveBeenCalledWith({
                 message: 'Error fetching station info',
                 duration: 5000,
-                position: 'bottom',
-                color: 'danger'
+                position: 'top',
+                color: 'danger',
+                buttons: [
+                    {
+                        text: 'OK',
+                        role: 'cancel'
+                    }
+                ]
             });
             expect(mockToast.present).toHaveBeenCalled();
       }));
