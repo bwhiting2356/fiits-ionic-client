@@ -94,7 +94,6 @@ describe('SignInPage', () => {
     [ActivatedRoute],
     async (activatedRoute: ActivatedRoute) => {
       (activatedRoute.params as BehaviorSubject<any>).next({ context: 'from-menu' });
-      // spyOnProperty(activatedRoute, 'params', 'get').and.returnValue(of({ context: 'from-menu'}));
       fixture.detectChanges();
 
       expect(fixture.debugElement.query(By.css('ion-menu-button'))).toBeTruthy();
