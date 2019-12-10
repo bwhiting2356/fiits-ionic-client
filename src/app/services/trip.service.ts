@@ -16,11 +16,9 @@ export class TripService {
 
   constructor(private http: HttpClient) { }
 
-  findBestTrip(searchQuery: SearchQuery): Observable<TripDetails> {
-    return this.http.post<TripDetails>(`${this.TRIP_API_URL}/trip`, searchQuery)
-      .pipe(
-        map(trip => new TripDetails(
-          trip.originLatLng,
+  parseTripDetails(trip: TripDetails): TripDetails {
+    return new TripDetails(
+      trip.originLatLng,
           trip.originAddress,
           trip.departureTime,
           trip.walking1Directions,
@@ -32,8 +30,14 @@ export class TripService {
           trip.destinationLatLng,
           trip.destinationAddress,
           trip.arrivalTime,
-          trip.status,
-        ))
+          trip.status
+    );
+  }
+
+  findBestTrip(searchQuery: SearchQuery): Observable<TripDetails> {
+    return this.http.post<TripDetails>(`${this.TRIP_API_URL}/trip`, searchQuery)
+      .pipe(
+        map(this.parseTripDetails)
       );
   }
 
@@ -45,21 +49,7 @@ export class TripService {
   fetchTrips(userId: string): Observable<TripDetails[]> {
     return this.http.get<TripDetails[]>(`${this.TRIP_API_URL}/trips/${userId}`)
       .pipe(
-        map(trips => trips.map(trip => new TripDetails(
-          trip.originLatLng,
-          trip.originAddress,
-          trip.departureTime,
-          trip.walking1Directions,
-          trip.startReservation,
-          trip.bicyclingDirections,
-          trip.rentalPrice,
-          trip.endReservation,
-          trip.walking2Directions,
-          trip.destinationLatLng,
-          trip.destinationAddress,
-          trip.arrivalTime,
-          trip.status,
-        )))
+        map(trips => trips.map(this.parseTripDetails))
       );
   }
 

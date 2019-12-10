@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { TripDetails } from 'src/app/shared/trip-details.model';
-// import { totalTripPrice, totalTripDuration, totalTripDistance } from 'src/app/shared/util/util';
 
 @Component({
   selector: 'app-trip-info',

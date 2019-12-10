@@ -243,11 +243,5 @@ describe('User Reducer', () => {
                 error: 'oops'
             });
         });
-
-        /*
-                                | FetchAccountInfo
-                        | FetchAccountInfoSuccess
-                        | FetchAccountInfoError;
-                        */
     });
 });
