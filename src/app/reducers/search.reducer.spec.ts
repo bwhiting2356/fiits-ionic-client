@@ -25,8 +25,8 @@ import {
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 import { mockTrips } from '../../testing/mock-trips';
-import { TimeTarget } from '../shared/time-target';
-import { SearchQuery } from '../shared/search-query';
+import { TimeTarget } from '../shared/time-target.model';
+import { SearchQuery } from '../shared/search-query.model';
 import { StationInfo } from '../shared/trip-details.model';
 
 describe('Search Reducer', () => {
@@ -305,7 +305,7 @@ describe('Search Reducer', () => {
   });
 
   it('should set book trip fetching to true', () => {
-    const action = new BookTripRequest(mockTrips[0], 'mock-uid');
+    const action = new BookTripRequest();
 
     const result = searchReducer(initialSearchState, action);
 

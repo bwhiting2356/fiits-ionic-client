@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="backToTripDetails()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Booking</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="booking-container">
+    <div id="fetching" *ngIf="accountInfoFetching | async; else booking">
+      <ion-spinner></ion-spinner>
+    </div>
+    <ng-template #booking>
+      <div id="can-book" *ngIf="canBook | async; else noBook">  
+          <ion-item *ngIf="(trip | async).totalPrice > 0; else charge">
+            You will earn {{ (trip | async).totalPrice | currency }} by booking this trip.
+          </ion-item>
+          <ng-template #charge>
+              <ion-item>You will be be charged {{ (trip | async).totalPrice | currency }} to book this trip.</ion-item>
+          </ng-template>
+          <ion-button expand="full" (click)="bookTrip()">Confirm Booking</ion-button>
+      </div>
+      <ng-template #noBook>
+          <div id="no-book">
+              <ion-item>You do not have enough funds on your account to book this trip.</ion-item>
+              <ion-button expand="full">Add funds</ion-button>
+          </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</ion-content>

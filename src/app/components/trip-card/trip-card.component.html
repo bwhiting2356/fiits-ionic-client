@@ -9,11 +9,11 @@
   <ion-card-content>
     <h4>
       <span class="title">Completed Trip</span>
-      <span class="miles-minutes">{{ totalDistance | distance }} &#8226; {{ totalDuration | time }}</span>
+      <span class="miles-minutes">{{ trip.totalDistance | distance }} &#8226; {{ trip.totalDuration | time }}</span>
     </h4>
     <p>
       <span class="date-time">{{ trip.departureTime | date: 'M/yy' }} {{ trip.departureTime | date:'h:mm a'}} - {{ trip.arrivalTime | date:'h:mm a'}}</span>
-      <span class="price">{{ totalPrice | currency }}</span>
+      <span class="price">{{ trip.totalPrice | currency }}</span>
     </p>
     <div id="button-container" *ngIf="isUpcoming()">
       <ion-button id="scan-button" [disabled]="!isReadyForScan()">

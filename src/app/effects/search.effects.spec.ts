@@ -33,7 +33,7 @@ import {
   ChangeTime
 } from '../actions/search.actions';
 
-import { SearchQuery } from '../shared/search-query';
+import { SearchQuery } from '../shared/search-query.model';
 import { StationService } from '../services/station.service';
 import { NavController } from '@ionic/angular';
 import { GeolocationService } from '../services/geolocation.service';
@@ -207,7 +207,7 @@ describe('SearchEffects', () => {
       spyOn(navCtrl, 'navigateBack');
       spyOn(tripService, 'bookTrip').and.returnValue(of({}));
 
-      const action = new BookTripRequest(mockTrips[0], 'mock-uid');
+      const action = new BookTripRequest();
       actions$ = hot('a', { a: action });
 
       const tripCompletion = new BookTripSuccess();
@@ -224,7 +224,7 @@ describe('SearchEffects', () => {
       const errorResponse = cold('#|', {}, error);
       spyOn(tripService, 'bookTrip').and.returnValue(errorResponse);
 
-      const action = new BookTripRequest(mockTrips[0], 'mock-uid');
+      const action = new BookTripRequest();
       actions$ = hot('--a-', { a: action });
 
       const completion = new BookTripFailure(error);
@@ -329,9 +329,11 @@ describe('SearchEffects', () => {
   ));
 
   it('should return an action to change time to the present if time is in the past', async () => {
+    const mockDate = new Date();
+    spyOn(effects, 'getCurrentTime').and.returnValue(mockDate);
     const dateInThePast = new Date(0);
     const newAction = effects.checkTimeIsNotPast(dateInThePast);
-    expect(newAction.time).toEqual(new Date());
+    expect(newAction.time).toEqual(mockDate);
   });
 
   it('should return an action to change time to the same time if time is not in the past', async () => {

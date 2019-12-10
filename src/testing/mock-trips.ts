@@ -199,7 +199,10 @@ export const mockTrips: TripDetails[] = [
         },
         destinationAddress: 'Mock Destination',
         arrivalTime: '2018-12-15T21:01:00.000+0000',
-        status: null
+        status: null,
+        totalPrice: -0.30,
+        totalDistance: 16000,
+        totalDuration: 10000.0,
     },
     {
         originLatLng: {
@@ -399,7 +402,10 @@ export const mockTrips: TripDetails[] = [
         },
         destinationAddress: 'Mock Destination',
         arrivalTime: '2020-12-17T21:01:40.000+0000',
-        status: null
+        status: null,
+        totalPrice: 1.0,
+        totalDistance: 1.0,
+        totalDuration: 1.0,
     },
     {
         originLatLng: {
@@ -599,7 +605,10 @@ export const mockTrips: TripDetails[] = [
         },
         destinationAddress: 'Mock Destination',
         arrivalTime: '2020-01-15T21:01:40.000+0000',
-        status: null
+        status: null,
+        totalPrice: 1.0,
+        totalDistance: 1.0,
+        totalDuration: 1.0,
     },
     {
         originLatLng: {
@@ -799,7 +808,10 @@ export const mockTrips: TripDetails[] = [
         },
         destinationAddress: 'Mock Destination',
         arrivalTime: '2020-11-16T21:01:40.000+0000',
-        status: null
+        status: null,
+        totalPrice: 1.0,
+        totalDistance: 1.0,
+        totalDuration: 1.0,
     }
 
 ];

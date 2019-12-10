@@ -2,6 +2,7 @@ import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { UserActions, UserActionTypes } from '../actions/user.actions';
 import { State } from '.';
 import { TripDetails } from '../shared/trip-details.model';
+import { AccountInfo } from '../shared/account-info.model';
 
 export interface UserState {
     email: string;
@@ -10,7 +11,9 @@ export interface UserState {
     displayName: string;
     authFetching: boolean;
     tripsFetching: boolean;
+    accountInfoFetching: boolean;
     trips: TripDetails[];
+    accountInfo: AccountInfo;
     error?: any;
 }
 
@@ -21,7 +24,9 @@ export const initialUserState: UserState = {
     displayName: '',
     authFetching: false,
     tripsFetching: false,
-    trips: []
+    accountInfoFetching: false,
+    trips: [],
+    accountInfo: undefined
 };
 
 const selectUser = createFeatureSelector<State, UserState>('user');
@@ -58,6 +63,14 @@ export const selectPassword = createSelector(
 export const selectAuthFetching = createSelector(
     selectUser,
     state => state.authFetching);
+
+export const selectAccountInfoFetching = createSelector(
+    selectUser,
+    state => state.accountInfoFetching);
+
+export const selectAccountInfo = createSelector(
+    selectUser,
+    state => state.accountInfo);
 
 export function userReducer(state = initialUserState, action: UserActions): UserState {
     switch (action.type) {
@@ -120,7 +133,23 @@ export function userReducer(state = initialUserState, action: UserActions): User
                 password: action.newValue
             };
 
-
+        case UserActionTypes.FetchAccountInfo:
+            return {
+                ...state,
+                accountInfoFetching: true
+            };
+        case UserActionTypes.FetchAccountInfoSuccess:
+            return {
+                ...state,
+                accountInfoFetching: false,
+                accountInfo: action.accountInfo
+            };
+        case UserActionTypes.FetchAccountInfoError:
+            return {
+                ...state,
+                accountInfoFetching: false,
+                error: action.error
+            };
         default:
             return state;
     }

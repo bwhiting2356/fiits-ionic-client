@@ -4,8 +4,9 @@ import { of } from 'rxjs';
 import { TripService } from './trip.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { hot } from 'jasmine-marbles';
-import { SearchQuery } from '../shared/search-query';
+import { SearchQuery } from '../shared/search-query.model';
 import { mockTrips } from 'src/testing/mock-trips';
+import { TripDetails } from '../shared/trip-details.model';
 
 describe('TripService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -50,7 +51,22 @@ describe('TripService', () => {
       };
 
       tripService.findBestTrip(seachQuery).subscribe(trip => {
-        expect(trip).toEqual(mockTrips[0]);
+        const newTrip = new TripDetails(
+            mockTrips[0].originLatLng,
+            mockTrips[0].originAddress,
+            mockTrips[0].departureTime,
+            mockTrips[0].walking1Directions,
+            mockTrips[0].startReservation,
+            mockTrips[0].bicyclingDirections,
+            mockTrips[0].rentalPrice,
+            mockTrips[0].endReservation,
+            mockTrips[0].walking2Directions,
+            mockTrips[0].destinationLatLng,
+            mockTrips[0].destinationAddress,
+            mockTrips[0].arrivalTime,
+            mockTrips[0].status,
+        );
+        expect(trip).toEqual(newTrip);
       });
 
       const mockReq = httpMock.expectOne(`${tripService.TRIP_API_URL}/trip`);

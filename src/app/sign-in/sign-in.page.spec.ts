@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 
 import { SignInPage } from './sign-in.page';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
@@ -8,6 +8,8 @@ import { Store } from '@ngrx/store';
 import { ChangePassword, ChangeEmail, LogIn, SignUp } from '../actions/user.actions';
 import { initialUserState } from '../reducers/user.reducer';
 import { By } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+import { of, BehaviorSubject } from 'rxjs';
 
 describe('SignInPage', () => {
   let component: SignInPage;
@@ -19,7 +21,8 @@ describe('SignInPage', () => {
       declarations: [ SignInPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        provideMockStore({ initialState })
+        provideMockStore({ initialState }),
+        { provide: ActivatedRoute, useValue: { params: new BehaviorSubject({}) }}
       ]
     })
     .compileComponents();
@@ -86,4 +89,27 @@ describe('SignInPage', () => {
     expect(fixture.debugElement.query(By.css('#fetching'))).toBeFalsy();
     expect(fixture.debugElement.query(By.css('.sign-in-container'))).toBeTruthy();
   });
+
+  it('should show the menu icon if the navigation context is from-menu', inject(
+    [ActivatedRoute],
+    async (activatedRoute: ActivatedRoute) => {
+      (activatedRoute.params as BehaviorSubject<any>).next({ context: 'from-menu' });
+      // spyOnProperty(activatedRoute, 'params', 'get').and.returnValue(of({ context: 'from-menu'}));
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('ion-menu-button'))).toBeTruthy();
+      expect(fixture.debugElement.query(By.css('ion-back-button'))).toBeFalsy();
+    }
+  ));
+
+  it('should show the menu icon if the navigation context is from-search', inject(
+    [ActivatedRoute],
+    async (activatedRoute: ActivatedRoute) => {
+      (activatedRoute.params as BehaviorSubject<any>).next({ context: 'from-search' });
+      fixture.detectChanges();
+
+      expect(fixture.debugElement.query(By.css('ion-menu-button'))).toBeFalsy();
+      expect(fixture.debugElement.query(By.css('ion-back-button'))).toBeTruthy();
+    }
+  ));
 });

@@ -10,7 +10,10 @@ import {
   SignUpSuccess,
   SignUpError,
   LogInSuccess,
-  LogInError
+  LogInError,
+  FetchAccountInfo,
+  FetchAccountInfoError,
+  FetchAccountInfoSuccess
 } from '../actions/user.actions';
 import { switchMap, withLatestFrom, catchError, map, tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
@@ -20,6 +23,7 @@ import { selectUID, selectEmail, selectPassword } from '../reducers/user.reducer
 import { selectTrip } from '../reducers/search.reducer';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { PaymentsService } from '../services/payments.service';
 
 @Injectable()
 export class UserEffects {
@@ -40,7 +44,10 @@ export class UserEffects {
             this.navCtrl.navigateBack('/search');
           }
         }),
-        map(([credential]) => new SignUpSuccess(credential.user.uid)),
+        switchMap(([credential]) => [
+          new SignUpSuccess(credential.user.uid),
+          new FetchAccountInfo()
+        ]),
         catchError(error => of(new SignUpError(error)))
       ))
     );
@@ -61,7 +68,10 @@ export class UserEffects {
             this.navCtrl.navigateBack('/search');
           }
         }),
-        map(([credential]) => new LogInSuccess(credential.user.uid)),
+        switchMap(([credential]) => [
+          new LogInSuccess(credential.user.uid),
+          new FetchAccountInfo()
+        ]),
         catchError(error => of(new LogInError(error)))
       ))
     );
@@ -76,10 +86,21 @@ export class UserEffects {
       ))
     );
 
+    @Effect()
+    fetchAccountInfo$: Observable<Action> = this.actions$.pipe(
+      ofType(UserActionTypes.FetchAccountInfo),
+      withLatestFrom(this.store.select(selectUID)),
+      switchMap(([_, userId]) => this.paymentService.fetchAccountInfo(userId).pipe(
+        map(accountInfo => new FetchAccountInfoSuccess(accountInfo)),
+        catchError(error => of(new FetchAccountInfoError(error)))
+      ))
+    );
+
     constructor(
         private store: Store<State>,
         private navCtrl: NavController,
         private authService: AuthService,
         private tripService: TripService,
+        private paymentService: PaymentsService,
         private actions$: Actions<UserActions>) {}
 }

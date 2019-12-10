@@ -10,10 +10,14 @@ import {
     ChangeEmail,
     ChangePassword,
     SignUpSuccess,
-    SignUp
+    SignUp,
+    FetchAccountInfo,
+    FetchAccountInfoSuccess,
+    FetchAccountInfoError
 } from '../actions/user.actions';
 import { mockTrips } from 'src/testing/mock-trips';
 import { initialState } from '.';
+import { mockAccountInfo } from 'src/testing/mock-account-info';
 
 describe('User Reducer', () => {
     describe('an unknown action', () => {
@@ -195,5 +199,55 @@ describe('User Reducer', () => {
                 password: 'secret-password'
             });
         });
+
+        it('should set fetching account info to true', () => {
+            const action = new FetchAccountInfo();
+
+            const result = userReducer(initialUserState, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                accountInfoFetching: true
+            });
+        });
+
+        it('should set fetching account info to false, save the account info', () => {
+            const initialStateWithFetching = {
+                ...initialUserState,
+                accountInfoFetching: true
+            };
+            const action = new FetchAccountInfoSuccess(mockAccountInfo);
+
+            const result = userReducer(initialStateWithFetching, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                accountInfo: mockAccountInfo,
+                accountInfoFetching: false
+            });
+        });
+
+        it('should set fetching account info to false, save the error', () => {
+            const initialStateWithFetching = {
+                ...initialUserState,
+                accountInfoFetching: true
+            };
+
+            const action = new FetchAccountInfoError('oops');
+
+            const result = userReducer(initialStateWithFetching, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                accountInfoFetching: false,
+                error: 'oops'
+            });
+        });
+
+        /*
+                                | FetchAccountInfo
+                        | FetchAccountInfoSuccess
+                        | FetchAccountInfoError;
+                        */
     });
 });

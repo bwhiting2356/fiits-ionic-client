@@ -26,17 +26,37 @@ export interface ReservationInfo {
 }
 
 export class TripDetails {
-    originLatLng: LatLng;
-    originAddress: string;
-    departureTime: string;
-    walking1Directions: DirectionsInfo;
-    startReservation: ReservationInfo;
-    bicyclingDirections: DirectionsInfo;
-    rentalPrice: number;
-    endReservation: ReservationInfo;
-    walking2Directions: DirectionsInfo;
-    destinationLatLng: LatLng;
-    destinationAddress: string;
-    arrivalTime: string;
-    status: string;
+    constructor(
+        public originLatLng: LatLng,
+        public originAddress: string,
+        public departureTime: string,
+        public walking1Directions: DirectionsInfo,
+        public startReservation: ReservationInfo,
+        public bicyclingDirections: DirectionsInfo,
+        public rentalPrice: number,
+        public endReservation: ReservationInfo,
+        public walking2Directions: DirectionsInfo,
+        public destinationLatLng: LatLng,
+        public destinationAddress: string,
+        public arrivalTime: string,
+        public status: string,
+    ) {}
+
+    get totalPrice(): number {
+        return this.startReservation.price
+            + this.endReservation.price
+            + this.rentalPrice;
+    }
+
+    get totalDistance(): number {
+        return this.walking1Directions.feet
+            + this.walking2Directions.feet
+            + this.bicyclingDirections.feet;
+    }
+
+    get totalDuration(): number {
+        return this.walking1Directions.seconds
+            + this.walking2Directions.seconds
+            + this.bicyclingDirections.seconds;
+    }
 }

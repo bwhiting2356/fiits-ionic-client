@@ -89,11 +89,11 @@
     <ion-col size="8" class="no-right-padding bold-text" id="destination-address">{{ trip.destinationAddress }}</ion-col>
   </ion-row>
   <ion-row id="bottom-row">
-    <ion-col size="3" class="no-right-padding" id="total-duration">{{ totalDuration | time }}</ion-col>
+    <ion-col size="3" class="no-right-padding" id="total-duration">{{ trip.totalDuration | time }}</ion-col>
     <ion-col size="1"></ion-col>
-    <ion-col size="2" class="no-right-padding" id="total-distance">{{ totalDistance | distance }}</ion-col>
+    <ion-col size="2" class="no-right-padding" id="total-distance">{{ trip.totalDistance | distance }}</ion-col>
     <ion-col size="6" class="ion-text-end" id="total-price">
       <ion-text class="bold-text">{{ priceMessage }}:</ion-text>&nbsp;
-      <ion-text [color]="textColor(totalPrice)">{{ totalPrice | currency }}</ion-text></ion-col>
+      <ion-text [color]="textColor(trip.totalPrice)">{{ trip.totalPrice | currency }}</ion-text></ion-col>
   </ion-row>
 </ion-grid>

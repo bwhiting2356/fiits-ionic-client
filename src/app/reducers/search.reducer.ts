@@ -2,7 +2,7 @@ import { createSelector, createFeatureSelector } from '@ngrx/store';
 
 import { SearchActionTypes, SearchActions, SearchAddressType } from '../actions/search.actions';
 import { LatLng } from '../shared/latlng.model';
-import { TimeTarget } from '../shared/time-target';
+import { TimeTarget } from '../shared/time-target.model';
 import { TripDetails, StationInfo } from '../shared/trip-details.model';
 import { DEFAULT_LOCATION } from '../shared/constants';
 

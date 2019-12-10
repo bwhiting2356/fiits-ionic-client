@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import { LatLng } from '../shared/latlng.model';
-import { SearchQuery } from '../shared/search-query';
-import { TimeTarget } from '../shared/time-target';
+import { SearchQuery } from '../shared/search-query.model';
+import { TimeTarget } from '../shared/time-target.model';
 import { TripDetails, StationInfo } from '../shared/trip-details.model';
 
 export enum SearchActionTypes {
@@ -51,7 +51,6 @@ export class ActiveSearchFalse implements Action {
 
 export class BookTripRequest implements Action {
   readonly type = SearchActionTypes.BookTripRequest;
-  constructor(public trip: TripDetails, public uid: string) {}
 }
 
 export class BookTripSuccess implements Action {

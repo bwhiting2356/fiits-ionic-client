@@ -1,5 +1,5 @@
 import { LatLng } from './latlng.model';
-import { TimeTarget } from './time-target';
+import { TimeTarget } from './time-target.model';
 
 export class SearchQuery {
     originLatLng: LatLng;
