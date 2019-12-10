@@ -27,9 +27,10 @@ import { StationService } from '../services/station.service';
 import { NavController } from '@ionic/angular';
 import { GeolocationService } from '../services/geolocation.service';
 import { State } from '../reducers';
-import { selectSearchTime } from '../reducers/search.reducer';
+import { selectSearchTime, selectTrip } from '../reducers/search.reducer';
 import { async } from 'rxjs/internal/scheduler/async';
 import { FetchTrips } from '../actions/user.actions';
+import { selectUID } from '../reducers/user.reducer';
 
 const ONE_MINUTE = 60 * 1000;
 
@@ -82,10 +83,10 @@ export class SearchEffects {
   @Effect() // TODO: should this be in user effects?
   bookTrip$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.BookTripRequest),
-    switchMap(action => this.tripService.bookTrip(action.trip, action.uid).pipe(
+    withLatestFrom(this.store.select(selectUID), this.store.select(selectTrip)),
+    switchMap(([_, uid, trip]) => this.tripService.bookTrip(trip, uid).pipe(
       tap(() => this.navCtrl.navigateBack('/trips/upcoming')),
       switchMap(() => [new BookTripSuccess(), new FetchTrips()]),
-
       catchError(error => of(new BookTripFailure(error)))
     ))
   );
@@ -129,9 +130,12 @@ export class SearchEffects {
     )
   );
 
+  getCurrentTime = () => new Date();
+
   checkTimeIsNotPast(time: Date) {
-    if (time < new Date()) {
-      return new ChangeTime(new Date());
+    const currentTime = this.getCurrentTime();
+    if (time < currentTime) {
+      return new ChangeTime(currentTime);
     } else {
       return new ChangeTime(time);
     }

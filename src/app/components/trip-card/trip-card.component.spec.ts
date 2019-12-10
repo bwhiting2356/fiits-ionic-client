@@ -42,12 +42,12 @@ describe('TripCardComponent', () => {
 
   it('should render the total price', () => {
     expect(fixture.debugElement.query(By.css('.price'))
-      .nativeElement.innerText).toBe('$0.30');
+      .nativeElement.innerText).toBe('-$0.30');
   });
 
   it('should render miles and minutes', () => {
     expect(fixture.debugElement.query(By.css('.miles-minutes'))
-      .nativeElement.innerText).toBe('3.0 mi • 2 hr 59 min');
+      .nativeElement.innerText).toBe('3.0 mi • 2 hr 47 min');
   });
 
   it('should show buttons to scan or cancel if the trip starts in the future', () => {

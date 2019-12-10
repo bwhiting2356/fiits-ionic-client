@@ -17,8 +17,8 @@ import {
   ActiveSearchTrue,
   ActiveSearchFalse
 } from '../actions/search.actions';
-import { TimeTarget } from '../shared/time-target';
-import { SearchQuery } from '../shared/search-query';
+import { TimeTarget } from '../shared/time-target.model';
+import { SearchQuery } from '../shared/search-query.model';
 import { StationInfo } from '../shared/trip-details.model';
 import {
   selectSearchOriginLatLng,

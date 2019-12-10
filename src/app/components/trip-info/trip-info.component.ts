@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { TripDetails } from 'src/app/shared/trip-details.model';
-import { totalTripPrice, totalTripDuration, totalTripDistance } from 'src/app/shared/util/util';
 
 @Component({
   selector: 'app-trip-info',
@@ -15,20 +14,8 @@ export class TripInfoComponent implements OnInit {
 
   ngOnInit() {}
 
-  get totalPrice() {
-    return totalTripPrice(this.trip);
-  }
-
-  get totalDuration(): number {
-    return totalTripDuration(this.trip);
-  }
-
-  get totalDistance(): number {
-    return totalTripDistance(this.trip);
-  }
-
   get priceMessage(): string {
-    return this.totalPrice > 0 ? 'Total earnings' : 'Total cost';
+    return this.trip.totalPrice > 0 ? 'Total earnings' : 'Total cost';
   }
 
   textColor(val: number): string {

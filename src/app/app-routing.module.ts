@@ -12,9 +12,10 @@ const routes: Routes = [
   { path: 'feedback', loadChildren: './feedback/feedback.module#FeedbackPageModule' },
   { path: 'trips', loadChildren: './trips/trips.module#TripsPageModule', canActivate: [AuthGuard] },
   { path: 'payments', loadChildren: './payments/payments.module#PaymentsPageModule', canActivate: [AuthGuard] },
-  { path: 'sign-in', loadChildren: './sign-in/sign-in.module#SignInPageModule' },
+  { path: 'sign-in/:context', loadChildren: './sign-in/sign-in.module#SignInPageModule' },
   { path: 'address-input', loadChildren: './address-input/address-input.module#AddressInputPageModule' },
   { path: 'trip-details', loadChildren: './trip-details/trip-details.module#TripDetailsPageModule' },
+  { path: 'confirm-booking', loadChildren: './confirm-booking/confirm-booking.module#ConfirmBookingPageModule', canActivate: [AuthGuard] },
 ];
 
 @NgModule({

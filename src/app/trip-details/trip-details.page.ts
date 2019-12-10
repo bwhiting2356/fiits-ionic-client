@@ -35,7 +35,7 @@ export class TripDetailsPage {
         if (loggedIn) {
           this.navCtrl.navigateForward('/confirm-booking');
         } else {
-          this.navCtrl.navigateForward('/sign-in');
+          this.navCtrl.navigateForward('/sign-in/from-search');
         }
       });
   }

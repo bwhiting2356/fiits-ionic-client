@@ -31,13 +31,13 @@ describe('TripInfoComponent', () => {
   });
 
   it('should return the message \'Total earnings\'', async () => {
-    component.trip = mockTrips[0];
+    component.trip = mockTrips[1];
     fixture.detectChanges();
     expect(component.priceMessage).toEqual('Total earnings');
   });
 
   it('should return the message \'Total cost\'', async () => {
-    component.trip = mockTrips[3];
+    component.trip = mockTrips[0];
     fixture.detectChanges();
     expect(component.priceMessage).toEqual('Total cost');
   });
@@ -148,7 +148,7 @@ describe('TripInfoComponent', () => {
   it('should render total duration', () => {
     component.trip = mockTrips[0];
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('#total-duration')).nativeElement.innerText).toEqual('2 hr 59 min');
+    expect(fixture.debugElement.query(By.css('#total-duration')).nativeElement.innerText).toEqual('2 hr 47 min');
   });
 
   it('should render total distance', () => {
@@ -160,11 +160,11 @@ describe('TripInfoComponent', () => {
   it('should render total price', () => {
     component.trip = mockTrips[0];
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('#total-price ion-text:nth-child(2)')).nativeElement.innerText).toEqual('$0.30');
+    expect(fixture.debugElement.query(By.css('#total-price ion-text:nth-child(2)')).nativeElement.innerText).toEqual('-$0.30');
   });
 
   it('should render total price message', () => {
-    component.trip = mockTrips[0];
+    component.trip = mockTrips[1];
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('#total-price ion-text:nth-child(1)')).nativeElement.innerText).toEqual('Total earnings:');
   });

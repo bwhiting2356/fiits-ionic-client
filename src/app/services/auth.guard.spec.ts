@@ -49,6 +49,6 @@ describe('AuthGuard', () => {
 
       spyOn(router, 'navigate');
       authGuard.canActivate().subscribe(result => expect(result).toBeFalsy());
-      expect(router.navigate).toHaveBeenCalled();
+      expect(router.navigate).toHaveBeenCalledWith(['/sign-in', 'from-menu']);
   }));
 });

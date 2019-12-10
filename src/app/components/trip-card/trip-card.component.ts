@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TripDetails } from 'src/app/shared/trip-details.model';
-import { totalTripPrice, totalTripDuration, totalTripDistance, addSeconds } from 'src/app/shared/util/util';
+import { addSeconds } from 'src/app/shared/util/util';
 
 export const RESERVATION_WINDOW = 10 * 60; // ten miutes
 
@@ -15,18 +15,6 @@ export class TripCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {}
-
-  get totalPrice(): number {
-    return totalTripPrice(this.trip);
-  }
-
-  get totalDuration(): number {
-    return totalTripDuration(this.trip);
-  }
-
-  get totalDistance(): number {
-    return totalTripDistance(this.trip);
-  }
 
   isUpcoming(): boolean {
     const currentTime = new Date();

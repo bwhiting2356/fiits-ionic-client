@@ -20,7 +20,7 @@ interface Page {
 export const loggedOutPages: Page[] = [
   {
     title: 'Log In/Sign Up',
-    url: '/sign-in',
+    url: '/sign-in/from-menu',
     icon: 'person',
   }
 ];

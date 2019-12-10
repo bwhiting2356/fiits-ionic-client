@@ -5,6 +5,7 @@ import { LogIn, SignUp, ChangeEmail, ChangePassword } from '../actions/user.acti
 import { Observable, combineLatest } from 'rxjs';
 import { selectEmail, selectPassword, selectAuthFetching } from '../reducers/user.reducer';
 import { map, take } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -16,11 +17,15 @@ export class SignInPage {
   email: Observable<string>;
   password: Observable<string>;
   authFetching: Observable<boolean>;
+  showMenu: Observable<boolean>;
 
-  constructor(private store: Store<State>) {
+  constructor(private activatedRoute: ActivatedRoute, private store: Store<State>) {
     this.email = store.select(selectEmail);
     this.password = store.select(selectPassword);
     this.authFetching = store.select(selectAuthFetching);
+    this.showMenu = activatedRoute.params.pipe(
+      map(params => params.context === 'from-menu')
+    );
   }
 
   changeEmail(newValue: string) {

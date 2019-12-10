@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TripDetails } from '../shared/trip-details.model';
-import { SearchQuery } from '../shared/search-query';
+import { SearchQuery } from '../shared/search-query.model';
 import { HttpClient } from '@angular/common/http';
 import { mockTrips } from 'src/testing/mock-trips';
 import { environment } from 'src/environments/environment';
@@ -16,8 +16,29 @@ export class TripService {
 
   constructor(private http: HttpClient) { }
 
+  parseTripDetails(trip: TripDetails): TripDetails {
+    return new TripDetails(
+      trip.originLatLng,
+          trip.originAddress,
+          trip.departureTime,
+          trip.walking1Directions,
+          trip.startReservation,
+          trip.bicyclingDirections,
+          trip.rentalPrice,
+          trip.endReservation,
+          trip.walking2Directions,
+          trip.destinationLatLng,
+          trip.destinationAddress,
+          trip.arrivalTime,
+          trip.status
+    );
+  }
+
   findBestTrip(searchQuery: SearchQuery): Observable<TripDetails> {
-    return this.http.post<TripDetails>(`${this.TRIP_API_URL}/trip`, searchQuery);
+    return this.http.post<TripDetails>(`${this.TRIP_API_URL}/trip`, searchQuery)
+      .pipe(
+        map(this.parseTripDetails)
+      );
   }
 
   bookTrip(tripDetails: TripDetails, uid: string) {
@@ -26,7 +47,10 @@ export class TripService {
   }
 
   fetchTrips(userId: string): Observable<TripDetails[]> {
-    return this.http.get<TripDetails[]>(`${this.TRIP_API_URL}/trips/${userId}`);
+    return this.http.get<TripDetails[]>(`${this.TRIP_API_URL}/trips/${userId}`)
+      .pipe(
+        map(trips => trips.map(this.parseTripDetails))
+      );
   }
 
   getFilteredTrips(direction: string, currentDate: Date): Observable<TripDetails[]> {

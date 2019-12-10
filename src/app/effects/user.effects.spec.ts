@@ -13,18 +13,18 @@ import {
   SignUp,
   SignUpSuccess,
   SignUpError,
-  LogInError
+  LogInError,
+  FetchAccountInfo
 } from '../actions/user.actions';
 import { mockTrips } from 'src/testing/mock-trips';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { initialState, State } from '../reducers';
 import { AuthService } from '../services/auth.service';
 import { TripService } from '../services/trip.service';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NavController } from '@ionic/angular';
 import { initialSearchState } from '../reducers/search.reducer';
-import { when } from 'ts-mockito';
+import { PaymentsService } from '../services/payments.service';
 
 describe('UserEffects', () => {
   let actions$: Observable<any>;
@@ -38,6 +38,7 @@ describe('UserEffects', () => {
         { provide: NavController, useValue: { navigateForward: () => {}, navigateBack: () => {} }},
         { provide: AuthService, useValue: { emailSignUp$: () => {}, emailLogin$: () => {} }},
         { provide: TripService, useValue: { fetchTrips: () => {} }},
+        { provide: PaymentsService, useValue: { fetchAccountInfo: () => { }}},
         provideMockActions(() => actions$),
         provideMockStore({ initialState })
       ]
@@ -88,11 +89,14 @@ describe('UserEffects', () => {
         spyOn(authService, 'emailSignUp$')
           .and.returnValue(of({ user: { uid: 'mock-uid' }} as firebase.auth.UserCredential));
         spyOn(navCtrl, 'navigateBack');
-        const action = new SignUp();
-        const success = new SignUpSuccess('mock-uid');
 
+        const action = new SignUp();
         actions$ = hot('a', { a: action });
-        const expected = hot('b', { b: success });
+
+        const signUpSuccess = new SignUpSuccess('mock-uid');
+        const fetchAccountInfo = new FetchAccountInfo();
+
+        const expected = hot('(bc)', { b: signUpSuccess, c: fetchAccountInfo });
 
         expect(userEffects.signUp$).toBeObservable(expected);
         expect(navCtrl.navigateBack).toHaveBeenCalledWith('/search');
@@ -111,11 +115,13 @@ describe('UserEffects', () => {
         spyOn(authService, 'emailSignUp$')
           .and.returnValue(of({ user: { uid: 'mock-uid' }} as firebase.auth.UserCredential));
         spyOn(navCtrl, 'navigateForward');
-        const action = new SignUp();
-        const success = new SignUpSuccess('mock-uid');
 
+        const action = new SignUp();
         actions$ = hot('a', { a: action });
-        const expected = hot('b', { b: success });
+
+        const fetchAccountInfo = new FetchAccountInfo();
+        const signUpSuccess = new SignUpSuccess('mock-uid');
+        const expected = hot('(bc)', { b: signUpSuccess, c: fetchAccountInfo });
 
         expect(userEffects.signUp$).toBeObservable(expected);
         expect(navCtrl.navigateForward).toHaveBeenCalledWith('/confirm-booking');
@@ -166,12 +172,13 @@ describe('UserEffects', () => {
         spyOn(authService, 'emailLogin$')
           .and.returnValue(of({ user: { uid: 'mock-uid' }} as firebase.auth.UserCredential));
         spyOn(navCtrl, 'navigateBack');
+
         const action = new LogIn();
-        const success = new LogInSuccess('mock-uid');
-
         actions$ = hot('a', { a: action });
-        const expected = hot('b', { b: success });
 
+        const fetchAccountInfo = new FetchAccountInfo();
+        const signUpSuccess = new LogInSuccess('mock-uid');
+        const expected = hot('(bc)', { b: signUpSuccess, c: fetchAccountInfo });
         expect(userEffects.logIn$).toBeObservable(expected);
         expect(navCtrl.navigateBack).toHaveBeenCalledWith('/search');
   }));
@@ -189,11 +196,13 @@ describe('UserEffects', () => {
         spyOn(authService, 'emailLogin$')
           .and.returnValue(of({ user: { uid: 'mock-uid' }} as firebase.auth.UserCredential));
         spyOn(navCtrl, 'navigateForward');
-        const action = new LogIn();
-        const success = new LogInSuccess('mock-uid');
 
+        const action = new LogIn();
         actions$ = hot('a', { a: action });
-        const expected = hot('b', { b: success });
+
+        const fetchAccountInfo = new FetchAccountInfo();
+        const signUpSuccess = new LogInSuccess('mock-uid');
+        const expected = hot('(bc)', { b: signUpSuccess, c: fetchAccountInfo });
 
         expect(userEffects.logIn$).toBeObservable(expected);
         expect(navCtrl.navigateForward).toHaveBeenCalledWith('/confirm-booking');

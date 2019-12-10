@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { TripDetails } from '../shared/trip-details.model';
+import { AccountInfo } from '../shared/account-info.model';
 
 export enum UserActionTypes {
     ChangeEmail = '[User] Change Email',
@@ -13,7 +14,10 @@ export enum UserActionTypes {
     LogOut = '[User] Log Out',
     FetchTrips = '[User] Fetch Trips',
     FetchTripsSuccess = '[User] Fetch Trips Success',
-    FetchTripsError = '[User] Fetch Trips Error'
+    FetchTripsError = '[User] Fetch Trips Error',
+    FetchAccountInfo = '[User] Fetch Account Info',
+    FetchAccountInfoSuccess = '[User] Fetch Account Info Success',
+    FetchAccountInfoError = '[User] Fetch Account Info Error'
 }
 
 export class ChangeEmail implements Action {
@@ -72,6 +76,20 @@ export class FetchTripsError implements Action {
     constructor(public error: any) {}
 }
 
+export class FetchAccountInfo implements Action {
+    readonly type  = UserActionTypes.FetchAccountInfo;
+}
+
+export class FetchAccountInfoSuccess implements Action {
+    readonly type = UserActionTypes.FetchAccountInfoSuccess;
+    constructor(public accountInfo: AccountInfo) {}
+}
+
+export class FetchAccountInfoError implements Action {
+    readonly type = UserActionTypes.FetchAccountInfoError;
+    constructor(public error: any) {}
+}
+
 export type UserActions = ChangeEmail
                         | ChangePassword
                         | LogIn
@@ -84,5 +102,8 @@ export type UserActions = ChangeEmail
                         | LogOut
                         | FetchTrips
                         | FetchTripsSuccess
-                        | FetchTripsError;
+                        | FetchTripsError
+                        | FetchAccountInfo
+                        | FetchAccountInfoSuccess
+                        | FetchAccountInfoError;
 

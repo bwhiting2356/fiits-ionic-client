@@ -88,7 +88,7 @@ describe('TripDetailPage', () => {
       spyOn(navCtrl, 'navigateForward');
       fixture.detectChanges();
       component.confirmBooking();
-      expect(navCtrl.navigateForward).toHaveBeenCalledWith('/sign-in');
+      expect(navCtrl.navigateForward).toHaveBeenCalledWith('/sign-in/from-search');
   }));
 
   it('should navigate to /confirm-booking if the user was logged in', inject(

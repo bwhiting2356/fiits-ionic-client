@@ -20,7 +20,7 @@ import {
   ActiveSearchFalse
 } from '../actions/search.actions';
 import { initialSearchState } from '../reducers/search.reducer';
-import { TimeTarget } from '../shared/time-target';
+import { TimeTarget } from '../shared/time-target.model';
 import { cold } from 'jasmine-marbles';
 import { of } from 'rxjs';
 import { initialState } from '../reducers';
@@ -84,12 +84,6 @@ describe('SearchPage', () => {
 
     expect(component.stations).toBeObservable(expected);
   });
-
-  // it('should render a spinner if showSpinner is true', () => {
-  //   component.showSpinner = of(true);
-  //   fixture.detectChanges();
-  //   expect(fixture.debugElement.query(By.css('#spinner'))).toBeTruthy();
-  // });
 
   it('should set showSpinner true if geocoding is fetching', () => {
     store.setState({
