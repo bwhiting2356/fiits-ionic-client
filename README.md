@@ -29,6 +29,13 @@ Allowing users to book their bike rentals in advance will give commuters the cer
 
 ![Architecture](https://raw.githubusercontent.com/bwhiting2356/fiits-diagrams/master/Fiits%20Architecture.svg?sanitize=true)
 
+The following additional repos are associated with this app:
+
+-  [Backend (Java)](https://github.com/bwhiting2356/fiits-spring-boot)
+-  [Firebase Cloud Functions (Node)](https://github.com/bwhiting2356/fiits-cloud-functions)
+-  [Inventory Prediction Microservice (Node)](https://github.com/bwhiting2356/fiits-inventory-prediction)
+-  [Admin Dashboard (Angular/Material)](https://github.com/bwhiting2356/fiits-cloud-functions)
+
 ### UX Flow
 
 ![UX Flow](https://raw.githubusercontent.com/bwhiting2356/fiits-diagrams/master/Fiits%20UX%20Flow.svg?sanitize=true)
