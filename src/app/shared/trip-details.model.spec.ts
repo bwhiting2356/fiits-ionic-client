@@ -43,7 +43,7 @@ describe('Trip details', () => {
         setTimeout(() => {
             expect(newTrip.status).toBe('Active');
             done();
-        }, 10);
+        }, 100);
     });
 
     it('should return \'UPCOMING\' status if the trip is in the future', () => {
