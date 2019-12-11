@@ -43,6 +43,17 @@ export const selectTrips = createSelector(
     selectUser,
     state => state.trips);
 
+export const selectFilteredTrips = createSelector(
+    selectTrips,
+    (trips, props) => {
+        if (props.direction === 'Upcoming') {
+            return trips.filter(trip => trip.status !== 'Completed');
+        } else {
+            return trips.filter(trip => trip.status === 'Completed');
+        }
+    }
+);
+
 export const selectTripsFetching = createSelector(
     selectUser,
     state => state.tripsFetching);

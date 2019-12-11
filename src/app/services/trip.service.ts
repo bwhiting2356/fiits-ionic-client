@@ -52,16 +52,16 @@ export class TripService {
       );
   }
 
-  getFilteredTrips(direction: string, currentDate: Date): Observable<TripDetails[]> {
-    return this.fetchTrips('').pipe( // TODO: fix
-      map(trips => trips.filter(trip => {
-        const tripDate = new Date(trip.arrivalTime);
-        if (direction === 'Upcoming') {
-          return tripDate > currentDate;
-        } else if (direction === 'Past') {
-          return tripDate <= currentDate;
-        }
-      }))
-    );
-  }
+  // getFilteredTrips(direction: string, currentDate: Date): Observable<TripDetails[]> {
+  //   return this.fetchTrips('').pipe( // TODO: fix
+  //     map(trips => trips.filter(trip => {
+  //       const tripDate = new Date(trip.arrivalTime);
+  //       if (direction === 'Upcoming') {
+  //         return tripDate > currentDate;
+  //       } else if (direction === 'Past') {
+  //         return tripDate <= currentDate;
+  //       }
+  //     }))
+  //   );
+  // }
 }

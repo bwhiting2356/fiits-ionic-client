@@ -13,7 +13,8 @@ import {
   LogInError,
   FetchAccountInfo,
   FetchAccountInfoError,
-  FetchAccountInfoSuccess
+  FetchAccountInfoSuccess,
+  FetchTrips
 } from '../actions/user.actions';
 import { switchMap, withLatestFrom, catchError, map, tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
@@ -46,7 +47,7 @@ export class UserEffects {
         }),
         switchMap(([credential]) => [
           new SignUpSuccess(credential.user.uid),
-          new FetchAccountInfo()
+          new FetchAccountInfo() // what account info is there to fetch for a new signup?
         ]),
         catchError(error => of(new SignUpError(error)))
       ))
@@ -70,6 +71,7 @@ export class UserEffects {
         }),
         switchMap(([credential]) => [
           new LogInSuccess(credential.user.uid),
+          new FetchTrips(),
           new FetchAccountInfo()
         ]),
         catchError(error => of(new LogInError(error)))
