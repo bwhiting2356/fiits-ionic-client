@@ -176,9 +176,10 @@ describe('UserEffects', () => {
         const action = new LogIn();
         actions$ = hot('a', { a: action });
 
+        const logInSuccess = new LogInSuccess('mock-uid');
+        const fetchTrips = new FetchTrips();
         const fetchAccountInfo = new FetchAccountInfo();
-        const signUpSuccess = new LogInSuccess('mock-uid');
-        const expected = hot('(bc)', { b: signUpSuccess, c: fetchAccountInfo });
+        const expected = hot('(bcd)', { b: logInSuccess, c: fetchTrips, d: fetchAccountInfo });
         expect(userEffects.logIn$).toBeObservable(expected);
         expect(navCtrl.navigateBack).toHaveBeenCalledWith('/search');
   }));
@@ -200,9 +201,10 @@ describe('UserEffects', () => {
         const action = new LogIn();
         actions$ = hot('a', { a: action });
 
-        const fetchAccountInfo = new FetchAccountInfo();
         const signUpSuccess = new LogInSuccess('mock-uid');
-        const expected = hot('(bc)', { b: signUpSuccess, c: fetchAccountInfo });
+        const fetchTrips = new FetchTrips();
+        const fetchAccountInfo = new FetchAccountInfo();
+        const expected = hot('(bcd)', { b: signUpSuccess, c: fetchTrips, d: fetchAccountInfo });
 
         expect(userEffects.logIn$).toBeObservable(expected);
         expect(navCtrl.navigateForward).toHaveBeenCalledWith('/confirm-booking');

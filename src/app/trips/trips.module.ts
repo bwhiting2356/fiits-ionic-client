@@ -16,7 +16,6 @@ const routes: Routes = [
       { path: '', redirectTo: 'upcoming'},
       { path: 'upcoming', loadChildren: './trip-list/trip-list.module#TripListPageModule' },
       { path: 'past', loadChildren: './trip-list/trip-list.module#TripListPageModule' },
-      { path: 'stats', loadChildren: './stats/stats.module#StatsPageModule' },
     ],
   }
 ];

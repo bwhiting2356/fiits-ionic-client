@@ -1,12 +1,13 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { capitalize } from '../../shared/util/util';
 import { Observable } from 'rxjs';
 import { TripDetails } from 'src/app/shared/trip-details.model';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/reducers';
-import { selectTrips, selectShowNoTrips, selectTripsFetching } from 'src/app/reducers/user.reducer';
+import { selectTrips, selectShowNoTrips, selectTripsFetching, selectFilteredTrips } from 'src/app/reducers/user.reducer';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-trip-list',
@@ -22,7 +23,8 @@ export class TripListPage {
   constructor(
     private store: Store<State>,
     private router: Router) {
-      this.trips = store.select(selectTrips);
+      console.log(`time direction ${this.timeDirection}`);
+      this.trips = store.select(selectFilteredTrips, { direction: this.timeDirection });
       this.showNoTrips = store.select(selectShowNoTrips);
       this.showFetching = store.select(selectTripsFetching);
     }

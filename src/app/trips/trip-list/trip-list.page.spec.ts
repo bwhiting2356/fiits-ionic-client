@@ -27,7 +27,7 @@ describe('TripListPage trip list', () => {
         {
           provide: Router,
           useValue: {
-            url: 'trips/upcoming'
+            url: 'trips/past'
           }
         },
         {
@@ -55,7 +55,7 @@ describe('TripListPage trip list', () => {
   });
 
   it('should return the current time direction capitalized', () => {
-    expect(component.timeDirection).toBe('Upcoming');
+    expect(component.timeDirection).toBe('Past');
   });
 
   it('should render list of trips', () => {
