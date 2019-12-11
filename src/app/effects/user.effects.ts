@@ -47,7 +47,7 @@ export class UserEffects {
         }),
         switchMap(([credential]) => [
           new SignUpSuccess(credential.user.uid),
-          new FetchAccountInfo() // what account info is there to fetch for a new signup?
+          new FetchAccountInfo() // TODO: what account info is there to fetch for a new signup?
         ]),
         catchError(error => of(new SignUpError(error)))
       ))

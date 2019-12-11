@@ -176,7 +176,6 @@ describe('UserEffects', () => {
         const action = new LogIn();
         actions$ = hot('a', { a: action });
 
-
         const logInSuccess = new LogInSuccess('mock-uid');
         const fetchTrips = new FetchTrips();
         const fetchAccountInfo = new FetchAccountInfo();
