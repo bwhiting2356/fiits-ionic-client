@@ -64,7 +64,6 @@ describe('TripService', () => {
             mockTrips[0].destinationLatLng,
             mockTrips[0].destinationAddress,
             mockTrips[0].arrivalTime,
-            mockTrips[0].status,
         );
         expect(trip).toEqual(newTrip);
       });

@@ -1,4 +1,6 @@
 import { LatLng } from './latlng.model';
+import { DateUtil } from './util/util';
+import { RESERVATION_WINDOW } from './constants';
 
 export interface DirectionsInfo {
     feet: number;
@@ -17,6 +19,7 @@ export interface StationInfo {
 }
 
 export type ReservationType = 'PICKUP' | 'DROPOFF';
+export type TripStatus = 'Active' | 'Upcoming' | 'Completed';
 
 export interface ReservationInfo {
     price: number;
@@ -39,7 +42,6 @@ export class TripDetails {
         public destinationLatLng: LatLng,
         public destinationAddress: string,
         public arrivalTime: string,
-        public status: string,
     ) {}
 
     get totalPrice(): number {
@@ -58,5 +60,20 @@ export class TripDetails {
         return this.walking1Directions.seconds
             + this.walking2Directions.seconds
             + this.bicyclingDirections.seconds;
+    }
+
+    get status(): TripStatus {
+        const now = DateUtil.getCurrentTime();
+        const arrivalTime = new Date(this.arrivalTime);
+        const startReservationTime = new Date(this.startReservation.time);
+        const tenMinAfterStart = DateUtil.addSeconds(startReservationTime, RESERVATION_WINDOW);
+
+        if (arrivalTime < now) {
+            return 'Completed';
+        } else if (now > startReservationTime && now < tenMinAfterStart) {
+            return 'Active';
+        } else {
+            return 'Upcoming';
+        }
     }
 }

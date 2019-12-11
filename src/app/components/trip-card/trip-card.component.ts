@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TripDetails } from 'src/app/shared/trip-details.model';
-import { addSeconds } from 'src/app/shared/util/util';
-
-export const RESERVATION_WINDOW = 10 * 60; // ten miutes
+import { DateUtil } from 'src/app/shared/util/util';
+import { RESERVATION_WINDOW } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-trip-card',
@@ -24,7 +23,7 @@ export class TripCardComponent implements OnInit {
 
   isReadyForScan(): boolean {
     const start = new Date(this.trip.startReservation.time);
-    const end = addSeconds(start, RESERVATION_WINDOW);
+    const end = DateUtil.addSeconds(start, RESERVATION_WINDOW);
     const currentTime = new Date();
     return currentTime >= start && currentTime <= end;
   }

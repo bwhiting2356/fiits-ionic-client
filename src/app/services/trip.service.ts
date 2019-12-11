@@ -30,7 +30,6 @@ export class TripService {
           trip.destinationLatLng,
           trip.destinationAddress,
           trip.arrivalTime,
-          trip.status
     );
   }
 

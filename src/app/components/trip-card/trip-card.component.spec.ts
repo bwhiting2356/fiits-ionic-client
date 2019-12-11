@@ -6,7 +6,6 @@ import { By } from '@angular/platform-browser';
 import { TripCardComponent } from './trip-card.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { mockTrips } from 'src/testing/mock-trips';
-import { addSeconds } from 'src/app/shared/util/util';
 
 describe('TripCardComponent', () => {
   let component: TripCardComponent;
