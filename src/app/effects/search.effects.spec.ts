@@ -1,3 +1,6 @@
+import * as sinon from 'sinon';
+import { DateUtil } from '../shared/util/util';
+
 import { TestBed, inject } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
@@ -44,6 +47,8 @@ import { State } from '../reducers';
 import { initialState } from '../reducers';
 import { Store } from '@ngrx/store';
 import { FetchTrips } from '../actions/user.actions';
+
+
 
 describe('SearchEffects', () => {
   let actions$: Observable<any>;
@@ -329,11 +334,11 @@ describe('SearchEffects', () => {
   ));
 
   it('should return an action to change time to the present if time is in the past', async () => {
-    const mockDate = new Date();
-    spyOn(effects, 'getCurrentTime').and.returnValue(mockDate);
+    const now = new Date();
+    sinon.stub(DateUtil, 'getCurrentTime').returns(now);
     const dateInThePast = new Date(0);
     const newAction = effects.checkTimeIsNotPast(dateInThePast);
-    expect(newAction.time).toEqual(mockDate);
+    expect(newAction.time).toEqual(now);
   });
 
   it('should return an action to change time to the same time if time is not in the past', async () => {

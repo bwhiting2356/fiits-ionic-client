@@ -51,7 +51,7 @@ describe('ConfirmBookingPage', () => {
       },
       search: {
         ...initialSearchState,
-        trip: { ...mockTrips[0], totalPrice: -3.00, totalDistance: 0, totalDuration: 0 }
+        trip: { ...mockTrips[0], totalPrice: -3.00, totalDistance: 0, totalDuration: 0, status: 'Upcoming' }
       }
     });
     fixture.detectChanges();
@@ -67,7 +67,7 @@ describe('ConfirmBookingPage', () => {
       },
       search: {
         ...initialSearchState,
-        trip: { ...mockTrips[0], totalPrice: -2.00, totalDistance: 0, totalDuration: 0 }
+        trip: { ...mockTrips[0], totalPrice: -2.00, totalDistance: 0, totalDuration: 0, status: 'Upcoming' }
       }
     });
     fixture.detectChanges();
@@ -83,7 +83,7 @@ describe('ConfirmBookingPage', () => {
       },
       search: {
         ...initialSearchState,
-        trip: { ...mockTrips[0], totalPrice: -3.00, totalDistance: 0, totalDuration: 0 }
+        trip: { ...mockTrips[0], totalPrice: -3.00, totalDistance: 0, totalDuration: 0, status: 'Upcoming' }
       }
     });
     fixture.detectChanges();
@@ -128,7 +128,7 @@ describe('ConfirmBookingPage', () => {
       },
       search: {
         ...initialSearchState,
-        trip: { ...mockTrips[0], totalPrice: -3.00, totalDistance: 0, totalDuration: 0 }
+        trip: { ...mockTrips[0], totalPrice: -3.00, totalDistance: 0, totalDuration: 0, status: 'Upcoming' }
       }
     });
     fixture.detectChanges();
@@ -145,7 +145,7 @@ describe('ConfirmBookingPage', () => {
       },
       search: {
         ...initialSearchState,
-        trip: { ...mockTrips[0], totalPrice: -3.00, totalDistance: 0, totalDuration: 0 }
+        trip: { ...mockTrips[0], totalPrice: -3.00, totalDistance: 0, totalDuration: 0, status: 'Completed' }
       }
     });
     fixture.detectChanges();

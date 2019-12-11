@@ -31,6 +31,7 @@ import { selectSearchTime, selectTrip } from '../reducers/search.reducer';
 import { async } from 'rxjs/internal/scheduler/async';
 import { FetchTrips } from '../actions/user.actions';
 import { selectUID } from '../reducers/user.reducer';
+import { DateUtil } from '../shared/util/util';
 
 const ONE_MINUTE = 60 * 1000;
 
@@ -130,10 +131,8 @@ export class SearchEffects {
     )
   );
 
-  getCurrentTime = () => new Date();
-
   checkTimeIsNotPast(time: Date) {
-    const currentTime = this.getCurrentTime();
+    const currentTime = DateUtil.getCurrentTime();
     if (time < currentTime) {
       return new ChangeTime(currentTime);
     } else {
