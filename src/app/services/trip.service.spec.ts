@@ -76,4 +76,22 @@ describe('TripService', () => {
 
       httpMock.verify();
   }));
+
+  it('should fetch the trips for the user', inject(
+    [HttpTestingController, TripService],
+    (httpMock: HttpTestingController, tripService: TripService) => {
+      const mockUID = 'mock-uid';
+
+      const parsedTrips = mockTrips.map(tripService.parseTripDetails);
+      tripService.fetchTrips(mockUID).subscribe(result => {
+        expect(result).toEqual(parsedTrips);
+      });
+
+      const mockReq = httpMock.expectOne(`${tripService.TRIP_API_URL}/trips/${mockUID}`);
+      expect(mockReq.cancelled).toBeFalsy();
+      expect(mockReq.request.responseType).toEqual('json');
+      mockReq.flush(mockTrips);
+
+      httpMock.verify();
+  }));
 });
