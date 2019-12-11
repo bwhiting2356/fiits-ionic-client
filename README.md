@@ -27,6 +27,8 @@ Allowing users to book their bike rentals in advance will give commuters the cer
 
 ### Architecture
 
-![Quality Gate Status](https://raw.githubusercontent.com/bwhiting2356/fiits-diagrams/master/Fiits%20Architecture.png)
+![Quality Gate Status](https://raw.githubusercontent.com/bwhiting2356/fiits-diagrams/master/Fiits%20Architecture.svg?sanitize=true)
 
 [Pivotal Tracker Board](https://www.pivotaltracker.com/n/projects/2406737)
+
+
