@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { of, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TripDetails } from '../shared/trip-details.model';
 import { SearchQuery } from '../shared/search-query.model';
 import { HttpClient } from '@angular/common/http';
-import { mockTrips } from 'src/testing/mock-trips';
 import { environment } from 'src/environments/environment';
 import { BookTripRequestPayload } from '../shared/book-trip-request.model';
 
