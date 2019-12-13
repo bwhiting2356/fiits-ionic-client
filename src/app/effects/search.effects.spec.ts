@@ -61,7 +61,7 @@ describe('SearchEffects', () => {
         SearchEffects,
         provideMockActions(() => actions$),
         provideMockStore({ initialState }),
-        { provide: GeocodeService, useValue: { getLatLngFromAddress$: () => {}, getAddressFromLatLng$: () => {} }},
+        { provide: GeocodeService, useValue: { getLatLngFromPlaceId$: () => {}, getAddressFromLatLng$: () => {} }},
         { provide: GeolocationService, useValue: { getCurrentPosition$: () => {}} },
         { provide: TripService, useValue: { findBestTrip: () => {}, bookTrip: () => {} }},
         { provide: StationService, useValue: { fetchAllStation$: () => {} }},
@@ -108,7 +108,7 @@ describe('SearchEffects', () => {
   it('should return SaveGeocodingOriginResult on success', inject(
     [GeocodeService, SearchEffects],
     async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
-      spyOn(geocodeService, 'getLatLngFromAddress$').and.returnValue(of({ lat: 0, lng: 0}));
+      spyOn(geocodeService, 'getLatLngFromPlaceId$').and.returnValue(of({ lat: 0, lng: 0}));
 
       const action = new FetchGeocodeOriginResult('123 Main Street');
       actions$ = hot('--a-', { a: action });
@@ -123,7 +123,7 @@ describe('SearchEffects', () => {
     async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
       const error = new Error();
       const errorResponse = cold('#|', {}, error);
-      spyOn(geocodeService, 'getLatLngFromAddress$').and.returnValue(errorResponse);
+      spyOn(geocodeService, 'getLatLngFromPlaceId$').and.returnValue(errorResponse);
 
       const action = new FetchGeocodeOriginResult('123 Main Street');
       actions$ = hot('--a-', { a: action });
@@ -136,7 +136,7 @@ describe('SearchEffects', () => {
   it('should return SaveGeocodingDestinationResult on success', inject(
     [GeocodeService, SearchEffects],
     async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
-      spyOn(geocodeService, 'getLatLngFromAddress$').and.returnValue(of({ lat: 0, lng: 0}));
+      spyOn(geocodeService, 'getLatLngFromPlaceId$').and.returnValue(of({ lat: 0, lng: 0}));
 
       const action = new FetchGeocodeDestinationResult('123 Main Street');
       actions$ = hot('--a-', { a: action });
@@ -151,7 +151,7 @@ describe('SearchEffects', () => {
     async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
       const error = new Error();
       const errorResponse = cold('#|', {}, error);
-      spyOn(geocodeService, 'getLatLngFromAddress$').and.returnValue(errorResponse);
+      spyOn(geocodeService, 'getLatLngFromPlaceId$').and.returnValue(errorResponse);
 
       const action = new FetchGeocodeDestinationResult('123 Main Street');
       actions$ = hot('--a-', { a: action });

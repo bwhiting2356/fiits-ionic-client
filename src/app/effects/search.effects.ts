@@ -44,8 +44,8 @@ export class SearchEffects {
   @Effect()
   fetchGeocodeOriginResult$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.FetchGeocodeOriginResult),
-    map(action => action.address),
-    switchMap(address => this.geocodeService.getLatLngFromAddress$(address).pipe(
+    map(action => action.placeId),
+    switchMap(placeId => this.geocodeService.getLatLngFromPlaceId$(placeId).pipe(
       map(geocodeResult => new SaveOriginLatLng(geocodeResult)),
       catchError(error => of(new GeocodeError(error)))
     ))
@@ -54,8 +54,8 @@ export class SearchEffects {
   @Effect()
   fetchGeocodeDestinationResult$: Observable<Action> = this.actions$.pipe(
     ofType(SearchActionTypes.FetchGeocodeDestinationResult),
-    map(action => action.address),
-    switchMap(address => this.geocodeService.getLatLngFromAddress$(address).pipe(
+    map(action => action.placeId),
+    switchMap(placeId => this.geocodeService.getLatLngFromPlaceId$(placeId).pipe(
       map(geocodeResult => new SaveDestinationLatLng(geocodeResult)),
       catchError(error => of(new GeocodeError(error)))
     ))

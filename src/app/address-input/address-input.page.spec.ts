@@ -328,7 +328,7 @@ describe('AddressInputPage', () => {
     expect(store.dispatch)
       .toHaveBeenCalledWith(new ChooseOriginLocation(mockAutocompleteResults[0].structured_formatting.main_text));
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new FetchGeocodeOriginResult(mockAutocompleteResults[0].structured_formatting.main_text));
+      .toHaveBeenCalledWith(new FetchGeocodeOriginResult(mockAutocompleteResults[0].place_id));
     expect(store.dispatch)
       .toHaveBeenCalledWith(new ClearResults());
 
@@ -364,7 +364,7 @@ describe('AddressInputPage', () => {
     expect(store.dispatch)
       .toHaveBeenCalledWith(new ChooseDestinationLocation(mockAutocompleteResults[1].structured_formatting.main_text));
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new FetchGeocodeDestinationResult(mockAutocompleteResults[1].structured_formatting.main_text));
+      .toHaveBeenCalledWith(new FetchGeocodeDestinationResult(mockAutocompleteResults[1].place_id));
     expect(store.dispatch)
       .toHaveBeenCalledWith(new ClearResults());
     expect(component.navCtrl.back).toHaveBeenCalled();
