@@ -102,7 +102,7 @@ describe('GeocodeService', () => {
     await service.initializeGeocoder();
     spyOn((service as any).googleGeocoderService, 'geocode')
       .and.callFake((_, cb) => cb(mockGeocodingResults));
-    service.getLatLngFromAddress$('123 Main Street').subscribe(result => {
+    service.getLatLngFromPlaceId$('123 Main Street').subscribe(result => {
       expect(result.lat).toEqual(1);
       expect(result.lng).toEqual(1);
     });

@@ -19,12 +19,12 @@ export class GeocodeService {
     this.googleGeocoderService = new google.maps.Geocoder();
   }
 
-  async geocode(address: string): Promise<LatLng> {
+  async geocode(placeId: string): Promise<LatLng> {
     if (!this.googleGeocoderService) {
       await this.initializeGeocoder();
     }
     return new Promise(resolve => {
-      this.googleGeocoderService.geocode({ address }, (results: GeocodingResult[]) => {
+      this.googleGeocoderService.geocode({ placeId }, (results: GeocodingResult[]) => {
         if (results && results[0]) {
           resolve({
             lat: results[0].geometry.location.lat(),
@@ -52,8 +52,8 @@ export class GeocodeService {
     });
   }
 
-  getLatLngFromAddress$(input: string): Observable<LatLng> {
-    return from(this.geocode(input));
+  getLatLngFromPlaceId$(placeId: string): Observable<LatLng> {
+    return from(this.geocode(placeId));
   }
 
   getAddressFromLatLng$(latLng: LatLng): Observable<string> {

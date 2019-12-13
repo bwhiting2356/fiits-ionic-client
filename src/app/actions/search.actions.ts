@@ -103,12 +103,12 @@ export class FetchAllStationsError implements Action {
 
 export class FetchGeocodeOriginResult implements Action {
   readonly type = SearchActionTypes.FetchGeocodeOriginResult;
-  constructor(public address: string) {}
+  constructor(public placeId: string) {}
 }
 
 export class FetchGeocodeDestinationResult implements Action {
   readonly type = SearchActionTypes.FetchGeocodeDestinationResult;
-  constructor(public address: string) {}
+  constructor(public placeId: string) {}
 }
 
 export class FetchGeolocation implements Action {
