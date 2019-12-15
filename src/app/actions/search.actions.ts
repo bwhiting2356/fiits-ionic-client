@@ -42,6 +42,6 @@ export const saveOriginLatLng = createAction('[Search] Save Origin LatLng', prop
 export const saveDestinationLatLng = createAction('[Search] Save Destination LatLng', props<{latlng: LatLng}>());
 export const setSearchAddressType = createAction('[Search] Set Search Address Type', props<{addressType: SearchAddressType}>());
 export const timeInPastError = createAction('[Search] Time In Past Error');
-export const searchQuery = createAction('[Search] Query', props<{query: SearchQuery}>());
+export const searchQuery = createAction('[Search] Query');
 export const searchQuerySuccess = createAction('[Search] Query Success', props<{trip: TripDetails}>());
 export const searchQueryError = createAction('[Search] Query Error', props<{error: any}>());

@@ -72,6 +72,17 @@ export const initialSearchState: SearchState = {
 
 const selectSearch = createFeatureSelector<State, SearchState>('search');
 
+export const selectSearchParams = createSelector(
+  selectSearch,
+  search => ({
+    timeTarget: search.timeTarget,
+    time: search.time,
+    originAddress: search.originAddress,
+    originLatLng: search.originLatLng,
+    destinationAddress: search.destinationAddress,
+    destinationLatLng: search.destinationLatLng
+  })
+);
 export const selectAddressType = createSelector(
   selectSearch,
   state => state.searchAddressType);
