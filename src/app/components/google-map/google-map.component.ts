@@ -1,21 +1,18 @@
 import { MapsAPILoader } from '@agm/core';
 import { Component, OnInit, OnChanges, Input, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
-
 import { Store } from '@ngrx/store';
-
 import { GoogleMap, Marker, InfoWindow } from '@agm/core/services/google-maps-types';
 
 import { GestureHandling } from 'src/app/shared/maps/gesture-handling';
 import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
 import { TripDetails, StationInfo } from 'src/app/shared/trip-details.model';
 import { LatLng } from 'src/app/shared/latlng.model';
-
 import { State } from 'src/app/reducers';
 import {
-  ChooseOriginLocation,
-  ChooseDestinationLocation,
-  SaveOriginLatLng,
-  SaveDestinationLatLng
+  chooseOriginLocation,
+  chooseDestinationLocation,
+  saveOriginLatLng,
+  saveDestinationLatLng
 } from 'src/app/actions/search.actions';
 import { environment } from 'src/environments/environment';
 import { latLngEquals } from 'src/app/shared/util/util';
@@ -183,11 +180,11 @@ export class GoogleMapComponent implements OnChanges, OnInit {
   handleInfoWindowButtonClick = (direction: string, stationIndex: number) => {
     const station: StationInfo = this.stations[stationIndex];
     if (direction === 'from') {
-      this.store.dispatch(new ChooseOriginLocation(station.address));
-      this.store.dispatch(new SaveOriginLatLng({ lat: station.lat, lng: station.lng }));
+      this.store.dispatch(chooseOriginLocation({ location: station.address }));
+      this.store.dispatch(saveOriginLatLng({ latlng: { lat: station.lat, lng: station.lng }}));
     } else { // direction === 'to'
-      this.store.dispatch(new ChooseDestinationLocation(station.address));
-      this.store.dispatch(new SaveDestinationLatLng({ lat: station.lat, lng: station.lng }));
+      this.store.dispatch(chooseDestinationLocation({ location: station.address }));
+      this.store.dispatch(saveDestinationLatLng({ latlng: { lat: station.lat, lng: station.lng }}));
     }
     if (this.openWindow) {
       this.openWindow.close();

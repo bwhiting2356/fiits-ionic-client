@@ -9,20 +9,19 @@ import { State } from '../reducers';
 import { By } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import {
-  SetSearchAddressType,
-  ChangeTimeTarget,
-  ChangeTime,
-  TripSearchQuery,
-  FetchAllStations,
-  FetchGeolocation,
-  TimeInPastError,
-  ActiveSearchTrue,
-  ActiveSearchFalse
+  setSearchAddressType,
+  changeTimeTarget,
+  changeTime,
+  searchQuery,
+  fetchAllStations,
+  fetchGeolocation,
+  timeInPastError,
+  activeSearchTrue,
+  activeSearchFalse
 } from '../actions/search.actions';
 import { initialSearchState } from '../reducers/search.reducer';
 import { TimeTarget } from '../shared/time-target.model';
 import { cold } from 'jasmine-marbles';
-import { of } from 'rxjs';
 import { initialState } from '../reducers';
 import { mockStations } from 'src/testing/mock-stations';
 
@@ -43,7 +42,7 @@ describe('SearchPage', () => {
           }
         },
         provideMockStore({ initialState })
-    ]
+      ]
     })
     .compileComponents();
     store = TestBed.get<Store<State>>(Store);
@@ -62,13 +61,13 @@ describe('SearchPage', () => {
   it('should dispatch an action to fetch all stations when the component loads', () => {
     spyOn(store, 'dispatch');
     (component as any).ngOnInit();
-    expect(store.dispatch).toHaveBeenCalledWith(new FetchAllStations());
+    expect(store.dispatch).toHaveBeenCalledWith(fetchAllStations());
   });
 
   it('should dispatch an action to fetch geolocation when the component loads', () => {
     spyOn(store, 'dispatch');
     (component as any).ngOnInit();
-    expect(store.dispatch).toHaveBeenCalledWith(new FetchGeolocation());
+    expect(store.dispatch).toHaveBeenCalledWith(fetchGeolocation());
   });
 
   it('should have the list of stations', () => {
@@ -130,7 +129,7 @@ describe('SearchPage', () => {
     spyOn(component.router, 'navigate');
     component.navigateToAddressInput('Origin');
     expect(store.dispatch)
-        .toHaveBeenCalledWith(new SetSearchAddressType('Origin'));
+        .toHaveBeenCalledWith(setSearchAddressType({ addressType: 'Origin' }));
     expect(component.router.navigate).toHaveBeenCalledWith(['address-input']);
   });
 
@@ -139,7 +138,7 @@ describe('SearchPage', () => {
     spyOn(component.router, 'navigate');
     component.navigateToAddressInput('Destination');
     expect(store.dispatch)
-        .toHaveBeenCalledWith(new SetSearchAddressType('Destination'));
+        .toHaveBeenCalledWith(setSearchAddressType({ addressType: 'Destination' }));
     expect(component.router.navigate).toHaveBeenCalledWith(['address-input']);
   });
 
@@ -230,7 +229,7 @@ describe('SearchPage', () => {
       ...initialState,
       search: {
         ...initialSearchState,
-        originLatLng: { lat: 1, lng: 1},
+        originLatLng: { lat: 1, lng: 1 },
         destinationLatLng: undefined
       }
     });
@@ -272,21 +271,21 @@ describe('SearchPage', () => {
   it('should dispatch an action to change timeTarget to ARRIVE_BY', () => {
     spyOn(store, 'dispatch');
     component.timeTargetChange({ target: { value: { value: 'ARRIVE_BY' }}});
-    expect(store.dispatch).toHaveBeenCalledWith(new ChangeTimeTarget('ARRIVE_BY'));
+    expect(store.dispatch).toHaveBeenCalledWith(changeTimeTarget({ timeTarget: 'ARRIVE_BY' }));
   });
 
   it('should dispatch an action to change timeTarget to DEPART_AT', () => {
     spyOn(store, 'dispatch');
     component.timeTargetChange({ target: { value: { value: 'DEPART_AT' }}});
-    expect(store.dispatch).toHaveBeenCalledWith(new ChangeTimeTarget('DEPART_AT'));
+    expect(store.dispatch).toHaveBeenCalledWith(changeTimeTarget({ timeTarget: 'DEPART_AT' }));
   });
 
   it('should dispatch an action to change the time', () => {
     spyOn(store, 'dispatch');
     const timeString = '2018-12-31T21:00:40.000+0000';
-    const date = new Date(timeString);
+    const time = new Date(timeString);
     component.timeChange({ target: { value: timeString }});
-    expect(store.dispatch).toHaveBeenCalledWith(new ChangeTime(date));
+    expect(store.dispatch).toHaveBeenCalledWith(changeTime({ time }));
   });
 
   it('should get the position from state', () => {
@@ -320,14 +319,14 @@ describe('SearchPage', () => {
     spyOn(store, 'dispatch');
     component.findBikeRentals();
     expect(store.dispatch).toHaveBeenCalledWith(
-      new TripSearchQuery({
+      searchQuery({ query: {
         timeTarget: 'ARRIVE_BY' as TimeTarget,
         time: later,
         originAddress: '123 Main Street',
         originLatLng: { lat: 0, lng: 0 },
         destinationAddress: '576 Main Street',
         destinationLatLng: { lat: 1, lng: 1 }
-      })
+      }})
     );
   });
 
@@ -347,28 +346,28 @@ describe('SearchPage', () => {
     fixture.detectChanges();
     spyOn(store, 'dispatch');
     component.findBikeRentals();
-    expect(store.dispatch).toHaveBeenCalledWith(new TimeInPastError());
+    expect(store.dispatch).toHaveBeenCalledWith(timeInPastError());
     expect(store.dispatch).not.toHaveBeenCalledWith(
-      new TripSearchQuery({
+      searchQuery({ query: {
         timeTarget: 'ARRIVE_BY' as TimeTarget,
         time: new Date('2018-12-31T21:00:40.000+0000'),
         originAddress: '123 Main Street',
         originLatLng: { lat: 0, lng: 0 },
         destinationAddress: '576 Main Street',
         destinationLatLng: { lat: 1, lng: 1 }
-      })
+      }})
     );
   });
 
   it('should dispatch an action to set active search to true on ionViewDidEnter', () => {
     spyOn(store, 'dispatch');
     component.ionViewDidEnter();
-    expect(store.dispatch).toHaveBeenCalledWith(new ActiveSearchTrue());
+    expect(store.dispatch).toHaveBeenCalledWith(activeSearchTrue());
   });
 
   it('should dispatch an action to set active search to false on ionViewDidLeave', () => {
     spyOn(store, 'dispatch');
     component.ionViewDidLeave();
-    expect(store.dispatch).toHaveBeenCalledWith(new ActiveSearchFalse());
+    expect(store.dispatch).toHaveBeenCalledWith(activeSearchFalse());
   });
 });

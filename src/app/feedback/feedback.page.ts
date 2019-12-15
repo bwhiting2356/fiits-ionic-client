@@ -1,10 +1,9 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
-import { SendFeedback, ChangeComment } from '../actions/feedback.actions';
+import { sendFeedback, changeComment } from '../actions/feedback.actions';
 import { Observable } from 'rxjs/internal/Observable';
-import { combineLatest } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { selectFeedbackPosting, selectFeedbackComment, selectFeedbackDisableSend } from '../reducers/feedback.reducer';
 
 @Component({
@@ -25,14 +24,14 @@ export class FeedbackPage {
   }
 
   changeComment(comment: string) {
-    this.store.dispatch(new ChangeComment(comment));
+    this.store.dispatch(changeComment({ comment }));
   }
 
   sendFeedback() {
     this.comment.pipe(
       take(1)
     ).subscribe(comment => {
-      this.store.dispatch(new SendFeedback({ comment }));
-    });
+      this.store.dispatch(sendFeedback({ feedback: { comment }}));
+    }); // TODO: have ngrx effect pull comment and metadata from store
   }
 }

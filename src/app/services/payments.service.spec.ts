@@ -8,7 +8,6 @@ describe('PaymentsService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [HttpClientTestingModule],
     providers: [PaymentsService]
-
   }));
 
   it('should be created', () => {

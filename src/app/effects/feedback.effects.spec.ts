@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { hot, cold } from 'jasmine-marbles';
 
 import { FeedbackEffects } from './feedback.effects';
-import { SendFeedback, FeedbackSuccess, FeedbackError } from '../actions/feedback.actions';
+import { sendFeedback, feedbackSuccess, feedbackError } from '../actions/feedback.actions';
 import { FeedbackService } from '../services/feedback.service';
 
 describe('FeedbackEffects', () => {
@@ -28,23 +28,23 @@ describe('FeedbackEffects', () => {
     async (feedbackService, feedbackEffects: FeedbackEffects) => {
       spyOn(feedbackService, 'sendFeedback').and.returnValue(of({}));
 
-      const action = new SendFeedback({ comment: 'cool app' });
-      const completion = new FeedbackSuccess();
+      const action = sendFeedback({ feedback: { comment: 'cool app' }});
+      const completion = feedbackSuccess();
 
       actions$ = hot('--a-', { a: action });
       const expected = hot('--b', { b: completion });
       expect(feedbackEffects.feedback$).toBeObservable(expected);
   }));
 
-  it('should return FeedbackError on error', inject(
+  it('should return feedbackError on error', inject(
     [FeedbackService, FeedbackEffects],
     async (feedbackService, feedbackEffects: FeedbackEffects) => {
       const error = new Error();
       const errorResponse = cold('#|', {}, error);
       spyOn(feedbackService, 'sendFeedback').and.returnValue(errorResponse);
 
-      const action = new SendFeedback({ comment: 'cool app' });
-      const completion = new FeedbackError(error);
+      const action = sendFeedback({ feedback: { comment: 'cool app' }});
+      const completion = feedbackError({ error });
 
       actions$ = hot('--a-', { a: action });
       const expected = hot('--b', { b: completion });

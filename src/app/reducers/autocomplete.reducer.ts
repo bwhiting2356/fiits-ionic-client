@@ -1,6 +1,11 @@
-import { AutocompleteActions, AutocompleteActionTypes } from '../actions/autocomplete.actions';
+import {
+    clearAutocompleteResults,
+    autocompleteError,
+    fetchAutocompleteResults,
+    saveAutocompleteResults
+} from '../actions/autocomplete.actions';
 import { AutocompleteResult } from '../shared/maps/autocomplete-result';
-import { createSelector, createFeatureSelector } from '@ngrx/store';
+import { createSelector, createFeatureSelector, createReducer, on, Action } from '@ngrx/store';
 import { State } from '.';
 
 export interface AutocompleteState {
@@ -43,29 +48,14 @@ export const selectAutocompleteShowNoResults = createSelector(
     (results, fetching, dirty) => results.length < 1 && !fetching && dirty
 );
 
+const autocompleteReducer = createReducer(
+    initialAutocompleteState,
+    on(clearAutocompleteResults, state => ({ ...state, autocompleteResults: [], autocompleteDirty: false })),
+    on(autocompleteError, (state, { error }) => ({ ...state, error })),
+    on(fetchAutocompleteResults, state => ({ ...state, autocompleteResults: [], autocompleteFetching: true, autocompleteDirty: true })),
+    on(saveAutocompleteResults, (state, { results }) => ({ ...state, autocompleteResults: results, autocompleteFetching: false }))
+);
 
-export function autocompleteReducer(state = initialAutocompleteState, action: AutocompleteActions): AutocompleteState {
-    switch (action.type) {
-        case AutocompleteActionTypes.ClearResults:
-            return {
-                ...state,
-                autocompleteResults: [],
-                autocompleteDirty: false,
-            };
-        case AutocompleteActionTypes.FetchResults:
-            return {
-                ...state,
-                autocompleteResults: [],
-                autocompleteFetching: true,
-                autocompleteDirty: true
-            };
-        case AutocompleteActionTypes.SaveResults:
-            return {
-                ...state,
-                autocompleteResults: action.autocompleteResults,
-                autocompleteFetching: false
-            };
-        default:
-            return state;
-    }
+export function reducer(state: AutocompleteState | undefined, action: Action) {
+    return autocompleteReducer(state, action);
 }

@@ -1,25 +1,33 @@
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
-import { SearchActions, SearchActionTypes } from '../actions/search.actions';
+import {
+    fetchAllStationsError,
+    searchQueryError,
+    geocodeError,
+    bookTripFailure,
+    bookTripSuccess,
+    timeInPastError
+} from '../actions/search.actions';
 import { Observable } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
-import { FeedbackActions, FeedbackActionTypes } from '../actions/feedback.actions';
-import { AutocompleteActions, AutocompleteActionTypes } from '../actions/autocomplete.actions';
-import { UserActionTypes, UserActions } from '../actions/user.actions';
+import { autocompleteError } from '../actions/autocomplete.actions';
+import { Action } from '@ngrx/store';
+import { feedbackSuccess, feedbackError } from '../actions/feedback.actions';
+import { logInError, logInSuccess, signUpSuccess, logOut, signUpError } from '../actions/user.actions';
 
 @Injectable()
 export class ToastEffects {
 
     @Effect({ dispatch: false })
     fetchingStationError$: Observable<any> = this.actions$.pipe(
-        ofType(SearchActionTypes.FetchAllStationsError),
+        ofType(fetchAllStationsError),
         tap(_ => this.presentToast('Error fetching station info', 'danger'))
     );
 
     @Effect({ dispatch: false })
     searchQueryError$: Observable<any> = this.actions$.pipe(
-        ofType(SearchActionTypes.TripSearchQueryError),
+        ofType(searchQueryError),
         tap(action => this.presentToast(
             action.error.error && action.error.error.message
                 ? action.error.error.message
@@ -30,25 +38,25 @@ export class ToastEffects {
 
     @Effect({ dispatch: false })
     geocodeError$: Observable<any> = this.actions$.pipe(
-        ofType(SearchActionTypes.GeocodeError),
+        ofType(geocodeError),
         tap(_ => this.presentToast('Error fetching location coordinates', 'danger'))
     );
 
     @Effect({ dispatch: false })
     autocompleteError$: Observable<any> = this.actions$.pipe(
-        ofType(AutocompleteActionTypes. Error),
+        ofType(autocompleteError),
         tap(_ => this.presentToast('Error fetching locations', 'danger'))
     );
 
     @Effect({ dispatch: false })
     feedbackError$: Observable<any> = this.actions$.pipe(
-        ofType(FeedbackActionTypes.FeedbackError),
+        ofType(feedbackError),
         tap(_ => this.presentToast('Error sending feedback', 'danger'))
     );
 
     @Effect({ dispatch: false })
     bookTripError$: Observable<any> = this.actions$.pipe(
-        ofType(SearchActionTypes.BookTripFailure),
+        ofType(bookTripFailure),
         tap(action => this.presentToast(
             action.error.error && action.error.error.message
                 ? action.error.error.message
@@ -59,31 +67,31 @@ export class ToastEffects {
 
     @Effect({ dispatch: false })
     bookTripSuccess$: Observable<any> = this.actions$.pipe(
-        ofType(SearchActionTypes.BookTripSuccess),
+        ofType(bookTripSuccess),
         tap(_ => this.presentToast('Trip booked successfully!', 'success'))
     );
 
     @Effect({ dispatch: false })
     timeInPastError$: Observable<any> = this.actions$.pipe(
-        ofType(SearchActionTypes.TimeInPastError),
+        ofType(timeInPastError),
         tap(_ => this.presentToast('Time cannot be in the past.', 'danger'))
     );
 
     @Effect({ dispatch: false })
     feedbackSuccess$: Observable<any> = this.actions$.pipe(
-        ofType(FeedbackActionTypes.FeedbackSuccess),
+        ofType(feedbackSuccess),
         tap(_ => this.presentToast('Feedback sent successfully!', 'success'))
     );
 
     @Effect({ dispatch: false })
     loginSuccess$: Observable<any> = this.actions$.pipe(
-        ofType(UserActionTypes.LogInSuccess),
+        ofType(logInSuccess),
         tap(_ => this.presentToast('Logged in successfully!', 'success'))
     );
 
     @Effect({ dispatch: false })
     loginError$: Observable<any> = this.actions$.pipe(
-        ofType(UserActionTypes.LogInError),
+        ofType(logInError),
         tap(action => this.presentToast(
             action.error.message
                 ? action.error.message
@@ -94,7 +102,7 @@ export class ToastEffects {
 
     @Effect({ dispatch: false })
     signupError$: Observable<any> = this.actions$.pipe(
-        ofType(UserActionTypes.SignUpError),
+        ofType(signUpError),
         tap(action => this.presentToast(
             action.error.message
                 ? action.error.message
@@ -105,13 +113,13 @@ export class ToastEffects {
 
     @Effect({ dispatch: false })
     signupSuccess$: Observable<any> = this.actions$.pipe(
-        ofType(UserActionTypes.SignUpSuccess),
+        ofType(signUpSuccess),
         tap(_ => this.presentToast('Signed up successfully!', 'success'))
     );
 
     @Effect({ dispatch: false })
     logOut$: Observable<any> = this.actions$.pipe(
-        ofType(UserActionTypes.LogOut),
+        ofType(logOut),
         tap(_ => this.presentToast('Logged out successfully!', 'success'))
     );
 
@@ -132,5 +140,5 @@ export class ToastEffects {
     }
     constructor(
         private toastCtrl: ToastController,
-        private actions$: Actions<SearchActions | FeedbackActions | AutocompleteActions | UserActions>) {}
+        private actions$: Actions<Action>) {}
 }

@@ -5,9 +5,9 @@ import { hot, cold, getTestScheduler } from 'jasmine-marbles';
 
 import { AutocompleteService } from '../services/autocomplete.service';
 import {
-  FetchResults,
-  SaveResults,
-  ResultsError,
+  fetchAutocompleteResults,
+  saveAutocompleteResults,
+  autocompleteError,
 } from '../actions/autocomplete.actions';
 import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 import { AutocompleteEffects, AUTOCOMPLETE_DEBOUNCE, AUTOCOMPLETE_EFFECTS_SCHEDULER } from './autocomplete.effects';
@@ -34,8 +34,8 @@ describe('AutocompleteEffects', () => {
     [AutocompleteService, AutocompleteEffects],
     async (autocompleteService: AutocompleteService, autocompleteEffects: AutocompleteEffects) => {
       spyOn(autocompleteService, 'getPlacePredictions$').and.returnValue(of(mockAutocompleteResults));
-      const action = new FetchResults('123 Main Street');
-      const completion = new SaveResults(mockAutocompleteResults);
+      const action = fetchAutocompleteResults({ input: '123 Main Street' });
+      const completion = saveAutocompleteResults({ results: mockAutocompleteResults });
       actions$ = hot('--a-', { a: action });
       const expected = hot('-----b', { b: completion });
       expect(autocompleteEffects.fetchAutocompleteResults$).toBeObservable(expected);
@@ -47,8 +47,8 @@ describe('AutocompleteEffects', () => {
       const error = new Error();
       const errorResponse = cold('#|', {}, error);
       spyOn(autocompleteService, 'getPlacePredictions$').and.returnValue(errorResponse);
-      const action = new FetchResults('123 Main Street');
-      const completion = new ResultsError(error);
+      const action = fetchAutocompleteResults({ input: '123 Main Street' });
+      const completion = autocompleteError({ error });
       actions$ = hot('--a-', { a: action });
       const expected = cold('-----b', { b: completion });
       expect(autocompleteEffects.fetchAutocompleteResults$).toBeObservable(expected);
@@ -58,11 +58,11 @@ describe('AutocompleteEffects', () => {
     [AutocompleteService, AutocompleteEffects],
     async (autocompleteService: AutocompleteService, autocompleteEffects: AutocompleteEffects) => {
       spyOn(autocompleteService, 'getPlacePredictions$').and.returnValue(of(mockAutocompleteResults));
-      const action1 = new FetchResults('123 Main Str');
-      const action2 = new FetchResults('123 Main Stre');
-      const action3 = new FetchResults('123 Main Stree');
+      const action1 = fetchAutocompleteResults({ input: '123 Main Str' });
+      const action2 = fetchAutocompleteResults({ input: '123 Main Stre' });
+      const action3 = fetchAutocompleteResults({ input: '123 Main Stree' });
 
-      const completion = new SaveResults(mockAutocompleteResults);
+      const completion = saveAutocompleteResults({ results: mockAutocompleteResults });
 
       actions$ = hot('--abc-', { a: action1, b: action2, c: action3 });
 

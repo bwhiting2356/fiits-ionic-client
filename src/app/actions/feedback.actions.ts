@@ -1,34 +1,7 @@
-import { Action } from '@ngrx/store';
+import { props, createAction } from '@ngrx/store';
 import { Feedback } from '../shared/feedback.model';
 
-export enum FeedbackActionTypes {
-    ChangeComment = '[Feedback] Change Comment',
-    FeedbackError = '[Feedback] Feedback Error',
-    FeedbackSuccess = '[Feedback] Feedback Success',
-    SendFeedback = '[Feedback] Send Feedback'
-}
-
-export class ChangeComment implements Action {
-    readonly type = FeedbackActionTypes.ChangeComment;
-    constructor(public comment: string) {}
-}
-
-export class FeedbackError implements Action {
-    readonly type = FeedbackActionTypes.FeedbackError;
-    constructor(public error: any) {}
-}
-
-export class FeedbackSuccess implements Action {
-    readonly type = FeedbackActionTypes.FeedbackSuccess;
-}
-
-
-export class SendFeedback implements Action {
-    readonly type = FeedbackActionTypes.SendFeedback;
-    constructor(public feedback: Feedback) {}
-}
-
-export type FeedbackActions = ChangeComment
-                    | SendFeedback
-                    | FeedbackError
-                    | FeedbackSuccess;
+export const changeComment = createAction('[Feedback] Change Comment', props<{comment: string}>());
+export const sendFeedback = createAction('[Feedback] Send Feedback', props<{feedback: Feedback}>());
+export const feedbackError = createAction('[Feedback] Error', props<{error: any}>());
+export const feedbackSuccess = createAction('[Feedback] Success');

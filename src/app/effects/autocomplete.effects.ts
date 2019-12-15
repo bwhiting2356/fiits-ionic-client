@@ -1,12 +1,12 @@
 import { Injectable, Optional, Inject, InjectionToken } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { map, catchError, switchMap, debounceTime } from 'rxjs/operators';
 import { AutocompleteService } from '../services/autocomplete.service';
-import { Observable, of, SchedulerLike } from 'rxjs';
+import { of, SchedulerLike } from 'rxjs';
 import { Action } from '@ngrx/store';
 
-import { AutocompleteActionTypes, SaveResults, ResultsError, AutocompleteActions } from '../actions/autocomplete.actions';
 import { async } from 'rxjs/internal/scheduler/async';
+import { fetchAutocompleteResults, autocompleteError, saveAutocompleteResults } from '../actions/autocomplete.actions';
 
 export const AUTOCOMPLETE_DEBOUNCE = new InjectionToken<number>('Test Debounce');
 export const AUTOCOMPLETE_EFFECTS_SCHEDULER = new InjectionToken<SchedulerLike>('AutocompleteEffects Scheduler');
@@ -14,20 +14,18 @@ export const AUTOCOMPLETE_EFFECTS_SCHEDULER = new InjectionToken<SchedulerLike>(
 @Injectable()
 export class AutocompleteEffects {
 
-
-  @Effect()
-  fetchAutocompleteResults$: Observable<Action> = this.actions$.pipe(
-    ofType(AutocompleteActionTypes.FetchResults),
+  fetchAutocompleteResults$ = createEffect(() => this.actions$.pipe(
+    ofType(fetchAutocompleteResults),
     debounceTime(this.debounce || 300, this.scheduler || async),
     map(action => action.input),
     switchMap(input => this.autocompleteService.getPlacePredictions$(input).pipe(
-      map(autocompleteResults => new SaveResults(autocompleteResults)),
-      catchError(error => of(new ResultsError(error)))
+      map(autocompleteResults => saveAutocompleteResults({ results: autocompleteResults })),
+      catchError(error => of(autocompleteError({ error })))
     ))
-  );
+  ));
 
   constructor(
-    private actions$: Actions<AutocompleteActions>,
+    private actions$: Actions<Action>,
     private autocompleteService: AutocompleteService,
 
     @Optional()

@@ -1,27 +1,27 @@
-import { searchReducer, initialSearchState } from './search.reducer';
+import { reducer as searchReducer, initialSearchState } from './search.reducer';
 import {
-  ActiveSearchTrue,
-  ActiveSearchFalse,
-  ChooseOriginLocation,
-  ChooseDestinationLocation,
-  FetchGeocodeOriginResult,
-  FetchGeocodeDestinationResult,
-  SaveOriginLatLng,
-  SaveDestinationLatLng,
-  SetSearchAddressType,
-  ChangeTimeTarget,
-  ChangeTime,
-  TripSearchQuery,
-  SaveTrip,
-  TripSearchQueryError,
-  SaveStations,
-  FetchAllStations,
-  FetchAllStationsError,
-  GeocodeError,
-  BookTripRequest,
-  BookTripSuccess,
-  BookTripFailure,
-  GeolocationChanged,
+  activeSearchTrue,
+  activeSearchFalse,
+  chooseOriginLocation,
+  chooseDestinationLocation,
+  fetchGeocodeOriginResult,
+  fetchGeocodeDestinationResult,
+  saveOriginLatLng,
+  saveDestinationLatLng,
+  setSearchAddressType,
+  changeTimeTarget,
+  changeTime,
+  searchQuery,
+  searchQuerySuccess,
+  searchQueryError,
+  fetchAllStations,
+  fetchAllStationsSuccess,
+  fetchAllStationsError,
+  geocodeError,
+  bookTripRequest,
+  bookTripSuccess,
+  bookTripFailure,
+  geolocationChanged,
 } from '../actions/search.actions';
 import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
 import { mockTrips } from '../../testing/mock-trips';
@@ -42,7 +42,7 @@ describe('Search Reducer', () => {
 
   describe('search actions', () => {
     it('should set the origin location', () => {
-      const action = new ChooseOriginLocation(mockAutocompleteResults[0].structured_formatting.main_text);
+      const action = chooseOriginLocation({ location: mockAutocompleteResults[0].structured_formatting.main_text });
 
       const result = searchReducer(initialSearchState, action);
 
@@ -53,7 +53,7 @@ describe('Search Reducer', () => {
     });
 
     it('should set the destination location', () => {
-      const action = new ChooseDestinationLocation(mockAutocompleteResults[1].structured_formatting.main_text);
+      const action = chooseDestinationLocation({ location: mockAutocompleteResults[1].structured_formatting.main_text });
 
       const result = searchReducer(initialSearchState, action);
 
@@ -64,7 +64,7 @@ describe('Search Reducer', () => {
     });
 
     it('should set the search address type to \'Origin\'', () => {
-      const action = new SetSearchAddressType('Origin');
+      const action = setSearchAddressType({ addressType: 'Origin' });
 
       const result = searchReducer(initialSearchState, action);
 
@@ -75,7 +75,7 @@ describe('Search Reducer', () => {
     });
 
     it('should set the search address type to \'Destination\'', () => {
-      const action = new SetSearchAddressType('Destination');
+      const action = setSearchAddressType({ addressType: 'Destination' });
 
       const result = searchReducer(initialSearchState, action);
 
@@ -86,7 +86,7 @@ describe('Search Reducer', () => {
     });
 
     it('should set geocode fetching to true when origin is fetching', () => {
-      const action = new FetchGeocodeOriginResult('123 Main Street');
+      const action = fetchGeocodeOriginResult({ placeId: '123 Main Street' });
 
       const result = searchReducer(initialSearchState, action);
 
@@ -97,7 +97,7 @@ describe('Search Reducer', () => {
     });
 
     it('should set geocode fetching to true when destination is fetching', () => {
-      const action = new FetchGeocodeDestinationResult('123 Main Street');
+      const action = fetchGeocodeDestinationResult({ placeId: '123 Main Street' });
 
       const result = searchReducer(initialSearchState, action);
 
@@ -113,7 +113,7 @@ describe('Search Reducer', () => {
         geocodeFetching: true,
       };
 
-      const action = new SaveOriginLatLng({ lat: 0, lng: 0 });
+      const action = saveOriginLatLng({ latlng: { lat: 0, lng: 0 }});
 
       const result = searchReducer(initialStateWithGeocodingFetching, action);
 
@@ -124,13 +124,13 @@ describe('Search Reducer', () => {
       });
     });
 
-    it('should save the destination latlng, set geocode fetching to flase', () => {
+    it('should save the destination latlng, set geocode fetching to false', () => {
       const initialStateWithGeocodingFetching = {
         ...initialSearchState,
         geocodeFetching: true,
       };
 
-      const action = new SaveDestinationLatLng({ lat: 0, lng: 0 });
+      const action = saveDestinationLatLng({ latlng: { lat: 0, lng: 0 }});
 
       const result = searchReducer(initialStateWithGeocodingFetching, action);
 
@@ -147,7 +147,7 @@ describe('Search Reducer', () => {
         geocodeFetching: true,
       };
 
-      const action = new GeocodeError('oops');
+      const action = geocodeError({ error: 'oops' });
 
       const result = searchReducer(initialStateWithGeocodingFetching, action);
 
@@ -165,7 +165,7 @@ describe('Search Reducer', () => {
         timeTarget: 'DEPART_AT' as TimeTarget
       };
 
-      const action = new ChangeTimeTarget('ARRIVE_BY');
+      const action = changeTimeTarget({ timeTarget: 'ARRIVE_BY' });
 
       const result = searchReducer(initialStateWithDepartAt, action);
 
@@ -181,7 +181,7 @@ describe('Search Reducer', () => {
         timeTarget: 'ARRIVE_BY' as TimeTarget
       };
 
-      const action = new ChangeTimeTarget('DEPART_AT');
+      const action = changeTimeTarget({ timeTarget: 'DEPART_AT' });
 
       const result = searchReducer(initialStateWithDepartAt, action);
 
@@ -192,19 +192,19 @@ describe('Search Reducer', () => {
     });
 
     it('should change the search time', () => {
-      const date = new Date('2018-12-31T21:00:40.000+0000');
-      const action = new ChangeTime(date);
+      const time = new Date('2018-12-31T21:00:40.000+0000');
+      const action = changeTime({ time });
 
       const result = searchReducer(initialSearchState, action);
 
       expect(result).toEqual({
         ...initialSearchState,
-        time: date
+        time
       });
     });
 
     it('should set searchQueryFetching to true', () => {
-      const seachQuery: SearchQuery = {
+      const query: SearchQuery = {
         originLatLng: { lat: 1, lng: 1 },
         originAddress: '123 Main Street',
         destinationLatLng: { lat: 0, lng: 0 },
@@ -213,7 +213,7 @@ describe('Search Reducer', () => {
         time: new Date(),
       };
 
-      const action = new TripSearchQuery(seachQuery);
+      const action = searchQuery({ query });
 
       const result = searchReducer(initialSearchState, action);
 
@@ -228,7 +228,7 @@ describe('Search Reducer', () => {
         ...initialSearchState,
         searchQueryFetching: true
       };
-      const action = new SaveTrip(mockTrips[0]);
+      const action = searchQuerySuccess({ trip: mockTrips[0] });
 
       const result = searchReducer(initialStateFetchingTrue, action);
 
@@ -245,7 +245,7 @@ describe('Search Reducer', () => {
       ...initialSearchState,
       searchQueryFetching: true
     };
-    const action = new TripSearchQueryError('oops');
+    const action = searchQueryError({ error: 'oops' });
 
     const result = searchReducer(initialStateFetchingTrue, action);
 
@@ -270,7 +270,7 @@ describe('Search Reducer', () => {
       lng: -74.003238
     }];
 
-    const action = new SaveStations(stations);
+    const action = fetchAllStationsSuccess({ stations });
 
     const result = searchReducer(initialStateFetchingTrue, action);
 
@@ -282,7 +282,7 @@ describe('Search Reducer', () => {
   });
 
   it('should set stations fetching to true', () => {
-    const action = new FetchAllStations();
+    const action = fetchAllStations();
 
     const result = searchReducer(initialSearchState, action);
 
@@ -293,7 +293,7 @@ describe('Search Reducer', () => {
   });
 
   it('should save the error and set stations fetching to false', () => {
-    const action = new FetchAllStationsError('oops');
+    const action = fetchAllStationsError({ error: 'oops' });
 
     const result = searchReducer(initialSearchState, action);
 
@@ -305,7 +305,7 @@ describe('Search Reducer', () => {
   });
 
   it('should set book trip fetching to true', () => {
-    const action = new BookTripRequest();
+    const action = bookTripRequest();
 
     const result = searchReducer(initialSearchState, action);
 
@@ -321,7 +321,7 @@ describe('Search Reducer', () => {
       trip: mockTrips[0],
       bookTripFetching: true
     };
-    const action = new BookTripSuccess();
+    const action = bookTripSuccess();
 
     const result = searchReducer(initialSearchStateWithTrip, action);
 
@@ -337,7 +337,7 @@ describe('Search Reducer', () => {
       bookTripFetching: true
     };
 
-    const action = new BookTripFailure('oops');
+    const action = bookTripFailure({ error: 'oops' });
 
     const result = searchReducer(initialSearchStateWithTrip, action);
 
@@ -351,7 +351,7 @@ describe('Search Reducer', () => {
   });
 
   it('should add the position to state', () => {
-    const action = new GeolocationChanged({ lat: 0, lng: 0});
+    const action = geolocationChanged({ position: { lat: 0, lng: 0 }});
 
     const result = searchReducer(initialSearchState, action);
 
@@ -362,7 +362,7 @@ describe('Search Reducer', () => {
   });
 
   it('shoudls set active search to true', () => {
-    const action = new ActiveSearchTrue();
+    const action = activeSearchTrue();
 
     const result = searchReducer(initialSearchState, action);
 
@@ -372,13 +372,13 @@ describe('Search Reducer', () => {
     });
   });
 
-  it('shoudls set active search to false', () => {
+  it('should set active search to false', () => {
     const initialStateWithSearchTrue = {
       ...initialSearchState,
       activeSearch: true
     };
 
-    const action = new ActiveSearchFalse();
+    const action = activeSearchFalse();
 
     const result = searchReducer(initialStateWithSearchTrue, action);
 

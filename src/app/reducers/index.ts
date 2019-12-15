@@ -4,11 +4,11 @@ import {
 } from '@ngrx/store';
 import { environment } from '../../environments/environment';
 
-import { SearchState, searchReducer, initialSearchState } from './search.reducer';
-import { FeedbackState, feedbackReducer, initialFeedbackState } from './feedback.reducer';
-import { UserState, initialUserState, userReducer } from './user.reducer';
+import { SearchState, initialSearchState, reducer as searchReducer } from './search.reducer';
+import { FeedbackState, initialFeedbackState, reducer as feedbackReducer } from './feedback.reducer';
+import { UserState, initialUserState, reducer as userReducer } from './user.reducer';
 
-import { AutocompleteState, initialAutocompleteState, autocompleteReducer } from './autocomplete.reducer';
+import { AutocompleteState, initialAutocompleteState, reducer as autocompleteReducer } from './autocomplete.reducer';
 
 export interface State {
   search: SearchState;

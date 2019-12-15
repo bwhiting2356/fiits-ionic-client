@@ -1,8 +1,25 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { UserActions, UserActionTypes } from '../actions/user.actions';
+import { createSelector, createFeatureSelector, createReducer, Action, on } from '@ngrx/store';
+
 import { State } from '.';
 import { TripDetails } from '../shared/trip-details.model';
 import { AccountInfo } from '../shared/account-info.model';
+import {
+    logIn,
+    signUp,
+    logInSuccess,
+    signUpSuccess,
+    logInError,
+    signUpError,
+    logOut,
+    fetchTripsSuccess,
+    fetchTrips,
+    fetchTripsError,
+    changeEmail,
+    changePassword,
+    fetchAccountInfo,
+    fetchAccountInfoSuccess,
+    fetchAccountInfoError
+} from '../actions/user.actions';
 
 export interface UserState {
     email: string;
@@ -83,85 +100,22 @@ export const selectAccountInfo = createSelector(
     selectUser,
     state => state.accountInfo);
 
-export function userReducer(state = initialUserState, action: UserActions): UserState {
-    switch (action.type) {
-        case UserActionTypes.LogIn:
-        case UserActionTypes.SignUp:
-            return {
-                ...state,
-                authFetching: true
-            };
-        case UserActionTypes.SignUpSuccess:
-        case UserActionTypes.LogInSuccess:
-            return {
-                ...state,
-                email: '',
-                password: '',
-                uid: action.uid,
-                authFetching: false
-            };
-        case UserActionTypes.SignUpError:
-        case UserActionTypes.LogInError:
-            return {
-                ...state,
-                error: action.error,
-                authFetching: false
-            };
-        case UserActionTypes.LogOut:
-            return {
-                ...initialUserState
-            };
+const userReducer = createReducer(
+    initialUserState,
+    on(logIn, signUp, state => ({ ...state, authFetching: true })),
+    on(logInSuccess, signUpSuccess, (state, { uid }) => ({ ...state, uid, authFetching: false, email: '', password: '' })),
+    on(logInError, signUpError, (state, { error }) => ({ ...state, error, authFetching: false })),
+    on(logOut, () => ({ ...initialUserState })),
+    on(fetchTrips, state => ({ ...state, tripsFetching: true })),
+    on(fetchTripsSuccess, (state , { trips }) => ({ ...state, trips, tripsFetching: false })),
+    on(fetchTripsError, (state, { error }) => ({ ...state, error, tripsFetching: false })),
+    on(changeEmail, (state, { email }) => ({ ...state, email })),
+    on(changePassword, (state, { password }) => ({ ...state, password })),
+    on(fetchAccountInfo, state => ({ ...state, accountInfoFetching: true })),
+    on(fetchAccountInfoSuccess, (state, { accountInfo }) => ({ ...state, accountInfo, accountInfoFetching: false })),
+    on(fetchAccountInfoError, (state, { error }) => ({ ...state, error, accountInfoFetching: false }) ),
+);
 
-        case UserActionTypes.FetchTrips:
-            return {
-                ...state,
-                tripsFetching: true
-            };
-
-        case UserActionTypes.FetchTripsSuccess:
-            return {
-                ...state,
-                tripsFetching: false,
-                trips: action.trips
-            };
-
-        case UserActionTypes.FetchTripsError:
-            return {
-                ...state,
-                tripsFetching: false,
-                error: action.error
-            };
-
-        case UserActionTypes.ChangeEmail:
-            return {
-                ...state,
-                email: action.newValue
-            };
-
-        case UserActionTypes.ChangePassword:
-            return {
-                ...state,
-                password: action.newValue
-            };
-
-        case UserActionTypes.FetchAccountInfo:
-            return {
-                ...state,
-                accountInfoFetching: true
-            };
-        case UserActionTypes.FetchAccountInfoSuccess:
-            return {
-                ...state,
-                accountInfoFetching: false,
-                accountInfo: action.accountInfo
-            };
-        case UserActionTypes.FetchAccountInfoError:
-            return {
-                ...state,
-                accountInfoFetching: false,
-                error: action.error
-            };
-        default:
-            return state;
-    }
+export function reducer(state: UserState | undefined, action: Action) {
+    return userReducer(state, action);
 }

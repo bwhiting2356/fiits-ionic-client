@@ -3,15 +3,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { By } from '@angular/platform-browser';
-
-import { of } from 'rxjs';
 import { cold } from 'jasmine-marbles';
-
 
 import { FeedbackPage } from './feedback.page';
 import { initialState } from '../reducers';
 import { State } from '../reducers';
-import { SendFeedback, ChangeComment } from '../actions/feedback.actions';
+import { sendFeedback, changeComment } from '../actions/feedback.actions';
 import { initialFeedbackState } from '../reducers/feedback.reducer';
 
 describe('FeedbackPage', () => {
@@ -106,20 +103,8 @@ describe('FeedbackPage', () => {
     spyOn(store, 'dispatch');
     fixture.detectChanges();
     component.sendFeedback();
-    expect(store.dispatch).toHaveBeenCalledWith(new SendFeedback({ comment: 'cool app' }));
+    expect(store.dispatch).toHaveBeenCalledWith(sendFeedback({ feedback: { comment: 'cool app' }}));
   });
-
-  // it('should disable the textarea if feedback is currently posting', () => {
-  //   component.feedbackPosting = of(true);
-  //   fixture.detectChanges();
-  //   expect(fixture.debugElement.query(By.css('ion-textarea')).nativeElement.disabled).toBeTruthy();
-  // });
-
-  // it('should not disable the textarea if feedback is currently not posting', () => {
-  //   component.feedbackPosting = of(false);
-  //   fixture.detectChanges();
-  //   expect(fixture.debugElement.query(By.css('ion-textarea')).nativeElement.disabled).toBeFalsy();
-  // });
 
   it('should call changeComment when the user changes their comment in the textarea', () => {
     spyOn(component, 'changeComment');
@@ -131,6 +116,6 @@ describe('FeedbackPage', () => {
   it('should dispatch ChangeComment when changeComment is called', () => {
     spyOn(store, 'dispatch');
     component.changeComment('cool app');
-    expect(store.dispatch).toHaveBeenCalledWith(new ChangeComment('cool app'));
+    expect(store.dispatch).toHaveBeenCalledWith(changeComment({ comment: 'cool app' }));
   });
 });

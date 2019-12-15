@@ -1,22 +1,30 @@
 import { Injectable, Optional, Inject, InjectionToken } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, Effect, ofType, createEffect } from '@ngrx/effects';
 import {
-  SearchActionTypes,
-  SaveOriginLatLng,
-  SaveDestinationLatLng,
-  SaveTrip,
-  SearchActions,
-  TripSearchQueryError,
-  SaveStations,
-  FetchAllStationsError,
-  GeocodeError,
-  BookTripSuccess,
-  BookTripFailure,
-  GeolocationChanged,
-  GeolocationError,
-  ChooseOriginLocation,
-  ChooseDestinationLocation,
-  ChangeTime
+  saveOriginLatLng,
+  saveDestinationLatLng,
+  searchQuerySuccess,
+  searchQueryError,
+  fetchAllStationsSuccess,
+  fetchAllStationsError,
+  geocodeError,
+  bookTripSuccess,
+  bookTripFailure,
+  geolocationChanged,
+  geolocationError,
+  chooseOriginLocation,
+  chooseDestinationLocation,
+  changeTime,
+  fetchGeocodeOriginResult,
+  fetchGeocodeDestinationResult,
+  searchQuery,
+  fetchAllStations,
+  bookTripRequest,
+  fetchGeolocation,
+  chooseCurrentLocationAsOrigin,
+  chooseCurrentLocationAsDestination,
+  activeSearchTrue,
+  activeSearchFalse
 } from '../actions/search.actions';
 import { map, catchError, tap, switchMap, withLatestFrom, takeUntil } from 'rxjs/operators';
 import { Observable, of, interval, SchedulerLike } from 'rxjs';
@@ -29,7 +37,7 @@ import { GeolocationService } from '../services/geolocation.service';
 import { State } from '../reducers';
 import { selectSearchTime, selectTrip } from '../reducers/search.reducer';
 import { async } from 'rxjs/internal/scheduler/async';
-import { FetchTrips } from '../actions/user.actions';
+import { fetchTrips } from '../actions/user.actions';
 import { selectUID } from '../reducers/user.reducer';
 import { DateUtil } from '../shared/util/util';
 
@@ -41,108 +49,100 @@ export const SEARCH_EFFECTS_SCHEDULER = new InjectionToken<SchedulerLike>('Searc
 @Injectable()
 export class SearchEffects {
 
-  @Effect()
-  fetchGeocodeOriginResult$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.FetchGeocodeOriginResult),
+  fetchGeocodeOriginResult$ = createEffect(() => this.actions$.pipe(
+    ofType(fetchGeocodeOriginResult),
     map(action => action.placeId),
     switchMap(placeId => this.geocodeService.getLatLngFromPlaceId$(placeId).pipe(
-      map(geocodeResult => new SaveOriginLatLng(geocodeResult)),
-      catchError(error => of(new GeocodeError(error)))
+      map(latlng => saveOriginLatLng({ latlng })),
+      catchError(error => of(geocodeError({ error })))
     ))
-  );
+  ));
 
-  @Effect()
-  fetchGeocodeDestinationResult$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.FetchGeocodeDestinationResult),
+  fetchGeocodeDestinationResult$ = createEffect(() => this.actions$.pipe(
+    ofType(fetchGeocodeDestinationResult),
     map(action => action.placeId),
     switchMap(placeId => this.geocodeService.getLatLngFromPlaceId$(placeId).pipe(
-      map(geocodeResult => new SaveDestinationLatLng(geocodeResult)),
-      catchError(error => of(new GeocodeError(error)))
+      map(latlng => saveDestinationLatLng({ latlng })),
+      catchError(error => of(geocodeError({ error })))
     ))
-  );
+  ));
 
-  @Effect()
-  tripSearchQuery$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.TripSearchQuery),
-    map(action => action.searchQuery),
-    switchMap(searchQuery => this.tripService.findBestTrip(searchQuery).pipe(
+  tripSearchQuery$ = createEffect(() => this.actions$.pipe(
+    ofType(searchQuery),
+    map(action => action.query),
+    switchMap(query => this.tripService.findBestTrip(query).pipe(
       tap(() => this.navCtrl.navigateForward('/trip-details')),
-      map(trip => new SaveTrip(trip)),
-      catchError(error => of(new TripSearchQueryError(error)))
+      map(trip => searchQuerySuccess({ trip })),
+      catchError(error => of(searchQueryError({ error })))
     ))
-  );
+  ));
 
-  @Effect()
-  fetchAllStation$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.FetchAllStations),
+  fetchAllStation$ = createEffect(() => this.actions$.pipe(
+    ofType(fetchAllStations),
     switchMap(() => this.stationService.fetchAllStation$().pipe(
-      map(stations => new SaveStations(stations)),
-      catchError(error => of(new FetchAllStationsError(error)))
+      map(stations => fetchAllStationsSuccess({ stations })),
+      catchError(error => of(fetchAllStationsError({ error })))
     ))
-  );
+  ));
 
-  @Effect() // TODO: should this be in user effects?
-  bookTrip$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.BookTripRequest),
+  // TODO: should this be in user effects?
+  bookTrip$ = createEffect(() => this.actions$.pipe(
+    ofType(bookTripRequest),
     withLatestFrom(this.store.select(selectUID), this.store.select(selectTrip)),
     switchMap(([_, uid, trip]) => this.tripService.bookTrip(trip, uid).pipe(
       tap(() => this.navCtrl.navigateBack('/trips/upcoming')),
-      switchMap(() => [new BookTripSuccess(), new FetchTrips()]),
-      catchError(error => of(new BookTripFailure(error)))
+      switchMap(() => [bookTripSuccess(), fetchTrips()]),
+      catchError(error => of(bookTripFailure({ error })))
     ))
-  );
+  ));
 
-  @Effect()
-  geolocation$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.FetchGeolocation),
+  geolocation$ = createEffect(() => this.actions$.pipe(
+    ofType(fetchGeolocation),
     switchMap(() => this.geolocationService.getCurrentPosition$().pipe(
-      map(position => new GeolocationChanged(position)),
-      catchError(error => of(new GeolocationError(error)))
+      map(position => geolocationChanged({ position })),
+      catchError(error => of(geolocationError({ error })))
     ))
-  );
+  ));
 
-  @Effect()
-  originReverseGeocode$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.ChooseCurrentLocationAsOrigin),
+  originReverseGeocode$ = createEffect(() => this.actions$.pipe(
+    ofType(chooseCurrentLocationAsOrigin),
     switchMap(action => this.geocodeService.getAddressFromLatLng$(action.location).pipe(
-      map(address => new ChooseOriginLocation(address)),
-      catchError(error => of(new GeocodeError(error)))
+      map(location => chooseOriginLocation({ location })),
+      catchError(error => of(geocodeError({ error })))
     ))
-  );
+  ));
 
-  @Effect()
-  destinationReverseGeocode$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.ChooseCurrentLocationAsDestination),
+  destinationReverseGeocode$ = createEffect(() => this.actions$.pipe(
+    ofType(chooseCurrentLocationAsDestination),
     switchMap(action => this.geocodeService.getAddressFromLatLng$(action.location).pipe(
-      map(address => new ChooseDestinationLocation(address)),
-      catchError(error => of(new GeocodeError(error)))
+      map(location => chooseDestinationLocation({ location })),
+      catchError(error => of(geocodeError({ error })))
     ))
-  );
+  ));
 
-  @Effect()
-  setTimeToPresent$: Observable<Action> = this.actions$.pipe(
-    ofType(SearchActionTypes.ActiveSearchTrue),
+  setTimeToPresent$ = createEffect(() => this.actions$.pipe(
+    ofType(activeSearchTrue),
     switchMap(() => interval(this.timerInterval || ONE_MINUTE, this.scheduler || async).pipe(
       takeUntil(
-        this.actions$.pipe(ofType(SearchActionTypes.ActiveSearchFalse))
+        this.actions$.pipe(ofType(activeSearchFalse))
       ),
       withLatestFrom(this.store.select(selectSearchTime)),
       map(([_, time]) => this.checkTimeIsNotPast(time)))
     )
-  );
+  ));
 
   checkTimeIsNotPast(time: Date) {
     const currentTime = DateUtil.getCurrentTime();
     if (time < currentTime) {
-      return new ChangeTime(currentTime);
+      return changeTime({ time: currentTime });
     } else {
-      return new ChangeTime(time);
+      return changeTime({ time });
     }
   }
 
   constructor(
     private store: Store<State>,
-    private actions$: Actions<SearchActions>,
+    private actions$: Actions<Action>,
     private geocodeService: GeocodeService,
     private geolocationService: GeolocationService,
     private tripService: TripService,

@@ -10,10 +10,10 @@ import { GoogleMapsUtil } from 'src/app/shared/maps/google-maps-util';
 import { State } from '../../reducers';
 import { initialState } from '../../reducers';
 import {
-  ChooseOriginLocation,
-  ChooseDestinationLocation,
-  SaveOriginLatLng,
-  SaveDestinationLatLng
+  chooseOriginLocation,
+  chooseDestinationLocation,
+  saveOriginLatLng,
+  saveDestinationLatLng
 } from 'src/app/actions/search.actions';
 
 import { GoogleMapComponent } from './google-map.component';
@@ -123,8 +123,6 @@ describe('GoogleMapComponent', () => {
     await component.initMap();
     expect(component.fitBounds).not.toHaveBeenCalled();
   });
-
-
 
   it('should call addMarker with the originLatLng when initMap is called', async () => {
     spyOn(component, 'addMarker');
@@ -396,8 +394,8 @@ describe('GoogleMapComponent', () => {
 
     (window as any).handleInfoWindowButtonClick('to', 0);
 
-    expect(store.dispatch).toHaveBeenCalledWith(new ChooseDestinationLocation(mockStations[0].address));
-    expect(store.dispatch).toHaveBeenCalledWith(new SaveDestinationLatLng({ lat: mockStations[0].lat, lng: mockStations[0].lng }));
+    expect(store.dispatch).toHaveBeenCalledWith(chooseDestinationLocation({ location: mockStations[0].address }));
+    expect(store.dispatch).toHaveBeenCalledWith(saveDestinationLatLng({ latlng: { lat: mockStations[0].lat, lng: mockStations[0].lng }}));
     expect(openWindow.close).toHaveBeenCalled();
   });
 
@@ -411,8 +409,8 @@ describe('GoogleMapComponent', () => {
 
     (window as any).handleInfoWindowButtonClick('from', 0);
 
-    expect(store.dispatch).toHaveBeenCalledWith(new ChooseOriginLocation(mockStations[0].address));
-    expect(store.dispatch).toHaveBeenCalledWith(new SaveOriginLatLng({ lat: mockStations[0].lat, lng: mockStations[0].lng }));
+    expect(store.dispatch).toHaveBeenCalledWith(chooseOriginLocation({ location: mockStations[0].address }));
+    expect(store.dispatch).toHaveBeenCalledWith(saveOriginLatLng({ latlng: { lat: mockStations[0].lat, lng: mockStations[0].lng }}));
     expect(openWindow.close).toHaveBeenCalled();
   });
 

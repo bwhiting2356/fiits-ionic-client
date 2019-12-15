@@ -1,7 +1,7 @@
+import { MapsAPILoader } from '@agm/core';
 import { TestBed } from '@angular/core/testing';
 
 import { GeocodeService } from './geocode.service';
-import { MapsAPILoader } from '@agm/core';
 import { mockGeocodingResults, mockReverseGeocodingResults } from '../../testing/mock-geocoding-results';
 
 describe('GeocodeService', () => {

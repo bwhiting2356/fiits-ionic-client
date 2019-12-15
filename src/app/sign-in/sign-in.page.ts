@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
-import { LogIn, SignUp, ChangeEmail, ChangePassword } from '../actions/user.actions';
+import { logIn, signUp, changeEmail, changePassword } from '../actions/user.actions';
 import { Observable, combineLatest } from 'rxjs';
 import { selectEmail, selectPassword, selectAuthFetching } from '../reducers/user.reducer';
 import { map, take } from 'rxjs/operators';
@@ -28,20 +28,19 @@ export class SignInPage {
     );
   }
 
-  changeEmail(newValue: string) {
-    this.store.dispatch(new ChangeEmail(newValue));
+  changeEmail(email: string) {
+    this.store.dispatch(changeEmail({ email }));
   }
 
-  changePassword(newValue: string) {
-    this.store.dispatch(new ChangePassword(newValue));
+  changePassword(password: string) {
+    this.store.dispatch(changePassword({ password }));
   }
 
   logIn() {
-    this.store.dispatch(new LogIn());
+    this.store.dispatch(logIn());
   }
 
   signUp() {
-    this.store.dispatch(new SignUp());
+    this.store.dispatch(signUp());
   }
-
 }

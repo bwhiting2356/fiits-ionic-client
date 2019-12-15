@@ -1,13 +1,12 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
-import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { TripDetails } from '../shared/trip-details.model';
 import { take } from 'rxjs/operators';
-import { BookTripRequest } from '../actions/search.actions';
-import { LogIn } from '../actions/user.actions';
-import { selectTrip, selectBookTripFetching } from '../reducers/search.reducer';
-import { selectUID, selectLoggedIn } from '../reducers/user.reducer';
+
+import { selectTrip } from '../reducers/search.reducer';
+import { selectLoggedIn } from '../reducers/user.reducer';
 import { NavController } from '@ionic/angular';
 
 @Component({
