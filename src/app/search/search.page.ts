@@ -101,6 +101,7 @@ export class SearchPage implements OnInit {
     this.store.dispatch(changeTime({ time: new Date(e.target.value) }));
   }
 
+  // TODO: put this logic in the ngrx effect
   findBikeRentals() {
     this.store.pipe(
       take(1),

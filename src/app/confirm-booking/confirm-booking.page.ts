@@ -43,7 +43,6 @@ export class ConfirmBookingPage {
 
   backToTripDetails() {
     this.navCtrl.navigateBack('/trip-details');
-
   }
 
 }
