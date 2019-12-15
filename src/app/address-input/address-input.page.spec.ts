@@ -14,18 +14,18 @@ import { AutocompleteService } from '../services/autocomplete.service';
 import { State } from '../reducers';
 import { initialState } from '../reducers';
 import {
-  ChooseOriginLocation,
-  ChooseDestinationLocation,
-  FetchGeocodeOriginResult,
-  FetchGeocodeDestinationResult,
-  ChooseCurrentLocationAsDestination,
-  ChooseCurrentLocationAsOrigin,
-  SaveOriginLatLng,
-  SaveDestinationLatLng,
+  chooseOriginLocation,
+  chooseDestinationLocation,
+  fetchGeocodeOriginResult,
+  fetchGeocodeDestinationResult,
+  chooseCurrentLocationAsDestination,
+  chooseCurrentLocationAsOrigin,
+  saveOriginLatLng,
+  saveDestinationLatLng,
 } from '../actions/search.actions';
 import { initialSearchState } from '../reducers/search.reducer';
 import { DEFAULT_LOCATION } from '../shared/constants';
-import { FetchResults, ClearResults } from '../actions/autocomplete.actions';
+import { clearAutocompleteResults, fetchAutocompleteResults } from '../actions/autocomplete.actions';
 import { initialAutocompleteState } from '../reducers/autocomplete.reducer';
 
 describe('AddressInputPage', () => {
@@ -72,7 +72,7 @@ describe('AddressInputPage', () => {
     spyOn(store, 'dispatch');
     await component.inputChange({ target: { value: '123 Main Street' }});
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new FetchResults('123 Main Street'));
+      .toHaveBeenCalledWith(fetchAutocompleteResults({ input: '123 Main Street' }));
   });
 
   it('should not show the no-results text if there are results', () => {
@@ -326,11 +326,11 @@ describe('AddressInputPage', () => {
 
     component.chooseLocation(mockAutocompleteResults[0]);
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new ChooseOriginLocation(mockAutocompleteResults[0].structured_formatting.main_text));
+      .toHaveBeenCalledWith(chooseOriginLocation({ location: mockAutocompleteResults[0].structured_formatting.main_text }));
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new FetchGeocodeOriginResult(mockAutocompleteResults[0].place_id));
+      .toHaveBeenCalledWith(fetchGeocodeOriginResult({ placeId: mockAutocompleteResults[0].place_id }));
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new ClearResults());
+      .toHaveBeenCalledWith(clearAutocompleteResults());
 
     expect(component.navCtrl.back).toHaveBeenCalled();
   });
@@ -362,11 +362,11 @@ describe('AddressInputPage', () => {
     component.chooseLocation(mockAutocompleteResults[1]);
 
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new ChooseDestinationLocation(mockAutocompleteResults[1].structured_formatting.main_text));
+      .toHaveBeenCalledWith(chooseDestinationLocation({ location: mockAutocompleteResults[1].structured_formatting.main_text }));
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new FetchGeocodeDestinationResult(mockAutocompleteResults[1].place_id));
+      .toHaveBeenCalledWith(fetchGeocodeDestinationResult({ placeId: mockAutocompleteResults[1].place_id }));
     expect(store.dispatch)
-      .toHaveBeenCalledWith(new ClearResults());
+      .toHaveBeenCalledWith(clearAutocompleteResults());
     expect(component.navCtrl.back).toHaveBeenCalled();
   });
 
@@ -408,8 +408,8 @@ describe('AddressInputPage', () => {
     });
 
     component.chooseCurrentLocation();
-    expect(store.dispatch).toHaveBeenCalledWith(new ChooseCurrentLocationAsOrigin({ lat: 0, lng: 0 }));
-    expect(store.dispatch).toHaveBeenCalledWith(new SaveOriginLatLng({ lat: 0, lng: 0}));
+    expect(store.dispatch).toHaveBeenCalledWith(chooseCurrentLocationAsOrigin({ location: { lat: 0, lng: 0 }}));
+    expect(store.dispatch).toHaveBeenCalledWith(saveOriginLatLng({ latlng: { lat: 0, lng: 0 }}));
     expect(component.navCtrl.back).toHaveBeenCalled();
   });
 
@@ -426,8 +426,8 @@ describe('AddressInputPage', () => {
     });
 
     component.chooseCurrentLocation();
-    expect(store.dispatch).toHaveBeenCalledWith(new ChooseCurrentLocationAsDestination({ lat: 0, lng: 0 }));
-    expect(store.dispatch).toHaveBeenCalledWith(new SaveDestinationLatLng({ lat: 0, lng: 0}));
+    expect(store.dispatch).toHaveBeenCalledWith(chooseCurrentLocationAsDestination({ location: {lat: 0, lng: 0 }}));
+    expect(store.dispatch).toHaveBeenCalledWith(saveDestinationLatLng({ latlng: {lat: 0, lng: 0 }}));
     expect(component.navCtrl.back).toHaveBeenCalled();
   });
 

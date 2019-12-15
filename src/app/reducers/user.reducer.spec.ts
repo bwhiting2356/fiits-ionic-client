@@ -1,22 +1,21 @@
-import { initialUserState, userReducer } from './user.reducer';
+import { initialUserState, reducer as userReducer } from './user.reducer';
 import {
-    LogIn,
-    LogInSuccess,
-    LogInError,
-    LogOut,
-    FetchTrips,
-    FetchTripsSuccess,
-    FetchTripsError,
-    ChangeEmail,
-    ChangePassword,
-    SignUpSuccess,
-    SignUp,
-    FetchAccountInfo,
-    FetchAccountInfoSuccess,
-    FetchAccountInfoError
+    logIn,
+    logInSuccess,
+    logInError,
+    logOut,
+    fetchTrips,
+    fetchTripsSuccess,
+    fetchTripsError,
+    changeEmail,
+    changePassword,
+    signUpSuccess,
+    signUp,
+    fetchAccountInfo,
+    fetchAccountInfoSuccess,
+    fetchAccountInfoError
 } from '../actions/user.actions';
 import { mockTrips } from 'src/testing/mock-trips';
-import { initialState } from '.';
 import { mockAccountInfo } from 'src/testing/mock-account-info';
 
 describe('User Reducer', () => {
@@ -39,7 +38,7 @@ describe('User Reducer', () => {
                 authFetching: true
             };
 
-            const action = new LogInSuccess('mock-uid');
+            const action = logInSuccess({ uid: 'mock-uid' });
 
             const result = userReducer(initialUserStateWithFetching, action);
 
@@ -60,7 +59,7 @@ describe('User Reducer', () => {
                 authFetching: true
             };
 
-            const action = new SignUpSuccess('mock-uid');
+            const action = signUpSuccess({ uid: 'mock-uid' });
 
             const result = userReducer(initialUserStateWithFetching, action);
 
@@ -74,7 +73,7 @@ describe('User Reducer', () => {
         });
 
         it('login should set fetching to true', () => {
-            const action = new LogIn();
+            const action = logIn();
 
             const result = userReducer(initialUserState, action);
 
@@ -85,7 +84,7 @@ describe('User Reducer', () => {
         });
 
         it('signup should set fetching to true', () => {
-            const action = new SignUp();
+            const action = signUp();
 
             const result = userReducer(initialUserState, action);
 
@@ -96,7 +95,7 @@ describe('User Reducer', () => {
         });
 
         it('login error should save the error to state, set fetching to false', () => {
-            const action = new LogInError('oops');
+            const action = logInError({ error: 'oops' });
 
             const result = userReducer(initialUserState, action);
 
@@ -108,7 +107,7 @@ describe('User Reducer', () => {
         });
 
         it('sigup error should save the error to state, set fetching to false', () => {
-            const action = new LogInError('oops');
+            const action = logInError({ error: 'oops' });
 
             const result = userReducer(initialUserState, action);
 
@@ -125,7 +124,7 @@ describe('User Reducer', () => {
                 uid: 'mock-uid'
             };
 
-            const action = new LogOut();
+            const action = logOut();
 
             const result = userReducer(initialUserStateWithUid, action);
 
@@ -133,7 +132,7 @@ describe('User Reducer', () => {
         });
 
         it('should set trips fetching to true', () => {
-            const action = new FetchTrips();
+            const action = fetchTrips();
 
             const result = userReducer(initialUserState, action);
 
@@ -148,7 +147,7 @@ describe('User Reducer', () => {
                 ...initialUserState,
                 tripsFetching: true
             };
-            const action = new FetchTripsSuccess(mockTrips);
+            const action = fetchTripsSuccess({ trips: mockTrips });
 
             const result = userReducer(initialUserStateWithFetching, action);
 
@@ -166,7 +165,7 @@ describe('User Reducer', () => {
             };
             const error = new Error('oops');
 
-            const action = new FetchTripsError(error);
+            const action = fetchTripsError({ error });
 
             const result = userReducer(initialUserStateWithFetching, action);
 
@@ -175,11 +174,10 @@ describe('User Reducer', () => {
                 tripsFetching: false,
                 error
             });
-
         });
 
         it('should change the email to the new value', () => {
-            const action = new ChangeEmail('test@test.com');
+            const action = changeEmail({ email: 'test@test.com' });
 
             const result = userReducer(initialUserState, action);
 
@@ -190,7 +188,7 @@ describe('User Reducer', () => {
         });
 
         it('should change the password to the new value', () => {
-            const action = new ChangePassword('secret-password');
+            const action = changePassword({ password: 'secret-password' });
 
             const result = userReducer(initialUserState, action);
 
@@ -201,7 +199,7 @@ describe('User Reducer', () => {
         });
 
         it('should set fetching account info to true', () => {
-            const action = new FetchAccountInfo();
+            const action = fetchAccountInfo();
 
             const result = userReducer(initialUserState, action);
 
@@ -216,7 +214,7 @@ describe('User Reducer', () => {
                 ...initialUserState,
                 accountInfoFetching: true
             };
-            const action = new FetchAccountInfoSuccess(mockAccountInfo);
+            const action = fetchAccountInfoSuccess({ accountInfo: mockAccountInfo });
 
             const result = userReducer(initialStateWithFetching, action);
 
@@ -233,7 +231,7 @@ describe('User Reducer', () => {
                 accountInfoFetching: true
             };
 
-            const action = new FetchAccountInfoError('oops');
+            const action = fetchAccountInfoError({ error: 'oops' });
 
             const result = userReducer(initialStateWithFetching, action);
 

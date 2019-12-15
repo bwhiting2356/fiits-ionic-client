@@ -5,7 +5,7 @@ import { SignInPage } from './sign-in.page';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { initialState, State } from '../reducers';
 import { Store } from '@ngrx/store';
-import { ChangePassword, ChangeEmail, LogIn, SignUp } from '../actions/user.actions';
+import { changePassword, changeEmail, logIn, signUp } from '../actions/user.actions';
 import { initialUserState } from '../reducers/user.reducer';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -42,25 +42,25 @@ describe('SignInPage', () => {
   it('should dispatch an action to change the password value', () => {
     spyOn(store, 'dispatch');
     component.changePassword('new-password');
-    expect(store.dispatch).toHaveBeenCalledWith(new ChangePassword('new-password'));
+    expect(store.dispatch).toHaveBeenCalledWith(changePassword({ password: 'new-password' }));
   });
 
   it('should dispatch an action to change the email value', () => {
     spyOn(store, 'dispatch');
     component.changeEmail('mock@email.com');
-    expect(store.dispatch).toHaveBeenCalledWith(new ChangeEmail('mock@email.com'));
+    expect(store.dispatch).toHaveBeenCalledWith(changeEmail({ email: 'mock@email.com' }));
   });
 
   it('should dispatch an action to sign up', () => {
     spyOn(store, 'dispatch');
     component.signUp();
-    expect(store.dispatch).toHaveBeenCalledWith(new SignUp());
+    expect(store.dispatch).toHaveBeenCalledWith(signUp());
   });
 
   it('should dispatch an action to log in', () => {
     spyOn(store, 'dispatch');
     component.logIn();
-    expect(store.dispatch).toHaveBeenCalledWith(new LogIn());
+    expect(store.dispatch).toHaveBeenCalledWith(logIn());
   });
 
   it('should render spinner auth are fetching', () => {

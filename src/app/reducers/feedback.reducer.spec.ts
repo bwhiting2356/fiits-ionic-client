@@ -1,5 +1,5 @@
-import { initialFeedbackState, feedbackReducer } from './feedback.reducer';
-import { SendFeedback, FeedbackSuccess, FeedbackError, ChangeComment } from '../actions/feedback.actions';
+import { initialFeedbackState, reducer as feedbackReducer } from './feedback.reducer';
+import { sendFeedback, feedbackSuccess, feedbackError, changeComment } from '../actions/feedback.actions';
 
 describe('Feedback Reducer', () => {
     describe('an unknown action', () => {
@@ -14,7 +14,7 @@ describe('Feedback Reducer', () => {
 
     describe('feedback actions', () => {
         it('should set feedback posting to true', () => {
-            const action = new SendFeedback({ comment: 'cool app' });
+            const action = sendFeedback({ feedback: { comment: 'cool app' }});
 
             const result = feedbackReducer(initialFeedbackState, action);
 
@@ -31,7 +31,7 @@ describe('Feedback Reducer', () => {
                 feedbackPosting: true,
             };
 
-            const action = new FeedbackSuccess();
+            const action = feedbackSuccess();
 
             const result = feedbackReducer(initialStateWithPostingTrue, action);
 
@@ -48,7 +48,7 @@ describe('Feedback Reducer', () => {
                 feedbackPosting: true,
             };
 
-            const action = new FeedbackError('oops');
+            const action = feedbackError({ error: 'oops'});
 
             const result = feedbackReducer(initialStateWithPostingTrue, action);
 
@@ -60,7 +60,7 @@ describe('Feedback Reducer', () => {
         });
 
         it('should change the comment', () => {
-            const action = new ChangeComment('cool app');
+            const action = changeComment({ comment: 'cool app' });
 
             const result = feedbackReducer(initialFeedbackState, action);
 

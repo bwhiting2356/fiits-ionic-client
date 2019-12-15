@@ -11,7 +11,7 @@ import { initialState, State } from './reducers';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { Store } from '@ngrx/store';
 import { initialUserState } from './reducers/user.reducer';
-import { LogOut } from './actions/user.actions';
+import { logOut } from './actions/user.actions';
 
 describe('AppComponent: user logged in', () => {
   let component: AppComponent;
@@ -105,6 +105,6 @@ describe('AppComponent: user logged in', () => {
 
     component.handleClick('Log Out');
 
-    expect(store.dispatch).toHaveBeenCalledWith(new LogOut());
+    expect(store.dispatch).toHaveBeenCalledWith(logOut());
   });
 });

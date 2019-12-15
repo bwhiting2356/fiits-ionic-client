@@ -3,22 +3,21 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { State } from '../reducers';
 import { LatLng } from '../shared/latlng.model';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import {
-  SetSearchAddressType,
   SearchAddressType,
-  ChangeTimeTarget,
-  ChangeTime,
-  TripSearchQuery,
-  FetchAllStations,
-  FetchGeolocation,
-  TimeInPastError,
-  ActiveSearchTrue,
-  ActiveSearchFalse
+  setSearchAddressType,
+  changeTimeTarget,
+  changeTime,
+  searchQuery,
+  fetchAllStations,
+  fetchGeolocation,
+  timeInPastError,
+  activeSearchTrue,
+  activeSearchFalse
 } from '../actions/search.actions';
 import { TimeTarget } from '../shared/time-target.model';
-import { SearchQuery } from '../shared/search-query.model';
 import { StationInfo } from '../shared/trip-details.model';
 import {
   selectSearchOriginLatLng,
@@ -77,52 +76,51 @@ export class SearchPage implements OnInit {
   }
 
   async ngOnInit() {
-    this.store.dispatch(new FetchAllStations());
-    this.store.dispatch(new FetchGeolocation());
+    this.store.dispatch(fetchAllStations());
+    this.store.dispatch(fetchGeolocation());
   }
 
   ionViewDidEnter() {
-    this.store.dispatch(new ActiveSearchTrue());
+    this.store.dispatch(activeSearchTrue());
   }
 
   ionViewDidLeave() {
-    this.store.dispatch(new ActiveSearchFalse());
+    this.store.dispatch(activeSearchFalse());
   }
 
-  navigateToAddressInput(type: SearchAddressType) {
+  navigateToAddressInput(addressType: SearchAddressType) {
     this.router.navigate(['address-input']);
-    this.store.dispatch(new SetSearchAddressType(type));
+    this.store.dispatch(setSearchAddressType({ addressType }));
   }
 
   timeTargetChange(e) {
-    this.store.dispatch(new ChangeTimeTarget(e.target.value.value));
+    this.store.dispatch(changeTimeTarget({ timeTarget: e.target.value.value} ));
   }
 
   timeChange(e) {
-    this.store.dispatch(new ChangeTime(new Date(e.target.value)));
+    this.store.dispatch(changeTime({ time: new Date(e.target.value) }));
   }
 
+  // TODO: put this logic in the ngrx effect
   findBikeRentals() {
     this.store.pipe(
       take(1),
       map(state => state.search),
-      map(search => {
-        const searchQuery: SearchQuery = {
+      map(search => ({
           timeTarget: search.timeTarget,
           time: search.time,
           originAddress: search.originAddress,
           originLatLng: search.originLatLng,
           destinationAddress: search.destinationAddress,
           destinationLatLng: search.destinationLatLng
-        };
-        return searchQuery;
-      })
-    ).subscribe(searchQuery => {
+        })
+      )
+    ).subscribe(query => {
       const twoMinutesAgo = new Date(Date.now() - 1000 * 60 * 2);
-      if (searchQuery.time < twoMinutesAgo) {
-        this.store.dispatch(new TimeInPastError());
+      if (query.time < twoMinutesAgo) {
+        this.store.dispatch(timeInPastError());
       } else {
-        this.store.dispatch(new TripSearchQuery(searchQuery));
+        this.store.dispatch(searchQuery({ query }));
       }
     });
   }

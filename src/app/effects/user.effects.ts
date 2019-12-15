@@ -3,18 +3,18 @@ import { Effect, ofType, Actions } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import {
-  UserActionTypes,
-  UserActions,
-  FetchTripsSuccess,
-  FetchTripsError,
-  SignUpSuccess,
-  SignUpError,
-  LogInSuccess,
-  LogInError,
-  FetchAccountInfo,
-  FetchAccountInfoError,
-  FetchAccountInfoSuccess,
-  FetchTrips
+  fetchTripsSuccess,
+  fetchTripsError,
+  logIn,
+  signUp,
+  signUpSuccess,
+  signUpError,
+  logInSuccess,
+  logInError,
+  fetchAccountInfo,
+  fetchAccountInfoError,
+  fetchAccountInfoSuccess,
+  fetchTrips,
 } from '../actions/user.actions';
 import { switchMap, withLatestFrom, catchError, map, tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
@@ -22,7 +22,6 @@ import { State } from '../reducers';
 import { TripService } from '../services/trip.service';
 import { selectUID, selectEmail, selectPassword } from '../reducers/user.reducer';
 import { selectTrip } from '../reducers/search.reducer';
-import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { PaymentsService } from '../services/payments.service';
 
@@ -31,7 +30,7 @@ export class UserEffects {
 
     @Effect()
     signUp$: Observable<Action> = this.actions$.pipe(
-      ofType(UserActionTypes.SignUp),
+      ofType(signUp),
       withLatestFrom(
         this.store.select(selectEmail),
         this.store.select(selectPassword),
@@ -46,16 +45,16 @@ export class UserEffects {
           }
         }),
         switchMap(([credential]) => [
-          new SignUpSuccess(credential.user.uid),
-          new FetchAccountInfo() // TODO: what account info is there to fetch for a new signup?
+          signUpSuccess({ uid: credential.user.uid }),
+          fetchAccountInfo() // TODO: what account info is there to fetch for a new signup?
         ]),
-        catchError(error => of(new SignUpError(error)))
+        catchError(error => of(signUpError({ error })))
       ))
     );
 
     @Effect()
     logIn$: Observable<Action> = this.actions$.pipe(
-      ofType(UserActionTypes.LogIn),
+      ofType(logIn),
       withLatestFrom(
         this.store.select(selectEmail),
         this.store.select(selectPassword),
@@ -70,31 +69,31 @@ export class UserEffects {
           }
         }),
         switchMap(([credential]) => [
-          new LogInSuccess(credential.user.uid),
-          new FetchTrips(),
-          new FetchAccountInfo()
+          logInSuccess({ uid: credential.user.uid }),
+          fetchTrips(),
+          fetchAccountInfo()
         ]),
-        catchError(error => of(new LogInError(error)))
+        catchError(error => of(logInError({ error })))
       ))
     );
 
     @Effect()
     fetchTrips$: Observable<Action> = this.actions$.pipe(
-      ofType(UserActionTypes.FetchTrips),
+      ofType(fetchTrips),
       withLatestFrom(this.store.select(selectUID)),
       switchMap(([_, userId]) => this.tripService.fetchTrips(userId).pipe(
-        map(trips => new FetchTripsSuccess(trips)),
-        catchError(error => of(new FetchTripsError(error)))
+        map(trips => fetchTripsSuccess({ trips })),
+        catchError(error => of(fetchTripsError({ error })))
       ))
     );
 
     @Effect()
     fetchAccountInfo$: Observable<Action> = this.actions$.pipe(
-      ofType(UserActionTypes.FetchAccountInfo),
+      ofType(fetchAccountInfo),
       withLatestFrom(this.store.select(selectUID)),
       switchMap(([_, userId]) => this.paymentService.fetchAccountInfo(userId).pipe(
-        map(accountInfo => new FetchAccountInfoSuccess(accountInfo)),
-        catchError(error => of(new FetchAccountInfoError(error)))
+        map(accountInfo => fetchAccountInfoSuccess({ accountInfo })),
+        catchError(error => of(fetchAccountInfoError({ error })))
       ))
     );
 
@@ -104,5 +103,5 @@ export class UserEffects {
         private authService: AuthService,
         private tripService: TripService,
         private paymentService: PaymentsService,
-        private actions$: Actions<UserActions>) {}
+        private actions$: Actions<Action>) {}
 }

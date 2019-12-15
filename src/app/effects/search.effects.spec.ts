@@ -10,30 +10,30 @@ import { SearchEffects, SEARCH_EFFECTS_SCHEDULER, SEARCH_EFFECTS_INTERVAL } from
 import { GeocodeService } from '../services/geocode.service';
 import { TripService } from '../services/trip.service';
 import {
-  FetchGeocodeOriginResult,
-  SaveOriginLatLng,
-  FetchGeocodeDestinationResult,
-  SaveDestinationLatLng,
-  TripSearchQuery,
-  SaveTrip,
-  FetchAllStations,
-  SaveStations,
-  FetchAllStationsError,
-  TripSearchQueryError,
-  GeocodeError,
-  BookTripRequest,
-  BookTripSuccess,
-  BookTripFailure,
-  FetchGeolocation,
-  GeolocationChanged,
-  GeolocationError,
-  ChooseCurrentLocationAsDestination,
-  ChooseCurrentLocationAsOrigin,
-  ChooseOriginLocation,
-  ChooseDestinationLocation,
-  ActiveSearchTrue,
-  ActiveSearchFalse,
-  ChangeTime
+  fetchGeocodeOriginResult,
+  saveOriginLatLng,
+  fetchGeocodeDestinationResult,
+  saveDestinationLatLng,
+  searchQuery,
+  searchQuerySuccess,
+  fetchAllStations,
+  fetchAllStationsSuccess,
+  fetchAllStationsError,
+  searchQueryError,
+  geocodeError,
+  bookTripRequest,
+  bookTripSuccess,
+  bookTripFailure,
+  fetchGeolocation,
+  geolocationChanged,
+  geolocationError,
+  chooseCurrentLocationAsDestination,
+  chooseCurrentLocationAsOrigin,
+  chooseOriginLocation,
+  chooseDestinationLocation,
+  activeSearchTrue,
+  activeSearchFalse,
+  changeTime
 } from '../actions/search.actions';
 
 import { SearchQuery } from '../shared/search-query.model';
@@ -46,9 +46,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { State } from '../reducers';
 import { initialState } from '../reducers';
 import { Store } from '@ngrx/store';
-import { FetchTrips } from '../actions/user.actions';
-
-
+import { fetchTrips } from '../actions/user.actions';
 
 describe('SearchEffects', () => {
   let actions$: Observable<any>;
@@ -80,10 +78,10 @@ describe('SearchEffects', () => {
     async (stationService: StationService, searchEffects: SearchEffects) => {
       spyOn(stationService, 'fetchAllStation$').and.returnValue(of(mockStations));
 
-      const action = new FetchAllStations();
+      const action = fetchAllStations();
       actions$ = hot('--a-', { a: action });
 
-      const completion = new SaveStations(mockStations);
+      const completion = fetchAllStationsSuccess({ stations: mockStations });
       const expected = hot('--b', { b: completion });
       expect(searchEffects.fetchAllStation$).toBeObservable(expected);
     }
@@ -96,10 +94,10 @@ describe('SearchEffects', () => {
       const errorResponse = cold('#|', {}, error);
       spyOn(stationService, 'fetchAllStation$').and.returnValue(errorResponse);
 
-      const action = new FetchAllStations();
+      const action = fetchAllStations();
       actions$ = hot('--a-', { a: action });
 
-      const completion = new FetchAllStationsError(error);
+      const completion = fetchAllStationsError({ error });
       const expected = cold('--b)', { b: completion });
       expect(searchEffects.fetchAllStation$).toBeObservable(expected);
     }
@@ -110,10 +108,10 @@ describe('SearchEffects', () => {
     async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
       spyOn(geocodeService, 'getLatLngFromPlaceId$').and.returnValue(of({ lat: 0, lng: 0}));
 
-      const action = new FetchGeocodeOriginResult('123 Main Street');
+      const action = fetchGeocodeOriginResult({ placeId: '123 Main Street' });
       actions$ = hot('--a-', { a: action });
 
-      const completion = new SaveOriginLatLng({ lat: 0, lng: 0});
+      const completion = saveOriginLatLng({ latlng: { lat: 0, lng: 0 }});
       const expected = hot('--b', { b: completion });
       expect(searchEffects.fetchGeocodeOriginResult$).toBeObservable(expected);
   }));
@@ -125,10 +123,10 @@ describe('SearchEffects', () => {
       const errorResponse = cold('#|', {}, error);
       spyOn(geocodeService, 'getLatLngFromPlaceId$').and.returnValue(errorResponse);
 
-      const action = new FetchGeocodeOriginResult('123 Main Street');
+      const action = fetchGeocodeOriginResult({ placeId: '123 Main Street' });
       actions$ = hot('--a-', { a: action });
 
-      const completion = new GeocodeError(error);
+      const completion = geocodeError({ error });
       const expected = cold('--b', { b: completion });
       expect(searchEffects.fetchGeocodeOriginResult$).toBeObservable(expected);
   }));
@@ -138,25 +136,25 @@ describe('SearchEffects', () => {
     async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
       spyOn(geocodeService, 'getLatLngFromPlaceId$').and.returnValue(of({ lat: 0, lng: 0}));
 
-      const action = new FetchGeocodeDestinationResult('123 Main Street');
+      const action = fetchGeocodeDestinationResult({ placeId: '123 Main Street' });
       actions$ = hot('--a-', { a: action });
 
-      const completion = new SaveDestinationLatLng({ lat: 0, lng: 0});
+      const completion = saveDestinationLatLng({ latlng: { lat: 0, lng: 0 }});
       const expected = hot('--b', { b: completion });
       expect(searchEffects.fetchGeocodeDestinationResult$).toBeObservable(expected);
   }));
 
-  it('should return GeocodeError on destination error', inject(
+  it('should return geocodeError on destination error', inject(
     [GeocodeService, SearchEffects],
     async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
       const error = new Error();
       const errorResponse = cold('#|', {}, error);
       spyOn(geocodeService, 'getLatLngFromPlaceId$').and.returnValue(errorResponse);
 
-      const action = new FetchGeocodeDestinationResult('123 Main Street');
+      const action = fetchGeocodeDestinationResult({ placeId: '123 Main Street' });
       actions$ = hot('--a-', { a: action });
 
-      const completion = new GeocodeError(error);
+      const completion = geocodeError({ error });
       const expected = cold('--b)', { b: completion });
       expect(searchEffects.fetchGeocodeDestinationResult$).toBeObservable(expected);
   }));
@@ -166,7 +164,7 @@ describe('SearchEffects', () => {
     async (tripService: TripService, searchEffects: SearchEffects) => {
       spyOn(tripService, 'findBestTrip').and.returnValue(of(mockTrips[0]));
 
-      const seachQuery: SearchQuery = {
+      const query: SearchQuery = {
         originLatLng: { lat: 1, lng: 1 },
         originAddress: '123 Main Street',
         destinationLatLng: { lat: 0, lng: 0 },
@@ -175,21 +173,21 @@ describe('SearchEffects', () => {
         time: new Date(),
       };
 
-      const action = new TripSearchQuery(seachQuery);
+      const action = searchQuery({ query });
       actions$ = hot('--a-', { a: action });
 
-      const completion = new SaveTrip(mockTrips[0]);
+      const completion = searchQuerySuccess({ trip: mockTrips[0] });
       const expected = hot('--b', { b: completion });
       expect(searchEffects.tripSearchQuery$).toBeObservable(expected);
   }));
 
-  it('should return TripSearchQueryError on error', inject(
+  it('should return searchQueryError on error', inject(
     [TripService, SearchEffects],
     async (tripService: TripService, searchEffects: SearchEffects) => {
       const error = new Error();
       const errorResponse = cold('#|', {}, error);
       spyOn(tripService, 'findBestTrip').and.returnValue(errorResponse);
-      const seachQuery: SearchQuery = {
+      const query: SearchQuery = {
         originLatLng: { lat: 1, lng: 1 },
         originAddress: '123 Main Street',
         destinationLatLng: { lat: 0, lng: 0 },
@@ -198,10 +196,10 @@ describe('SearchEffects', () => {
         time: new Date(),
       };
 
-      const action = new TripSearchQuery(seachQuery);
+      const action = searchQuery({ query });
       actions$ = hot('--a-', { a: action });
 
-      const completion = new TripSearchQueryError(error);
+      const completion = searchQueryError({ error });
       const expected = cold('--b', { b: completion });
       expect(searchEffects.tripSearchQuery$).toBeObservable(expected);
   }));
@@ -212,12 +210,12 @@ describe('SearchEffects', () => {
       spyOn(navCtrl, 'navigateBack');
       spyOn(tripService, 'bookTrip').and.returnValue(of({}));
 
-      const action = new BookTripRequest();
+      const action = bookTripRequest();
       actions$ = hot('a', { a: action });
 
-      const tripCompletion = new BookTripSuccess();
-      const fetchTrips = new FetchTrips();
-      const expected = hot('(bc)', { b: tripCompletion, c: fetchTrips });
+      const tripCompletion = bookTripSuccess();
+      const fetchTripsAction = fetchTrips();
+      const expected = hot('(bc)', { b: tripCompletion, c: fetchTripsAction });
       expect(searchEffects.bookTrip$).toBeObservable(expected);
       expect(navCtrl.navigateBack).toHaveBeenCalledWith('/trips/upcoming');
   }));
@@ -229,10 +227,10 @@ describe('SearchEffects', () => {
       const errorResponse = cold('#|', {}, error);
       spyOn(tripService, 'bookTrip').and.returnValue(errorResponse);
 
-      const action = new BookTripRequest();
+      const action = bookTripRequest();
       actions$ = hot('--a-', { a: action });
 
-      const completion = new BookTripFailure(error);
+      const completion = bookTripFailure({ error });
       const expected = cold('--b', { b: completion });
       expect(searchEffects.bookTrip$).toBeObservable(expected);
   }));
@@ -242,10 +240,10 @@ describe('SearchEffects', () => {
     async (geolocationService: GeolocationService, searchEffects: SearchEffects) => {
       spyOn(geolocationService, 'getCurrentPosition$').and.returnValue(of({ lat: 0, lng: 0 }));
 
-      const action = new FetchGeolocation();
+      const action = fetchGeolocation();
       actions$ = hot('a', { a: action });
 
-      const completion = new GeolocationChanged({ lat: 0, lng: 0 });
+      const completion = geolocationChanged({ position: { lat: 0, lng: 0 }});
       searchEffects.geolocation$.subscribe(completionAction => {
         expect(completionAction).toEqual(completion);
       });
@@ -259,10 +257,10 @@ describe('SearchEffects', () => {
       const errorResponse = cold('#|', {}, error);
       spyOn(geolocationService, 'getCurrentPosition$').and.returnValue(errorResponse);
 
-      const action = new FetchGeolocation();
+      const action = fetchGeolocation();
       actions$ = cold('--a-', { a: action });
 
-      const completion = new GeolocationError(error);
+      const completion = geolocationError({ error });
       const expected = cold('--b', { b: completion });
       expect(searchEffects.geolocation$).toBeObservable(expected);
     }
@@ -273,10 +271,10 @@ describe('SearchEffects', () => {
     async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
       spyOn(geocodeService, 'getAddressFromLatLng$').and.returnValue(of('123 Main Street'));
 
-      const action = new ChooseCurrentLocationAsOrigin({ lat: 0, lng: 0 });
+      const action = chooseCurrentLocationAsOrigin({ location: { lat: 0, lng: 0 }});
       actions$ = hot('a', { a: action });
 
-      const completion = new ChooseOriginLocation('123 Main Street');
+      const completion = chooseOriginLocation({ location: '123 Main Street' });
       searchEffects.originReverseGeocode$.subscribe(completionAction => {
         expect(completionAction).toEqual(completion);
       });
@@ -290,10 +288,10 @@ describe('SearchEffects', () => {
       const errorResponse = cold('#|', {}, error);
       spyOn(geocodeService, 'getAddressFromLatLng$').and.returnValue(errorResponse);
 
-      const action = new ChooseCurrentLocationAsOrigin({ lat: 0, lng: 0 });
+      const action = chooseCurrentLocationAsOrigin({ location: { lat: 0, lng: 0 }});
       actions$ = hot('a', { a: action });
 
-      const completion = new GeocodeError(error);
+      const completion = geocodeError({ error });
       searchEffects.originReverseGeocode$.subscribe(completionAction => {
         expect(completionAction).toEqual(completion);
       });
@@ -305,11 +303,11 @@ describe('SearchEffects', () => {
     async (geocodeService: GeocodeService, searchEffects: SearchEffects) => {
       spyOn(geocodeService, 'getAddressFromLatLng$').and.returnValue(of('123 Main Street'));
 
-      const action = new ChooseCurrentLocationAsDestination({ lat: 0, lng: 0 });
+      const action = chooseCurrentLocationAsDestination({ location: { lat: 0, lng: 0 }});
 
       actions$ = hot('a', { a: action });
 
-      const completion = new ChooseDestinationLocation('123 Main Street');
+      const completion = chooseDestinationLocation({ location: '123 Main Street' });
       searchEffects.destinationReverseGeocode$.subscribe(completionAction => {
         expect(completionAction).toEqual(completion);
       });
@@ -323,10 +321,10 @@ describe('SearchEffects', () => {
       const errorResponse = cold('#|', {}, error);
       spyOn(geocodeService, 'getAddressFromLatLng$').and.returnValue(errorResponse);
 
-      const action = new ChooseCurrentLocationAsDestination({ lat: 0, lng: 0 });
+      const action = chooseCurrentLocationAsDestination({ location: { lat: 0, lng: 0 }});
       actions$ = hot('a', { a: action });
 
-      const completion = new GeocodeError(error);
+      const completion = geocodeError({ error });
       searchEffects.destinationReverseGeocode$.subscribe(completionAction => {
         expect(completionAction).toEqual(completion);
       });
@@ -348,14 +346,14 @@ describe('SearchEffects', () => {
   });
 
   it('should dispatch an action four times to check the time and then stop when search is no longer active', async () => {
-    const changeTime = new ChangeTime(new Date());
-    spyOn(effects, 'checkTimeIsNotPast').and.returnValue(changeTime);
+    const changeTimeAction = changeTime({ time: new Date()});
+    spyOn(effects, 'checkTimeIsNotPast').and.returnValue(changeTimeAction);
 
-    const onAction = new ActiveSearchTrue();
-    const offAction = new ActiveSearchFalse();
+    const onAction = activeSearchTrue();
+    const offAction = activeSearchFalse();
     actions$ = hot('--a----b-', { a: onAction, b: offAction });
 
-    const expected = hot('---cccc', { c: changeTime });
+    const expected = hot('---cccc', { c: changeTimeAction });
     expect(effects.setTimeToPresent$).toBeObservable(expected);
   });
 });

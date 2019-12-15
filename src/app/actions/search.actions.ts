@@ -1,197 +1,47 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import { LatLng } from '../shared/latlng.model';
 import { SearchQuery } from '../shared/search-query.model';
 import { TimeTarget } from '../shared/time-target.model';
 import { TripDetails, StationInfo } from '../shared/trip-details.model';
 
-export enum SearchActionTypes {
-  ActiveSearchTrue = '[Search] Active Search True',
-  ActiveSearchFalse = '[Search] Active Search False',
-  AutocompleteResultsError = '[Search] Autocomplete Results Error',
-  AutocompleteDirty = '[Search] Autocomplete Dirty',
-  BookTripRequest = '[Search] Book Trip Request',
-  BookTripSuccess = '[Search] Book Trip Success',
-  BookTripFailure = '[Search] Book Trip Failure',
-  ChangeTime = '[Search] Change Time',
-  ChangeTimeTarget = '[Search] Change Time Target',
-  ChooseCurrentLocationAsDestination = '[Search] Choose Current Location As Destination',
-  ChooseCurrentLocationAsOrigin = '[Search] Choose Current Location As Origin',
-  ChooseOriginLocation = '[Search] Choose Origin Location',
-  ChooseDestinationLocation = '[Search] Choose Destination Location',
-  ClearAutocompleteResults = '[Search] Clear Autocomplete Results',
-  FetchAllStations = '[Search] Fetch All Stations',
-  FetchAllStationsError = '[Search] Fetch All Stations Error',
-  FetchAutocompleteResults = '[Search] Fetch Autocomplete Results',
-  FetchGeocodeOriginResult = '[Search] Fetch Geocode Origin Result',
-  FetchGeocodeDestinationResult = '[Search] Fetch Geocode Destination Result',
-  FetchGeolocation = '[Search] Fetch Geolocation',
-  GeocodeError = '[Search] Geocode Error',
-  GeolocationChanged = '[Search] Geolocation Changed',
-  GeolocationError = '[Search] Geolocation Error',
-  SaveAutocompleteResults = '[Search] Save Autocomplete Results',
-  SaveOriginLatLng = '[Search] Save Origin LatLng',
-  SaveDestinationLatLng = '[Search] Save Destination LatLng',
-  SaveStations = '[Search] Save Stations',
-  SaveTrip = '[Search] Save Trip',
-  SetSearchAddressType = '[Search] Set Search Address Type',
-  TimeInPastError = '[Search] Time In Past Error',
-  TripSearchQuery = '[Search] Trip Search Query',
-  TripSearchQueryError = '[Search] Trip Search Query Error',
-}
-
 export type SearchAddressType = 'Origin' | 'Destination';
 
-export class ActiveSearchTrue implements Action {
-  readonly type = SearchActionTypes.ActiveSearchTrue;
-}
-
-export class ActiveSearchFalse implements Action {
-  readonly type = SearchActionTypes.ActiveSearchFalse;
-}
-
-export class BookTripRequest implements Action {
-  readonly type = SearchActionTypes.BookTripRequest;
-}
-
-export class BookTripSuccess implements Action {
-  readonly type = SearchActionTypes.BookTripSuccess;
-}
-
-export class BookTripFailure implements Action {
-  readonly type = SearchActionTypes.BookTripFailure;
-  constructor(public error: any) {}
-}
-
-export class ChangeTime implements Action {
-  readonly type = SearchActionTypes.ChangeTime;
-  constructor(public time: Date) {}
-}
-
-export class ChangeTimeTarget implements Action {
-  readonly type = SearchActionTypes.ChangeTimeTarget;
-  constructor(public timeTarget: TimeTarget) {}
-}
-
-export class ChooseCurrentLocationAsDestination implements Action {
-  readonly type = SearchActionTypes.ChooseCurrentLocationAsDestination;
-  constructor(public location: LatLng) {}
-}
-
-export class ChooseCurrentLocationAsOrigin implements Action {
-  readonly type = SearchActionTypes.ChooseCurrentLocationAsOrigin;
-  constructor(public location: LatLng) {}
-}
-
-export class ChooseOriginLocation implements Action {
-  readonly type = SearchActionTypes.ChooseOriginLocation;
-  constructor(public location: string) {}
-}
-
-export class ChooseDestinationLocation implements Action {
-  readonly type = SearchActionTypes.ChooseDestinationLocation;
-  constructor(public location: string) {}
-}
-
-export class FetchAllStations implements Action {
-  readonly type = SearchActionTypes.FetchAllStations;
-}
-
-export class FetchAllStationsError implements Action {
-  readonly type = SearchActionTypes.FetchAllStationsError;
-  constructor(public error: any) {}
-}
-
-export class FetchGeocodeOriginResult implements Action {
-  readonly type = SearchActionTypes.FetchGeocodeOriginResult;
-  constructor(public placeId: string) {}
-}
-
-export class FetchGeocodeDestinationResult implements Action {
-  readonly type = SearchActionTypes.FetchGeocodeDestinationResult;
-  constructor(public placeId: string) {}
-}
-
-export class FetchGeolocation implements Action {
-  readonly type = SearchActionTypes.FetchGeolocation;
-}
-
-export class GeocodeError implements Action {
-  readonly type = SearchActionTypes.GeocodeError;
-  constructor(public error: any) {}
-}
-
-export class GeolocationChanged implements Action {
-  readonly type = SearchActionTypes.GeolocationChanged;
-  constructor(public position: LatLng) {}
-}
-
-export class GeolocationError implements Action {
-  readonly type = SearchActionTypes.GeolocationError;
-  constructor(public error: any) {}
-}
-
-export class SaveOriginLatLng implements Action {
-  readonly type = SearchActionTypes.SaveOriginLatLng;
-  constructor(public latlng: LatLng) {}
-}
-
-export class SaveDestinationLatLng implements Action {
-  readonly type = SearchActionTypes.SaveDestinationLatLng;
-  constructor(public latlng: LatLng) {}
-}
-
-export class SaveStations implements Action {
-  readonly type = SearchActionTypes.SaveStations;
-  constructor(public stations: StationInfo[]) {}
-}
-
-export class SaveTrip implements Action {
-  readonly type = SearchActionTypes.SaveTrip;
-  constructor(public trip: TripDetails) {}
-}
-
-export class SetSearchAddressType implements Action {
-  readonly type = SearchActionTypes.SetSearchAddressType;
-  constructor(public addressType: SearchAddressType) {}
-}
-
-export class TimeInPastError implements Action {
-  readonly type = SearchActionTypes.TimeInPastError;
-}
-
-export class TripSearchQuery implements Action {
-  readonly type = SearchActionTypes.TripSearchQuery;
-  constructor(public searchQuery: SearchQuery) {}
-}
-
-export class TripSearchQueryError implements Action {
-  readonly type = SearchActionTypes.TripSearchQueryError;
-  constructor(public error: any) {}
-}
-
-export type SearchActions = ActiveSearchTrue
-              | ActiveSearchFalse
-              | BookTripRequest
-              | BookTripSuccess
-              | BookTripFailure
-              | ChangeTime
-              | ChangeTimeTarget
-              | ChooseCurrentLocationAsOrigin
-              | ChooseCurrentLocationAsDestination
-              | ChooseDestinationLocation
-              | ChooseOriginLocation
-              | FetchAllStations
-              | FetchAllStationsError
-              | FetchGeocodeOriginResult
-              | FetchGeocodeDestinationResult
-              | FetchGeolocation
-              | GeocodeError
-              | GeolocationChanged
-              | SaveOriginLatLng
-              | SaveDestinationLatLng
-              | SaveStations
-              | SaveTrip
-              | SetSearchAddressType
-              | TimeInPastError
-              | TripSearchQuery
-              | TripSearchQueryError;
+export const activeSearchTrue = createAction('[Search] Active Search True');
+export const activeSearchFalse = createAction('[Search] Active Search False');
+export const bookTripRequest = createAction('[Search] Book Trip Request');
+export const bookTripSuccess = createAction('[Search] Book Trip Success');
+export const bookTripFailure = createAction('[Search] Book Trip Failure', props<{error: any}>());
+export const changeTime = createAction('[Search] Change Time', props<{time: Date}>());
+export const changeTimeTarget = createAction('[Search] Change Time Target', props<{timeTarget: TimeTarget}>());
+export const chooseCurrentLocationAsDestination = createAction(
+  '[Search] Choose Current Location As Destination',
+  props<{location: LatLng}>()
+);
+export const chooseCurrentLocationAsOrigin = createAction(
+  '[Search] Choose Current Location As Origin',
+  props<{location: LatLng}>()
+);
+export const chooseOriginLocation = createAction(
+  '[Search] Choose Origin Location',
+  props<{location: string}>()
+);
+export const chooseDestinationLocation = createAction(
+  '[Search] Choose Destination Location',
+  props<{location: string}>()
+);
+export const fetchAllStations = createAction('[Search] Fetch All Stations');
+export const fetchAllStationsError = createAction('[Search] Fetch All Stations Error', props<{error: any}>());
+export const fetchAllStationsSuccess = createAction('[Search] Fetch All Stations Success', props<{stations: StationInfo[]}>());
+export const fetchGeocodeOriginResult = createAction('[Search] Fetch Geocode Origin Result', props<{placeId: string}>());
+export const fetchGeocodeDestinationResult = createAction('[Search] Fetch Geocode Destination Result', props<{placeId: string}>());
+export const fetchGeolocation = createAction('[Search] Fetch Geolocation');
+export const geocodeError = createAction('[Search] Geocode Error', props<{error: any}>());
+export const geolocationChanged = createAction('[Search] Geolocation Changed', props<{position: LatLng}>());
+export const geolocationError = createAction('[Search] Geolocation Error', props<{error: any}>());
+export const saveOriginLatLng = createAction('[Search] Save Origin LatLng', props<{latlng: LatLng}>());
+export const saveDestinationLatLng = createAction('[Search] Save Destination LatLng', props<{latlng: LatLng}>());
+export const setSearchAddressType = createAction('[Search] Set Search Address Type', props<{addressType: SearchAddressType}>());
+export const timeInPastError = createAction('[Search] Time In Past Error');
+export const searchQuery = createAction('[Search] Query', props<{query: SearchQuery}>());
+export const searchQuerySuccess = createAction('[Search] Query Success', props<{trip: TripDetails}>());
+export const searchQueryError = createAction('[Search] Query Error', props<{error: any}>());

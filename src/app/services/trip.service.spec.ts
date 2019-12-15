@@ -1,9 +1,9 @@
 import { TestBed, inject } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { of } from 'rxjs';
+import { hot } from 'jasmine-marbles';
 
 import { TripService } from './trip.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { hot } from 'jasmine-marbles';
 import { SearchQuery } from '../shared/search-query.model';
 import { mockTrips } from 'src/testing/mock-trips';
 import { TripDetails } from '../shared/trip-details.model';

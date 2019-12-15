@@ -1,6 +1,6 @@
-import { FeedbackActions, FeedbackActionTypes } from '../actions/feedback.actions';
-import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector, createReducer, on, Action } from '@ngrx/store';
 import { State } from '.';
+import { changeComment, feedbackError, feedbackSuccess, sendFeedback } from '../actions/feedback.actions';
 
 export interface FeedbackState {
     feedbackPosting: boolean;
@@ -30,31 +30,14 @@ export const selectFeedbackDisableSend = createSelector(
     (feedbackPosting, comment) => feedbackPosting || !comment
 );
 
-export function feedbackReducer(state = initialFeedbackState, action: FeedbackActions): FeedbackState {
-    switch (action.type) {
-        case FeedbackActionTypes.ChangeComment:
-            return {
-                ...state,
-                comment: action.comment
-            };
-        case FeedbackActionTypes.FeedbackError:
-            return {
-                ...state,
-                feedbackPosting: false,
-                error: action.error
-            };
-        case FeedbackActionTypes.FeedbackSuccess:
-            return {
-                ...state,
-                comment: '',
-                feedbackPosting: false,
-            };
-        case FeedbackActionTypes.SendFeedback:
-            return {
-                ...state,
-                feedbackPosting: true
-            };
-        default:
-            return state;
-    }
+const feedbackReducer = createReducer(
+    initialFeedbackState,
+    on(changeComment, (state, { comment }) => ({ ...state, comment })),
+    on(feedbackError, (state, { error }) => ({ ...state, feedbackPosting: false, error })),
+    on(feedbackSuccess, state => ({ ...state, feedbackPosting: false, comment: '' })),
+    on(sendFeedback, (state) => ({ ...state, feedbackPosting: true }))
+);
+
+export function reducer(state: FeedbackState | undefined, action: Action) {
+    return feedbackReducer(state, action);
 }

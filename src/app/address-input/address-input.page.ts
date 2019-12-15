@@ -7,15 +7,15 @@ import { map, take } from 'rxjs/operators';
 import { AutocompleteResult } from '../shared/maps/autocomplete-result';
 import { State } from '../reducers';
 import {
-  ChooseOriginLocation,
-  ChooseDestinationLocation,
-  FetchGeocodeOriginResult,
-  FetchGeocodeDestinationResult,
   SearchAddressType,
-  ChooseCurrentLocationAsDestination,
-  ChooseCurrentLocationAsOrigin,
-  SaveOriginLatLng,
-  SaveDestinationLatLng
+  chooseOriginLocation,
+  chooseDestinationLocation,
+  fetchGeocodeOriginResult,
+  fetchGeocodeDestinationResult,
+  chooseCurrentLocationAsDestination,
+  chooseCurrentLocationAsOrigin,
+  saveOriginLatLng,
+  saveDestinationLatLng
 } from '../actions/search.actions';
 
 import {
@@ -23,7 +23,7 @@ import {
   selectShowCurrentLocation,
   selectPosition
 } from '../reducers/search.reducer';
-import { FetchResults, ClearResults } from '../actions/autocomplete.actions';
+import { fetchAutocompleteResults, clearAutocompleteResults } from '../actions/autocomplete.actions';
 import {
   selectAutocompleteResults,
   selectAutocompletFetching,
@@ -78,20 +78,20 @@ export class AddressInputPage implements OnInit {
   }
 
   async inputChange(e) {
-    this.store.dispatch(new FetchResults(e.target.value));
+    this.store.dispatch(fetchAutocompleteResults({ input: e.target.value }));
   }
 
   chooseLocation(result: AutocompleteResult) {
     this.navCtrl.back();
-    this.store.dispatch(new ClearResults());
+    this.store.dispatch(clearAutocompleteResults());
     this.searchAddressType.pipe(take(1))
       .subscribe(type => {
         if (type === 'Origin') {
-          this.store.dispatch(new ChooseOriginLocation(result.structured_formatting.main_text));
-          this.store.dispatch(new FetchGeocodeOriginResult(result.place_id));
+          this.store.dispatch(chooseOriginLocation({ location: result.structured_formatting.main_text }));
+          this.store.dispatch(fetchGeocodeOriginResult({ placeId: result.place_id }));
         } else { // (type === 'Destination')
-          this.store.dispatch(new ChooseDestinationLocation(result.structured_formatting.main_text));
-          this.store.dispatch(new FetchGeocodeDestinationResult(result.place_id));
+          this.store.dispatch(chooseDestinationLocation({ location: result.structured_formatting.main_text }));
+          this.store.dispatch(fetchGeocodeDestinationResult({ placeId: result.place_id }));
         }
       });
   }
@@ -103,13 +103,13 @@ export class AddressInputPage implements OnInit {
       this.store.select(selectPosition)
     ])
     .pipe(take(1))
-    .subscribe(([type, position]) => {
+    .subscribe(([type, latlng]) => {
       if (type === 'Origin') {
-        this.store.dispatch(new SaveOriginLatLng(position));
-        this.store.dispatch(new ChooseCurrentLocationAsOrigin(position));
+        this.store.dispatch(saveOriginLatLng({ latlng }));
+        this.store.dispatch(chooseCurrentLocationAsOrigin({ location: latlng }));
       } else { // (type === 'Destination')
-        this.store.dispatch(new SaveDestinationLatLng(position));
-        this.store.dispatch(new ChooseCurrentLocationAsDestination(position));
+        this.store.dispatch(saveDestinationLatLng({ latlng }));
+        this.store.dispatch(chooseCurrentLocationAsDestination({ location: latlng }));
       }
     });
   }

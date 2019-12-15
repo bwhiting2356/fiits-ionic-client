@@ -22,7 +22,8 @@ describe('Trip details', () => {
         expect(newTrip.status).toBe('Completed');
     });
 
-    it('should return \'ACTIVE\' status if the trip is currently active (within reservation window)', (done) => {
+    it('should return \'Active\' status if the trip is currently active (within reservation window)', () => {
+        const now = new Date();
         const newTrip = new TripDetails(
             mockTrips[0].originLatLng,
             mockTrips[0].originAddress,
@@ -30,7 +31,7 @@ describe('Trip details', () => {
             mockTrips[0].walking1Directions,
             {
                 ...mockTrips[0].startReservation,
-                time: new Date().toString()
+                time: now.toString()
             },
             mockTrips[0].bicyclingDirections,
             mockTrips[0].rentalPrice,
@@ -38,12 +39,9 @@ describe('Trip details', () => {
             mockTrips[0].walking2Directions,
             mockTrips[0].destinationLatLng,
             mockTrips[0].destinationAddress,
-            DateUtil.addSeconds(new Date(), 10000).toString()
+            DateUtil.addSeconds(now, 10000).toString()
         );
-        setTimeout(() => {
-            expect(newTrip.status).toBe('Active');
-            done();
-        }, 100);
+        expect(newTrip.status).toBe('Active');
     });
 
     it('should return \'UPCOMING\' status if the trip is in the future', () => {

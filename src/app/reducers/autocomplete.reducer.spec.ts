@@ -1,5 +1,5 @@
-import { autocompleteReducer, initialAutocompleteState } from './autocomplete.reducer';
-import { ClearResults, FetchResults, SaveResults } from '../actions/autocomplete.actions';
+import { reducer as autocompleteReducer, initialAutocompleteState } from './autocomplete.reducer';
+import { clearAutocompleteResults, saveAutocompleteResults, fetchAutocompleteResults } from '../actions/autocomplete.actions';
 import { mockAutocompleteResults } from 'src/testing/mock-autocomplete-results';
 
 describe('Autocomplete Reducer', () => {
@@ -19,7 +19,7 @@ describe('Autocomplete Reducer', () => {
                 ...initialAutocompleteState,
                 autocompleteFetching: true
               };
-            const action = new SaveResults(mockAutocompleteResults);
+            const action = saveAutocompleteResults({ results: mockAutocompleteResults });
 
             const result = autocompleteReducer(initialStateWithFetching, action);
 
@@ -36,7 +36,7 @@ describe('Autocomplete Reducer', () => {
               autocompleteResults: mockAutocompleteResults,
               autocompleteDirty: true,
             };
-            const action = new ClearResults();
+            const action = clearAutocompleteResults();
 
             const result = autocompleteReducer(initialStateWithMockResults, action);
 
@@ -48,7 +48,7 @@ describe('Autocomplete Reducer', () => {
           });
 
         it('should set the fetching state to true, dirty to true', () => {
-            const action = new FetchResults('123 Main Street');
+            const action = fetchAutocompleteResults({ input: '123 Main Street'});
 
             const result = autocompleteReducer(initialAutocompleteState, action);
 
@@ -65,7 +65,7 @@ describe('Autocomplete Reducer', () => {
               autocompleteDirty: true,
               autocompleteResults: mockAutocompleteResults
             };
-            const action = new FetchResults('123 Main Street');
+            const action = fetchAutocompleteResults({ input: '123 Main Street' });
 
             const result = autocompleteReducer(initialStateWithMockResults, action);
 

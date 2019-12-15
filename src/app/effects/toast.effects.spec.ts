@@ -5,18 +5,18 @@ import { ToastController } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { hot } from 'jasmine-marbles';
 import {
-    FetchAllStationsError,
-    TripSearchQueryError,
-    GeocodeError,
-    BookTripSuccess,
-    BookTripFailure,
-    TimeInPastError
+    fetchAllStationsError,
+    searchQueryError,
+    geocodeError,
+    bookTripSuccess,
+    bookTripFailure,
+    timeInPastError
 } from '../actions/search.actions';
 import {
-    ResultsError
+    autocompleteError
 } from '../actions/autocomplete.actions';
-import { FeedbackError, FeedbackSuccess } from '../actions/feedback.actions';
-import { LogInSuccess, SignUpSuccess, LogInError, SignUpError, LogOut } from '../actions/user.actions';
+import { feedbackError, feedbackSuccess } from '../actions/feedback.actions';
+import { logInSuccess, signUpSuccess, logInError, signUpError, logOut } from '../actions/user.actions';
 
 describe('Toast Effects ', () => {
     let actions$: Observable<any>;
@@ -60,7 +60,7 @@ describe('Toast Effects ', () => {
 
 
     it('should call presentToast with the message \'Error fetching station info\'', async () => {
-        const action = new FetchAllStationsError('oops');
+        const action = fetchAllStationsError({ error: 'oops' });
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -70,7 +70,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Error booking trip\'', async () => {
-        const action = new BookTripFailure('oops');
+        const action = bookTripFailure({ error: 'oops' });
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -80,7 +80,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Custom error message\'', async () => {
-        const action = new BookTripFailure({ error: { message: 'Custom error message' }});
+        const action = bookTripFailure({ error: { error: { message: 'Custom error message' }}});
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -90,7 +90,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the specific message', async () => {
-        const action = new TripSearchQueryError({ error: { message: 'Stations too far apart' }});
+        const action = searchQueryError({ error: { error: { message: 'Stations too far apart' }}});
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -100,7 +100,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with a generic message', async () => {
-        const action = new TripSearchQueryError('oops');
+        const action = searchQueryError({ error: 'oops' });
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -110,7 +110,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Error fetching location coordinates\'', async () => {
-        const action = new GeocodeError('oops');
+        const action = geocodeError({ error: 'oops' });
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -120,7 +120,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Error fetching locations\'', async () => {
-        const action = new ResultsError('oops');
+        const action = autocompleteError({ error: 'oops'});
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -130,7 +130,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Error sending feedback\'', async () => {
-        const action = new FeedbackError('oops');
+        const action = feedbackError({ error: 'oops'});
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -140,7 +140,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Feedback sent successfully!\'', async () => {
-        const action = new FeedbackSuccess();
+        const action = feedbackSuccess();
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -150,7 +150,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Logged in successfully!\'', () => {
-        const action = new LogInSuccess('mock-uid');
+        const action = logInSuccess({ uid: 'mock-uid' });
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -160,7 +160,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Signed up successfully!\'', () => {
-        const action = new SignUpSuccess('mock-uid');
+        const action = signUpSuccess({ uid: 'mock-uid' });
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -170,7 +170,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Error logging in\'', async () => {
-        const action = new LogInError('oops');
+        const action = logInError({ error: 'oops' });
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -180,7 +180,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Error signing up\'', async () => {
-        const action = new SignUpError('oops');
+        const action = signUpError({ error: 'oops' });
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -190,7 +190,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Trip booked successfully!\'', async () => {
-        const action = new BookTripSuccess();
+        const action = bookTripSuccess();
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -200,7 +200,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Logged out successfully!\'', async () => {
-        const action = new LogOut();
+        const action = logOut();
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });
@@ -211,7 +211,7 @@ describe('Toast Effects ', () => {
     });
 
     it('should call presentToast with the message \'Time cannot be in the past.\'', () => {
-        const action = new TimeInPastError();
+        const action = timeInPastError();
         spyOn(effects, 'presentToast');
 
         actions$ = hot('--a-', { a: action });

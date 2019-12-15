@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { State } from './reducers';
 import { selectLoggedIn } from './reducers/user.reducer';
-import { LogOut } from './actions/user.actions';
+import { logOut } from './actions/user.actions';
 
 interface Page {
   title: string;
@@ -93,7 +93,7 @@ export class AppComponent {
 
   handleClick(title: string) {
     if (title === 'Log Out') {
-      this.store.dispatch(new LogOut());
+      this.store.dispatch(logOut());
     }
   }
 }

@@ -7,7 +7,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { selectAccountInfoFetching, selectAccountInfo } from '../reducers/user.reducer';
 import { AccountInfo } from '../shared/account-info.model';
 import { map } from 'rxjs/operators';
-import { BookTripRequest } from '../actions/search.actions';
+import { bookTripRequest } from '../actions/search.actions';
 import { NavController } from '@ionic/angular';
 
 @Component({
@@ -38,12 +38,11 @@ export class ConfirmBookingPage {
   }
 
   bookTrip() {
-    this.store.dispatch(new BookTripRequest());
+    this.store.dispatch(bookTripRequest());
   }
 
   backToTripDetails() {
     this.navCtrl.navigateBack('/trip-details');
-
   }
 
 }

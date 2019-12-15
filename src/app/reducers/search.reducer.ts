@@ -1,6 +1,30 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store';
+import { createSelector, createFeatureSelector, createReducer, on, Action } from '@ngrx/store';
 
-import { SearchActionTypes, SearchActions, SearchAddressType } from '../actions/search.actions';
+import {
+  SearchAddressType,
+  activeSearchTrue,
+  activeSearchFalse,
+  bookTripRequest,
+  bookTripSuccess,
+  bookTripFailure,
+  changeTime,
+  changeTimeTarget,
+  chooseOriginLocation,
+  chooseDestinationLocation,
+  fetchGeocodeOriginResult,
+  fetchGeocodeDestinationResult,
+  geocodeError,
+  fetchAllStations,
+  fetchAllStationsSuccess,
+  fetchAllStationsError,
+  searchQuerySuccess,
+  searchQuery,
+  searchQueryError,
+  setSearchAddressType,
+  saveDestinationLatLng,
+  saveOriginLatLng,
+  geolocationChanged,
+} from '../actions/search.actions';
 import { LatLng } from '../shared/latlng.model';
 import { TimeTarget } from '../shared/time-target.model';
 import { TripDetails, StationInfo } from '../shared/trip-details.model';
@@ -114,123 +138,33 @@ export const selectBookTripFetching = createSelector(
     selectSearch,
     search => search.bookTripFetching);
 
-export function searchReducer(state = initialSearchState, action: SearchActions): SearchState {
-  switch (action.type) {
-    case SearchActionTypes.ActiveSearchTrue:
-      return {
-        ...state,
-        activeSearch: true
-      };
-    case SearchActionTypes.ActiveSearchFalse:
-      return {
-        ...state,
-        activeSearch: false
-      };
-    case SearchActionTypes.BookTripRequest:
-      return {
-        ...state,
-        bookTripFetching: true
-      };
-    case SearchActionTypes.BookTripSuccess:
-      return {
-        ...initialSearchState
-      };
-    case SearchActionTypes.BookTripFailure:
-      return {
-        ...state,
-        error: action.error,
-        bookTripFetching: false
-      };
-    case SearchActionTypes.ChangeTime:
-      return {
-        ...state,
-        time: action.time
-      };
-    case SearchActionTypes.ChangeTimeTarget:
-      return {
-        ...state,
-        timeTarget: action.timeTarget
-      };
-    case SearchActionTypes.ChooseOriginLocation:
-      return {
-        ...state,
-        originAddress: action.location
-      };
-    case SearchActionTypes.ChooseDestinationLocation:
-      return {
-        ...state,
-        destinationAddress: action.location
-      };
-    case SearchActionTypes.FetchAllStations:
-      return {
-        ...state,
-        stationsFetching: true
-      };
-    case SearchActionTypes.FetchAllStationsError:
-      return {
-        ...state,
-        stationsFetching: false,
-        error: action.error
-      };
-    case SearchActionTypes.FetchGeocodeOriginResult:
-    case SearchActionTypes.FetchGeocodeDestinationResult:
-      return {
-        ...state,
-        geocodeFetching: true
-      };
 
-    case SearchActionTypes.GeocodeError:
-      return {
-        ...state,
-        geocodeFetching: false,
-        error: action.error
-      };
-    case SearchActionTypes.GeolocationChanged:
-      return {
-        ...state,
-        position: action.position
-      };
-    case SearchActionTypes.SaveOriginLatLng:
-      return {
-        ...state,
-        originLatLng: action.latlng,
-        geocodeFetching: false
-      };
-    case SearchActionTypes.SaveDestinationLatLng:
-      return {
-        ...state,
-        destinationLatLng: action.latlng,
-        geocodeFetching: false
-      };
-    case SearchActionTypes.SaveStations:
-      return {
-        ...state,
-        stations: action.stations,
-        stationsFetching: false
-      };
-    case SearchActionTypes.SaveTrip:
-      return {
-        ...state,
-        trip: action.trip,
-        searchQueryFetching: false,
-      };
-    case SearchActionTypes.SetSearchAddressType:
-      return {
-        ...state,
-        searchAddressType: action.addressType
-      };
-    case SearchActionTypes.TripSearchQuery:
-      return {
-        ...state,
-        searchQueryFetching: true
-      };
-    case SearchActionTypes.TripSearchQueryError:
-      return {
-        ...state,
-        searchQueryFetching: false,
-        error: action.error
-      };
-    default:
-      return state;
-  }
+const searchReducer = createReducer(
+    initialSearchState,
+    on(activeSearchTrue, state => ({ ...state, activeSearch: true })),
+    on(activeSearchFalse, state => ({ ...state, activeSearch: false })),
+    on(bookTripRequest, state => ({ ...state, bookTripFetching: true })),
+    on(bookTripSuccess, () => ({ ...initialSearchState })),
+    on(bookTripFailure, (state, { error }) => ({ ...state, error, bookTripFetching: false })),
+    on(changeTime, (state, { time }) => ({ ...state, time })),
+    on(changeTimeTarget, (state, { timeTarget }) => ({ ...state, timeTarget })),
+    on(chooseOriginLocation, (state, { location }) => ({ ...state, originAddress: location })),
+    on(chooseDestinationLocation, (state, { location }) => ({ ...state, destinationAddress: location })),
+    on(fetchAllStations, state => ({ ...state, stationsFetching: true })),
+    on(fetchAllStationsSuccess, (state, { stations }) => ({ ...state, stations, stationsFetching: false })),
+    on(fetchAllStationsError, (state, { error }) => ({ ...state, error, stationsFetching: false })),
+    on(searchQuery, state => ({ ...state, searchQueryFetching: true })),
+    on(searchQueryError, (state, { error }) => ({ ...state, error, searchQueryFetching: false })),
+    on(searchQuerySuccess, (state, { trip }) => ({ ...state, trip, searchQueryFetching: false })),
+    on(setSearchAddressType, (state, { addressType }) => ({ ...state, searchAddressType: addressType })),
+    on(fetchGeocodeOriginResult, state => ({ ...state, geocodeFetching: true })),
+    on(fetchGeocodeDestinationResult, state => ({ ...state, geocodeFetching: true })),
+    on(geocodeError, (state, { error }) => ({ ...state, error, geocodeFetching: false })),
+    on(saveOriginLatLng, (state, { latlng }) => ({ ...state, originLatLng: latlng, geocodeFetching: false })),
+    on(saveDestinationLatLng, (state, { latlng }) => ({ ...state, destinationLatLng: latlng, geocodeFetching: false })),
+    on(geolocationChanged, (state, { position }) => ({ ...state, position }))
+);
+
+export function reducer(state: SearchState | undefined, action: Action) {
+    return searchReducer(state, action);
 }

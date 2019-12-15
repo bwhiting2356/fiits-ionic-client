@@ -11,7 +11,7 @@ import { hot } from 'jasmine-marbles';
 import { initialUserState } from '../reducers/user.reducer';
 import { mockAccountInfo } from 'src/testing/mock-account-info';
 import { By } from '@angular/platform-browser';
-import { BookTripRequest } from '../actions/search.actions';
+import { bookTripRequest } from '../actions/search.actions';
 import { NavController } from '@ionic/angular';
 
 describe('ConfirmBookingPage', () => {
@@ -155,7 +155,7 @@ describe('ConfirmBookingPage', () => {
   it('should dispatch an action to book the trip', () => {
     spyOn(store, 'dispatch');
     component.bookTrip();
-    expect(store.dispatch).toHaveBeenCalledWith(new BookTripRequest());
+    expect(store.dispatch).toHaveBeenCalledWith(bookTripRequest());
   });
 
   it('hould navigate back to /trip-details', inject(
