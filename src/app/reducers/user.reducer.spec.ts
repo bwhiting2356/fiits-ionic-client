@@ -30,7 +30,7 @@ describe('User Reducer', () => {
     });
 
     describe('user actions', () => {
-        it('should save the uid to state, set fetching to false, clear email and password', () => {
+        it('should save the uid to state, set fetching to false, clear password', () => {
             const initialUserStateWithFetching = {
                 ...initialUserState,
                 email: 'test@testy.com',
@@ -44,14 +44,14 @@ describe('User Reducer', () => {
 
             expect(result).toEqual({
                 ...initialUserState,
-                email: '',
+                email: 'test@testy.com',
                 password: '',
                 authFetching: false,
                 uid: 'mock-uid'
             });
         });
 
-        it('should save the uid to state, set fetching to false, clear email and password', () => {
+        it('should save the uid to state, set fetching to false, clear password', () => {
             const initialUserStateWithFetching = {
                 ...initialUserState,
                 email: 'test@testy.com',
@@ -65,7 +65,7 @@ describe('User Reducer', () => {
 
             expect(result).toEqual({
                 ...initialUserState,
-                email: '',
+                email: 'test@testy.com',
                 password: '',
                 authFetching: false,
                 uid: 'mock-uid'

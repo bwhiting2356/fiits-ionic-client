@@ -14,7 +14,7 @@ describe('Feedback Reducer', () => {
 
     describe('feedback actions', () => {
         it('should set feedback posting to true', () => {
-            const action = sendFeedback({ feedback: { comment: 'cool app' }});
+            const action = sendFeedback();
 
             const result = feedbackReducer(initialFeedbackState, action);
 

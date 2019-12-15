@@ -28,10 +28,6 @@ export class FeedbackPage {
   }
 
   sendFeedback() {
-    this.comment.pipe(
-      take(1)
-    ).subscribe(comment => {
-      this.store.dispatch(sendFeedback({ feedback: { comment }}));
-    }); // TODO: have ngrx effect pull comment and metadata from store
+    this.store.dispatch(sendFeedback());
   }
 }
