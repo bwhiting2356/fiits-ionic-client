@@ -103,7 +103,7 @@ describe('FeedbackPage', () => {
     spyOn(store, 'dispatch');
     fixture.detectChanges();
     component.sendFeedback();
-    expect(store.dispatch).toHaveBeenCalledWith(sendFeedback({ feedback: { comment: 'cool app' }}));
+    expect(store.dispatch).toHaveBeenCalledWith(sendFeedback());
   });
 
   it('should call changeComment when the user changes their comment in the textarea', () => {

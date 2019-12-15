@@ -103,7 +103,7 @@ export const selectAccountInfo = createSelector(
 const userReducer = createReducer(
     initialUserState,
     on(logIn, signUp, state => ({ ...state, authFetching: true })),
-    on(logInSuccess, signUpSuccess, (state, { uid }) => ({ ...state, uid, authFetching: false, email: '', password: '' })),
+    on(logInSuccess, signUpSuccess, (state, { uid }) => ({ ...state, uid, authFetching: false, password: '' })),
     on(logInError, signUpError, (state, { error }) => ({ ...state, error, authFetching: false })),
     on(logOut, () => ({ ...initialUserState })),
     on(fetchTrips, state => ({ ...state, tripsFetching: true })),

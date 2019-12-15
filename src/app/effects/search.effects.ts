@@ -154,7 +154,7 @@ export class SearchEffects {
     )
   ));
 
-  dateTooFarInPast(time) {
+  dateTooFarInPast(time: Date) {
       const twoMinutesAgo = DateUtil.subtractSeconds(DateUtil.getCurrentTime(), 1000 * 60 * 2);
       return time < twoMinutesAgo;
   }
