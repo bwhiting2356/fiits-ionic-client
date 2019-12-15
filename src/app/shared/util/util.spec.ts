@@ -13,4 +13,12 @@ describe('util', () => {
 
         expect(DateUtil.addSeconds(time1, 30)).toEqual(time2);
     });
+
+    it('should subtract seconds from the time', () => {
+        const time1 = new Date('2018-04-01T00:00:00.000Z');
+        const time2 = new Date('2018-04-01T00:00:30.000Z');
+
+        expect(DateUtil.subtractSeconds(time2, 30)).toEqual(time1);
+
+    });
 });

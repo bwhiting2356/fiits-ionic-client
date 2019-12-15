@@ -33,7 +33,8 @@ import {
   chooseDestinationLocation,
   activeSearchTrue,
   activeSearchFalse,
-  changeTime
+  changeTime,
+  timeInPastError,
 } from '../actions/search.actions';
 
 import { SearchQuery } from '../shared/search-query.model';
@@ -47,6 +48,7 @@ import { State } from '../reducers';
 import { initialState } from '../reducers';
 import { Store } from '@ngrx/store';
 import { fetchTrips } from '../actions/user.actions';
+import { initialSearchState } from '../reducers/search.reducer';
 
 describe('SearchEffects', () => {
   let actions$: Observable<any>;
@@ -159,24 +161,53 @@ describe('SearchEffects', () => {
       expect(searchEffects.fetchGeocodeDestinationResult$).toBeObservable(expected);
   }));
 
-  it('should return SaveTrip on success, navigate to trip details', inject(
+  it('should return saveTrip on success, navigate to trip details', inject(
     [TripService, SearchEffects],
     async (tripService: TripService, searchEffects: SearchEffects) => {
+      store.setState({
+        ...initialState,
+        search: {
+          ...initialSearchState,
+          originLatLng: { lat: 1, lng: 1 },
+          originAddress: '123 Main Street',
+          destinationLatLng: { lat: 0, lng: 0 },
+          destinationAddress: '576 Main Street',
+          timeTarget: 'ARRIVE_BY',
+          time: new Date(),
+        }
+      });
+
       spyOn(tripService, 'findBestTrip').and.returnValue(of(mockTrips[0]));
-
-      const query: SearchQuery = {
-        originLatLng: { lat: 1, lng: 1 },
-        originAddress: '123 Main Street',
-        destinationLatLng: { lat: 0, lng: 0 },
-        destinationAddress: '576 Main Street',
-        timeTarget: 'ARRIVE_BY',
-        time: new Date(),
-      };
-
-      const action = searchQuery({ query });
+      const action = searchQuery();
       actions$ = hot('--a-', { a: action });
 
       const completion = searchQuerySuccess({ trip: mockTrips[0] });
+      const expected = hot('--b', { b: completion });
+      expect(searchEffects.tripSearchQuery$).toBeObservable(expected);
+  }));
+
+  it('should return timeInPastError if the time was too far in the past', inject(
+    [TripService, SearchEffects],
+    async (tripService: TripService, searchEffects: SearchEffects) => {
+      spyOn(searchEffects, 'dateTooFarInPast').and.returnValue(true);
+      store.setState({
+        ...initialState,
+        search: {
+          ...initialSearchState,
+          originLatLng: { lat: 1, lng: 1 },
+          originAddress: '123 Main Street',
+          destinationLatLng: { lat: 0, lng: 0 },
+          destinationAddress: '576 Main Street',
+          timeTarget: 'ARRIVE_BY',
+          time: new Date(),
+        }
+      });
+
+      spyOn(tripService, 'findBestTrip').and.returnValue(of(mockTrips[0]));
+      const action = searchQuery();
+      actions$ = hot('--a-', { a: action });
+
+      const completion = timeInPastError();
       const expected = hot('--b', { b: completion });
       expect(searchEffects.tripSearchQuery$).toBeObservable(expected);
   }));
@@ -187,16 +218,20 @@ describe('SearchEffects', () => {
       const error = new Error();
       const errorResponse = cold('#|', {}, error);
       spyOn(tripService, 'findBestTrip').and.returnValue(errorResponse);
-      const query: SearchQuery = {
-        originLatLng: { lat: 1, lng: 1 },
-        originAddress: '123 Main Street',
-        destinationLatLng: { lat: 0, lng: 0 },
-        destinationAddress: '576 Main Street',
-        timeTarget: 'ARRIVE_BY',
-        time: new Date(),
-      };
+      store.setState({
+        ...initialState,
+        search: {
+          ...initialSearchState,
+          originLatLng: { lat: 1, lng: 1 },
+          originAddress: '123 Main Street',
+          destinationLatLng: { lat: 0, lng: 0 },
+          destinationAddress: '576 Main Street',
+          timeTarget: 'ARRIVE_BY',
+          time: new Date(),
+        }
+      });
 
-      const action = searchQuery({ query });
+      const action = searchQuery();
       actions$ = hot('--a-', { a: action });
 
       const completion = searchQueryError({ error });
@@ -355,5 +390,23 @@ describe('SearchEffects', () => {
 
     const expected = hot('---cccc', { c: changeTimeAction });
     expect(effects.setTimeToPresent$).toBeObservable(expected);
+  });
+
+  it('should return false if the time is in the past but only less than 2 minutes', () => {
+    const targetTime = DateUtil.subtractSeconds(DateUtil.getCurrentTime(), 100);
+    const result = effects.dateTooFarInPast(targetTime);
+    expect(result).toBeFalsy();
+  });
+
+  it('should return false if the time is in the future', () => {
+    const targetTime = DateUtil.addSeconds(DateUtil.getCurrentTime(), 100);
+    const result = effects.dateTooFarInPast(targetTime);
+    expect(result).toBeFalsy();
+  });
+
+  it('shluld return true if the time is more than two minutes in the past', () => {
+    const targetTime = DateUtil.subtractSeconds(DateUtil.getCurrentTime(), 1000 * 60 * 3);
+    const result = effects.dateTooFarInPast(targetTime);
+    expect(result).toBeTruthy();
   });
 });

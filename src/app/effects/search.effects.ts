@@ -24,7 +24,8 @@ import {
   chooseCurrentLocationAsOrigin,
   chooseCurrentLocationAsDestination,
   activeSearchTrue,
-  activeSearchFalse
+  activeSearchFalse,
+  timeInPastError
 } from '../actions/search.actions';
 import { map, catchError, tap, switchMap, withLatestFrom, takeUntil } from 'rxjs/operators';
 import { Observable, of, interval, SchedulerLike } from 'rxjs';
@@ -35,7 +36,7 @@ import { StationService } from '../services/station.service';
 import { NavController } from '@ionic/angular';
 import { GeolocationService } from '../services/geolocation.service';
 import { State } from '../reducers';
-import { selectSearchTime, selectTrip } from '../reducers/search.reducer';
+import { selectSearchTime, selectTrip, selectSearchParams } from '../reducers/search.reducer';
 import { async } from 'rxjs/internal/scheduler/async';
 import { fetchTrips } from '../actions/user.actions';
 import { selectUID } from '../reducers/user.reducer';
@@ -48,6 +49,23 @@ export const SEARCH_EFFECTS_SCHEDULER = new InjectionToken<SchedulerLike>('Searc
 
 @Injectable()
 export class SearchEffects {
+
+  constructor(
+    private store: Store<State>,
+    private actions$: Actions<Action>,
+    private geocodeService: GeocodeService,
+    private geolocationService: GeolocationService,
+    private tripService: TripService,
+    private stationService: StationService,
+    private navCtrl: NavController,
+
+    @Optional()
+    @Inject(SEARCH_EFFECTS_INTERVAL)
+    private timerInterval: number,
+
+    @Optional()
+    @Inject(SEARCH_EFFECTS_SCHEDULER)
+    private scheduler: SchedulerLike) {}
 
   fetchGeocodeOriginResult$ = createEffect(() => this.actions$.pipe(
     ofType(fetchGeocodeOriginResult),
@@ -69,12 +87,17 @@ export class SearchEffects {
 
   tripSearchQuery$ = createEffect(() => this.actions$.pipe(
     ofType(searchQuery),
-    map(action => action.query),
-    switchMap(query => this.tripService.findBestTrip(query).pipe(
-      tap(() => this.navCtrl.navigateForward('/trip-details')),
-      map(trip => searchQuerySuccess({ trip })),
-      catchError(error => of(searchQueryError({ error })))
-    ))
+    withLatestFrom(this.store.select(selectSearchParams)),
+    switchMap(([_, query]) => {
+      if (this.dateTooFarInPast(query.time)) {
+        return of(timeInPastError());
+      }
+      return this.tripService.findBestTrip(query).pipe(
+        tap(() => this.navCtrl.navigateForward('/trip-details')),
+        map(trip => searchQuerySuccess({ trip })),
+        catchError(error => of(searchQueryError({ error })))
+      );
+    })
   ));
 
   fetchAllStation$ = createEffect(() => this.actions$.pipe(
@@ -131,6 +154,52 @@ export class SearchEffects {
     )
   ));
 
+
+/*
+
+it('should dispatch a message to show a toast saying the time must be in the future, not search for the trip', () => {
+    store.setState({
+      ...initialState,
+      search: {
+        ...initialSearchState,
+        timeTarget: 'ARRIVE_BY' as TimeTarget,
+        time: new Date('2018-12-31T21:00:40.000+0000'),
+        originAddress: '123 Main Street',
+        originLatLng: { lat: 0, lng: 0 },
+        destinationAddress: '576 Main Street',
+        destinationLatLng: { lat: 1, lng: 1 }
+      }
+    });
+    fixture.detectChanges();
+    spyOn(store, 'dispatch');
+    component.findBikeRentals();
+    expect(store.dispatch).toHaveBeenCalledWith(timeInPastError());
+    expect(store.dispatch).not.toHaveBeenCalledWith(searchQuery());
+  });
+
+*/
+
+
+    // switchMap(([_, query]) => this.tripService.findBestTrip(query).pipe(
+    //   tap(() => this.navCtrl.navigateForward('/trip-details')),
+    //   map(trip => searchQuerySuccess({ trip })),
+    //   catchError(error => of(searchQueryError({ error })))
+    // ))
+
+    /*
+      // const twoMinutesAgo = new Date(Date.now() - 1000 * 60 * 2);
+      // if (query.time < twoMinutesAgo) {
+      //   this.store.dispatch(timeInPastError());
+      // } else {
+
+
+    */
+
+  dateTooFarInPast(time) {
+      const twoMinutesAgo = DateUtil.subtractSeconds(DateUtil.getCurrentTime(), 1000 * 60 * 2);
+      return time < twoMinutesAgo;
+  }
+
   checkTimeIsNotPast(time: Date) {
     const currentTime = DateUtil.getCurrentTime();
     if (time < currentTime) {
@@ -139,21 +208,4 @@ export class SearchEffects {
       return changeTime({ time });
     }
   }
-
-  constructor(
-    private store: Store<State>,
-    private actions$: Actions<Action>,
-    private geocodeService: GeocodeService,
-    private geolocationService: GeolocationService,
-    private tripService: TripService,
-    private stationService: StationService,
-    private navCtrl: NavController,
-
-    @Optional()
-    @Inject(SEARCH_EFFECTS_INTERVAL)
-    private timerInterval: number,
-
-    @Optional()
-    @Inject(SEARCH_EFFECTS_SCHEDULER)
-    private scheduler: SchedulerLike) {}
 }

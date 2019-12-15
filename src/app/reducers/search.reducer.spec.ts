@@ -213,7 +213,7 @@ describe('Search Reducer', () => {
         time: new Date(),
       };
 
-      const action = searchQuery({ query });
+      const action = searchQuery();
 
       const result = searchReducer(initialSearchState, action);
 

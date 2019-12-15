@@ -103,25 +103,25 @@ export class SearchPage implements OnInit {
 
   // TODO: put this logic in the ngrx effect
   findBikeRentals() {
-    this.store.pipe(
-      take(1),
-      map(state => state.search),
-      map(search => ({
-          timeTarget: search.timeTarget,
-          time: search.time,
-          originAddress: search.originAddress,
-          originLatLng: search.originLatLng,
-          destinationAddress: search.destinationAddress,
-          destinationLatLng: search.destinationLatLng
-        })
-      )
-    ).subscribe(query => {
-      const twoMinutesAgo = new Date(Date.now() - 1000 * 60 * 2);
-      if (query.time < twoMinutesAgo) {
-        this.store.dispatch(timeInPastError());
-      } else {
-        this.store.dispatch(searchQuery({ query }));
-      }
-    });
+    // this.store.pipe(
+    //   take(1),
+    //   map(state => state.search),
+    //   map(search => ({
+    //       timeTarget: search.timeTarget,
+    //       time: search.time,
+    //       originAddress: search.originAddress,
+    //       originLatLng: search.originLatLng,
+    //       destinationAddress: search.destinationAddress,
+    //       destinationLatLng: search.destinationLatLng
+    //     })
+    //   )
+    // ).subscribe(query => {
+      // const twoMinutesAgo = new Date(Date.now() - 1000 * 60 * 2);
+      // if (query.time < twoMinutesAgo) {
+      //   this.store.dispatch(timeInPastError());
+      // } else {
+        this.store.dispatch(searchQuery());
+      // }
+    // });
   }
 }
