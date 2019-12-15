@@ -154,47 +154,6 @@ export class SearchEffects {
     )
   ));
 
-
-/*
-
-it('should dispatch a message to show a toast saying the time must be in the future, not search for the trip', () => {
-    store.setState({
-      ...initialState,
-      search: {
-        ...initialSearchState,
-        timeTarget: 'ARRIVE_BY' as TimeTarget,
-        time: new Date('2018-12-31T21:00:40.000+0000'),
-        originAddress: '123 Main Street',
-        originLatLng: { lat: 0, lng: 0 },
-        destinationAddress: '576 Main Street',
-        destinationLatLng: { lat: 1, lng: 1 }
-      }
-    });
-    fixture.detectChanges();
-    spyOn(store, 'dispatch');
-    component.findBikeRentals();
-    expect(store.dispatch).toHaveBeenCalledWith(timeInPastError());
-    expect(store.dispatch).not.toHaveBeenCalledWith(searchQuery());
-  });
-
-*/
-
-
-    // switchMap(([_, query]) => this.tripService.findBestTrip(query).pipe(
-    //   tap(() => this.navCtrl.navigateForward('/trip-details')),
-    //   map(trip => searchQuerySuccess({ trip })),
-    //   catchError(error => of(searchQueryError({ error })))
-    // ))
-
-    /*
-      // const twoMinutesAgo = new Date(Date.now() - 1000 * 60 * 2);
-      // if (query.time < twoMinutesAgo) {
-      //   this.store.dispatch(timeInPastError());
-      // } else {
-
-
-    */
-
   dateTooFarInPast(time) {
       const twoMinutesAgo = DateUtil.subtractSeconds(DateUtil.getCurrentTime(), 1000 * 60 * 2);
       return time < twoMinutesAgo;
