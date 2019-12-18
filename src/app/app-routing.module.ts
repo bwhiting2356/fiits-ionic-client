@@ -8,14 +8,18 @@ const routes: Routes = [
     redirectTo: 'search',
     pathMatch: 'full'
   },
-  { path: 'search', loadChildren: './search/search.module#SearchPageModule' },
-  { path: 'feedback', loadChildren: './feedback/feedback.module#FeedbackPageModule' },
-  { path: 'trips', loadChildren: './trips/trips.module#TripsPageModule', canActivate: [AuthGuard] },
-  { path: 'payments', loadChildren: './payments/payments.module#PaymentsPageModule', canActivate: [AuthGuard] },
-  { path: 'sign-in/:context', loadChildren: './sign-in/sign-in.module#SignInPageModule' },
-  { path: 'address-input', loadChildren: './address-input/address-input.module#AddressInputPageModule' },
-  { path: 'trip-details', loadChildren: './trip-details/trip-details.module#TripDetailsPageModule' },
-  { path: 'confirm-booking', loadChildren: './confirm-booking/confirm-booking.module#ConfirmBookingPageModule', canActivate: [AuthGuard] },
+  { path: 'search', loadChildren: () => import('./search/search.module').then(m => m.SearchPageModule) },
+  { path: 'feedback', loadChildren: () => import('./feedback/feedback.module').then(m => m.FeedbackPageModule) },
+  { path: 'trips', loadChildren: () => import('./trips/trips.module').then(m => m.TripsPageModule) },
+  { path: 'payments', loadChildren: () => import('./payments/payments.module').then(m => m.PaymentsPageModule), canActivate: [AuthGuard] },
+  { path: 'sign-in/:context', loadChildren: () => import('./sign-in/sign-in.module').then(m => m.SignInPageModule) },
+  { path: 'address-input', loadChildren: () => import('./address-input/address-input.module').then(m => m.AddressInputPageModule) },
+  { path: 'trip-details', loadChildren: () => import('./trip-details/trip-details.module').then(m => m.TripDetailsPageModule) },
+  {
+    path: 'confirm-booking',
+    loadChildren: () => import('./confirm-booking/confirm-booking.module').then(m => m.ConfirmBookingPageModule),
+    canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({
