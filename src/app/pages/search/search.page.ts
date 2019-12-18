@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { State } from '../reducers';
-import { LatLng } from '../shared/latlng.model';
+import { State } from '../../reducers';
+import { LatLng } from '../../shared/latlng.model';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import {
@@ -16,9 +16,9 @@ import {
   timeInPastError,
   activeSearchTrue,
   activeSearchFalse
-} from '../actions/search.actions';
-import { TimeTarget } from '../shared/time-target.model';
-import { StationInfo } from '../shared/trip-details.model';
+} from '../../actions/search.actions';
+import { TimeTarget } from '../../shared/time-target.model';
+import { StationInfo } from '../../shared/trip-details.model';
 import {
   selectSearchOriginLatLng,
   selectSearchOriginAddress,
@@ -29,7 +29,7 @@ import {
   selectSearchShowSpinner,
   selectStations,
   selectPosition
-} from '../reducers/search.reducer';
+} from '../../reducers/search.reducer';
 
 @Component({
   selector: 'app-search',

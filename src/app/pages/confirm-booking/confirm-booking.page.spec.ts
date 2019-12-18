@@ -3,15 +3,15 @@ import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing'
 
 import { ConfirmBookingPage } from './confirm-booking.page';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { initialState, State } from '../reducers';
+import { initialState, State } from '../../reducers';
 import { Store } from '@ngrx/store';
-import { initialSearchState } from '../reducers/search.reducer';
+import { initialSearchState } from '../../reducers/search.reducer';
 import { mockTrips } from 'src/testing/mock-trips';
 import { hot } from 'jasmine-marbles';
-import { initialUserState } from '../reducers/user.reducer';
+import { initialUserState } from '../../reducers/user.reducer';
 import { mockAccountInfo } from 'src/testing/mock-account-info';
 import { By } from '@angular/platform-browser';
-import { bookTripRequest } from '../actions/search.actions';
+import { bookTripRequest } from '../../actions/search.actions';
 import { NavController } from '@ionic/angular';
 
 describe('ConfirmBookingPage', () => {

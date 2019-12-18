@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { State } from '../reducers';
-import { selectTrip } from '../reducers/search.reducer';
-import { TripDetails } from '../shared/trip-details.model';
+import { State } from '../../reducers';
+import { selectTrip } from '../../reducers/search.reducer';
+import { TripDetails } from '../../shared/trip-details.model';
 import { Observable, combineLatest } from 'rxjs';
-import { selectAccountInfoFetching, selectAccountInfo } from '../reducers/user.reducer';
-import { AccountInfo } from '../shared/account-info.model';
+import { selectAccountInfoFetching, selectAccountInfo } from '../../reducers/user.reducer';
+import { AccountInfo } from '../../shared/account-info.model';
 import { map } from 'rxjs/operators';
-import { bookTripRequest } from '../actions/search.actions';
+import { bookTripRequest } from '../../actions/search.actions';
 import { NavController } from '@ionic/angular';
 
 @Component({

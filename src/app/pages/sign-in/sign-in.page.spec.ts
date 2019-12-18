@@ -3,10 +3,10 @@ import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing'
 
 import { SignInPage } from './sign-in.page';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { initialState, State } from '../reducers';
+import { initialState, State } from '../../reducers';
 import { Store } from '@ngrx/store';
-import { changePassword, changeEmail, logIn, signUp } from '../actions/user.actions';
-import { initialUserState } from '../reducers/user.reducer';
+import { changePassword, changeEmail, logIn, signUp } from '../../actions/user.actions';
+import { initialUserState } from '../../reducers/user.reducer';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { of, BehaviorSubject } from 'rxjs';

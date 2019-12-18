@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { TripsPage } from './trips.page';
 import { provideMockStore } from '@ngrx/store/testing';
-import { initialState } from '../reducers';
+import { initialState } from '../../reducers';
 
 describe('TripsPage', () => {
   let component: TripsPage;

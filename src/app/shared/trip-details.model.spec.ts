@@ -22,7 +22,7 @@ describe('Trip details', () => {
         expect(newTrip.status).toBe('Completed');
     });
 
-    it('should return \'Active\' status if the trip is currently active (within reservation window)', () => {
+    it('should return \'Active\' status if the trip is currently active (within reservation window)', (done) => {
         const now = new Date();
         const newTrip = new TripDetails(
             mockTrips[0].originLatLng,
@@ -41,7 +41,11 @@ describe('Trip details', () => {
             mockTrips[0].destinationAddress,
             DateUtil.addSeconds(now, 10000).toString()
         );
-        expect(newTrip.status).toBe('Active');
+        setTimeout(() => {
+            expect(newTrip.status).toBe('Active');
+            done();
+        }, 1000);
+
     });
 
     it('should return \'UPCOMING\' status if the trip is in the future', () => {

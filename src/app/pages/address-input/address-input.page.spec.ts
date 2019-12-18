@@ -7,12 +7,12 @@ import { Store } from '@ngrx/store';
 import { By } from '@angular/platform-browser';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { mockAutocompleteResults } from '../../testing/mock-autocomplete-results';
+import { mockAutocompleteResults } from '../../../testing/mock-autocomplete-results';
 
 import { AddressInputPage } from './address-input.page';
-import { AutocompleteService } from '../services/autocomplete.service';
-import { State } from '../reducers';
-import { initialState } from '../reducers';
+import { AutocompleteService } from '../../services/autocomplete.service';
+import { State } from '../../reducers';
+import { initialState } from '../../reducers';
 import {
   chooseOriginLocation,
   chooseDestinationLocation,
@@ -22,11 +22,11 @@ import {
   chooseCurrentLocationAsOrigin,
   saveOriginLatLng,
   saveDestinationLatLng,
-} from '../actions/search.actions';
-import { initialSearchState } from '../reducers/search.reducer';
-import { DEFAULT_LOCATION } from '../shared/constants';
-import { clearAutocompleteResults, fetchAutocompleteResults } from '../actions/autocomplete.actions';
-import { initialAutocompleteState } from '../reducers/autocomplete.reducer';
+} from '../../actions/search.actions';
+import { initialSearchState } from '../../reducers/search.reducer';
+import { DEFAULT_LOCATION } from '../../shared/constants';
+import { clearAutocompleteResults, fetchAutocompleteResults } from '../../actions/autocomplete.actions';
+import { initialAutocompleteState } from '../../reducers/autocomplete.reducer';
 
 describe('AddressInputPage', () => {
   let component: AddressInputPage;

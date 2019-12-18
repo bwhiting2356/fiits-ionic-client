@@ -5,7 +5,7 @@ import { SearchPage } from './search.page';
 import { Router } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
-import { State } from '../reducers';
+import { State } from '../../reducers';
 import { By } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import {
@@ -18,11 +18,11 @@ import {
   timeInPastError,
   activeSearchTrue,
   activeSearchFalse
-} from '../actions/search.actions';
-import { initialSearchState } from '../reducers/search.reducer';
-import { TimeTarget } from '../shared/time-target.model';
+} from '../../actions/search.actions';
+import { initialSearchState } from '../../reducers/search.reducer';
+import { TimeTarget } from '../../shared/time-target.model';
 import { cold } from 'jasmine-marbles';
-import { initialState } from '../reducers';
+import { initialState } from '../../reducers';
 import { mockStations } from 'src/testing/mock-stations';
 
 describe('SearchPage', () => {

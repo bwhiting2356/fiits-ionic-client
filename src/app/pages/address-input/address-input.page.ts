@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { AutocompleteResult } from '../shared/maps/autocomplete-result';
-import { State } from '../reducers';
+import { AutocompleteResult } from '../../shared/maps/autocomplete-result';
+import { State } from '../../reducers';
 import {
   SearchAddressType,
   chooseOriginLocation,
@@ -16,21 +16,21 @@ import {
   chooseCurrentLocationAsOrigin,
   saveOriginLatLng,
   saveDestinationLatLng
-} from '../actions/search.actions';
+} from '../../actions/search.actions';
 
 import {
   selectAddressType,
   selectShowCurrentLocation,
   selectPosition
-} from '../reducers/search.reducer';
-import { fetchAutocompleteResults, clearAutocompleteResults } from '../actions/autocomplete.actions';
+} from '../../reducers/search.reducer';
+import { fetchAutocompleteResults, clearAutocompleteResults } from '../../actions/autocomplete.actions';
 import {
   selectAutocompleteResults,
   selectAutocompletFetching,
   selectAutocompleteDirty,
   selectShowAutocompleteSuggestions,
   selectAutocompleteShowNoResults
-} from '../reducers/autocomplete.reducer';
+} from '../../reducers/autocomplete.reducer';
 
 @Component({
   selector: 'app-address-input',

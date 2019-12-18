@@ -5,12 +5,12 @@ import { By } from '@angular/platform-browser';
 
 import { TripListPage } from './trip-list.page';
 import { Router } from '@angular/router';
-import { TripService } from '../../services/trip.service';
+import { TripService } from '../../../services/trip.service';
 
 import { of } from 'rxjs';
 import { mockTrips } from 'src/testing/mock-trips';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { initialState, State } from '../../reducers';
+import { initialState, State } from '../../../reducers';
 import { Store } from '@ngrx/store';
 import { initialUserState } from 'src/app/reducers/user.reducer';
 
