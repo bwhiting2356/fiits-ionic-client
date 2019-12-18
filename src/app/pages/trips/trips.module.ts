@@ -17,16 +17,6 @@ const routes: Routes = [
       { path: 'upcoming', loadChildren: () => import('./trip-list/trip-list.module').then(m => m.TripListPageModule) },
       { path: 'past', loadChildren: () => import('./trip-list/trip-list.module').then(m => m.TripListPageModule) },
     ],
-
-    /*
-
-    {
-    path: 'payments',
-    loadChildren: () => import('./pages/payments/payments.module').then(m => m.PaymentsPageModule),
-    canActivate: [AuthGuard]
-  },
-
-    */
   }
 ];
 
