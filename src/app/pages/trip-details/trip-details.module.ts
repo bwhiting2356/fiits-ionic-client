@@ -5,14 +5,14 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { SearchPage } from './search.page';
-import { ComponentsModule } from '../components/components.module';
+import { TripDetailsPage } from './trip-details.page';
+import { ComponentsModule } from '../../components/components.module';
 
 const routes: Routes = [
   {
     path: '',
-    component: SearchPage
-  },
+    component: TripDetailsPage
+  }
 ];
 
 @NgModule({
@@ -23,6 +23,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [SearchPage]
+  declarations: [TripDetailsPage]
 })
-export class SearchPageModule {}
+export class TripDetailsPageModule {}

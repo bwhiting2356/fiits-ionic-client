@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { capitalize } from '../../shared/util/util';
+import { capitalize } from '../../../shared/util/util';
 import { Observable } from 'rxjs';
 import { TripDetails } from 'src/app/shared/trip-details.model';
 import { Store } from '@ngrx/store';

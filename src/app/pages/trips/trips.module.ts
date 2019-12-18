@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { TripsPage } from './trips.page';
-import { ComponentsModule } from '../components/components.module';
+import { ComponentsModule } from '../../components/components.module';
 
 const routes: Routes = [
   {
@@ -14,8 +14,8 @@ const routes: Routes = [
     component: TripsPage,
     children: [
       { path: '', redirectTo: 'upcoming'},
-      { path: 'upcoming', loadChildren: './trip-list/trip-list.module#TripListPageModule' },
-      { path: 'past', loadChildren: './trip-list/trip-list.module#TripListPageModule' },
+      { path: 'upcoming', loadChildren: () => import('./trip-list/trip-list.module').then(m => m.TripListPageModule) },
+      { path: 'past', loadChildren: () => import('./trip-list/trip-list.module').then(m => m.TripListPageModule) },
     ],
   }
 ];

@@ -1,10 +1,10 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { State } from '../reducers';
-import { sendFeedback, changeComment } from '../actions/feedback.actions';
+import { State } from '../../reducers';
+import { sendFeedback, changeComment } from '../../actions/feedback.actions';
 import { Observable } from 'rxjs/internal/Observable';
 import { take } from 'rxjs/operators';
-import { selectFeedbackPosting, selectFeedbackComment, selectFeedbackDisableSend } from '../reducers/feedback.reducer';
+import { selectFeedbackPosting, selectFeedbackComment, selectFeedbackDisableSend } from '../../reducers/feedback.reducer';
 
 @Component({
   selector: 'app-feedback',

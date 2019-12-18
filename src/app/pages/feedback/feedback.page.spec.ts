@@ -6,10 +6,10 @@ import { By } from '@angular/platform-browser';
 import { cold } from 'jasmine-marbles';
 
 import { FeedbackPage } from './feedback.page';
-import { initialState } from '../reducers';
-import { State } from '../reducers';
-import { sendFeedback, changeComment } from '../actions/feedback.actions';
-import { initialFeedbackState } from '../reducers/feedback.reducer';
+import { initialState } from '../../reducers';
+import { State } from '../../reducers';
+import { sendFeedback, changeComment } from '../../actions/feedback.actions';
+import { initialFeedbackState } from '../../reducers/feedback.reducer';
 
 describe('FeedbackPage', () => {
   let component: FeedbackPage;

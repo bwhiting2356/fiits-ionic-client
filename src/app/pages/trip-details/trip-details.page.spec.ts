@@ -4,11 +4,11 @@ import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing'
 import { TripDetailsPage } from './trip-details.page';
 import { By } from '@angular/platform-browser';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { State } from '../reducers';
-import { initialState } from '../reducers';
+import { State } from '../../reducers';
+import { initialState } from '../../reducers';
 import { Store } from '@ngrx/store';
 import { NavController } from '@ionic/angular';
-import { initialUserState } from '../reducers/user.reducer';
+import { initialUserState } from '../../reducers/user.reducer';
 
 describe('TripDetailPage', () => {
   let component: TripDetailsPage;

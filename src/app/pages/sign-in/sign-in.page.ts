@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { State } from '../reducers';
-import { logIn, signUp, changeEmail, changePassword } from '../actions/user.actions';
+import { State } from '../../reducers';
+import { logIn, signUp, changeEmail, changePassword } from '../../actions/user.actions';
 import { Observable, combineLatest } from 'rxjs';
-import { selectEmail, selectPassword, selectAuthFetching } from '../reducers/user.reducer';
+import { selectEmail, selectPassword, selectAuthFetching } from '../../reducers/user.reducer';
 import { map, take } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 
