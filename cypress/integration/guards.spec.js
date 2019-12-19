@@ -16,8 +16,8 @@ describe('Auth guard', () => {
     });
 
     it('should redirect from /trip-details to /search if there is no trip search in progress (navigated to directly)', () => {
-        cy.visit('http://localhost:8100/trip-details');
-        cy.wait(500);
-        cy.url().should('include', '/search');
-      });
+      cy.visit('http://localhost:8100/trip-details');
+      cy.wait(500);
+      cy.url().should('include', '/search');
+    });
 })
