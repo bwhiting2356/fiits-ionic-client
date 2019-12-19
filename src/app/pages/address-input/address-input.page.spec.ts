@@ -430,21 +430,4 @@ describe('AddressInputPage', () => {
     expect(store.dispatch).toHaveBeenCalledWith(saveDestinationLatLng({ latlng: {lat: 0, lng: 0 }}));
     expect(component.navCtrl.back).toHaveBeenCalled();
   });
-
-  it('should not render the input if searchAddressType is undefined and navigate back to /search', async () => {
-    spyOn(component.navCtrl, 'navigateForward');
-    store.setState({
-      ...initialState,
-      search: {
-        ...initialSearchState,
-        searchAddressType: undefined
-      }
-    });
-
-    fixture.detectChanges();
-    component.ngOnInit();
-    expect(fixture.debugElement.query(By.css('#input'))).toBeFalsy();
-    expect(component.navCtrl.navigateForward).toHaveBeenCalledWith('/search');
-  });
-
 });

@@ -13,7 +13,7 @@ describe('AuthGuard', () => {
     TestBed.configureTestingModule({
       providers: [
         AuthGuard,
-        { provide: Router, useValue: { navigate: () => {}} },
+        { provide: Router, useValue: { navigate: () => {} }},
         provideMockStore({ initialState })
       ]
     });
@@ -22,7 +22,7 @@ describe('AuthGuard', () => {
 
   it('should return true, not navigate away', inject(
     [Router, AuthGuard],
-    async (router: Router, authGuard: AuthGuard) => {
+    async (router: Router, guard: AuthGuard) => {
       store.setState({
         ...initialState,
         user: {
@@ -32,13 +32,13 @@ describe('AuthGuard', () => {
       });
 
       spyOn(router, 'navigate');
-      authGuard.canActivate().subscribe(result => expect(result).toBeTruthy());
+      guard.canActivate().subscribe(result => expect(result).toBeTruthy());
       expect(router.navigate).not.toHaveBeenCalled();
   }));
 
   it('should return false, navigate away', inject(
     [Router, AuthGuard],
-    async (router: Router, authGuard: AuthGuard) => {
+    async (router: Router, guard: AuthGuard) => {
       store.setState({
         ...initialState,
         user: {
@@ -48,7 +48,7 @@ describe('AuthGuard', () => {
       });
 
       spyOn(router, 'navigate');
-      authGuard.canActivate().subscribe(result => expect(result).toBeFalsy());
+      guard.canActivate().subscribe(result => expect(result).toBeFalsy());
       expect(router.navigate).toHaveBeenCalledWith(['/sign-in', 'from-menu']);
   }));
 });
