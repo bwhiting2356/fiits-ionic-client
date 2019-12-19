@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './services/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { AddressTypeValidGuard } from './guards/address-type-valid.guard';
+import { TripValidGuard } from './guards/trip-valid.guard';
 
 const routes: Routes = [
   {
@@ -32,11 +34,13 @@ const routes: Routes = [
   },
   {
     path: 'address-input',
-    loadChildren: () => import('./pages/address-input/address-input.module').then(m => m.AddressInputPageModule)
+    loadChildren: () => import('./pages/address-input/address-input.module').then(m => m.AddressInputPageModule),
+    canActivate: [AddressTypeValidGuard]
   },
   {
     path: 'trip-details',
-    loadChildren: () => import('./pages/trip-details/trip-details.module').then(m => m.TripDetailsPageModule)
+    loadChildren: () => import('./pages/trip-details/trip-details.module').then(m => m.TripDetailsPageModule),
+    canActivate: [TripValidGuard]
   },
   {
     path: 'confirm-booking',
