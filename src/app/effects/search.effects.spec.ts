@@ -55,7 +55,7 @@ describe('SearchEffects', () => {
   let store: MockStore<State>;
   const now = new Date();
   let sandbox;
-  
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
