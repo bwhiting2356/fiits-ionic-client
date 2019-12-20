@@ -2,7 +2,22 @@ import { mockTrips } from 'src/testing/mock-trips';
 import { TripDetails } from './trip-details.model';
 import { DateUtil } from '../shared/util/util';
 
+import * as sinon from 'sinon';
+
 describe('Trip details', () => {
+    let sandbox;
+    const now = new Date();
+
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
+        const twoMinutesFromNow = DateUtil.addSeconds(now, 60 * 2);
+        sandbox.stub(DateUtil, 'getCurrentTime').returns(twoMinutesFromNow);
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+    });
+
     it('should return \'COMPLETED\' status if the trip is in the past', () => {
         const newTrip = new TripDetails(
             mockTrips[0].originLatLng,
@@ -22,8 +37,7 @@ describe('Trip details', () => {
         expect(newTrip.status).toBe('Completed');
     });
 
-    it('should return \'Active\' status if the trip is currently active (within reservation window)', (done) => {
-        const now = new Date();
+    it('should return \'Active\' status if the trip is currently active (within reservation window)', () => {
         const newTrip = new TripDetails(
             mockTrips[0].originLatLng,
             mockTrips[0].originAddress,
@@ -41,10 +55,7 @@ describe('Trip details', () => {
             mockTrips[0].destinationAddress,
             DateUtil.addSeconds(now, 10000).toString()
         );
-        setTimeout(() => {
-            expect(newTrip.status).toBe('Active');
-            done();
-        }, 1000);
+        expect(newTrip.status).toBe('Active');
 
     });
 

@@ -37,7 +37,6 @@ import {
   timeInPastError,
 } from '../actions/search.actions';
 
-import { SearchQuery } from '../shared/search-query.model';
 import { StationService } from '../services/station.service';
 import { NavController } from '@ionic/angular';
 import { GeolocationService } from '../services/geolocation.service';
@@ -54,7 +53,9 @@ describe('SearchEffects', () => {
   let actions$: Observable<any>;
   let effects: SearchEffects;
   let store: MockStore<State>;
-
+  const now = new Date();
+  let sandbox;
+  
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -73,6 +74,12 @@ describe('SearchEffects', () => {
 
     effects = TestBed.get<SearchEffects>(SearchEffects);
     store = TestBed.get<Store<State>>(Store);
+    sandbox = sinon.createSandbox();
+    sandbox.stub(DateUtil, 'getCurrentTime').returns(now);
+  });
+
+  afterEach(() => {
+    sandbox.restore();
   });
 
   it('should return SaveStations on success', inject(
@@ -367,8 +374,6 @@ describe('SearchEffects', () => {
   ));
 
   it('should return an action to change time to the present if time is in the past', async () => {
-    const now = new Date();
-    sinon.stub(DateUtil, 'getCurrentTime').returns(now);
     const dateInThePast = new Date(0);
     const newAction = effects.checkTimeIsNotPast(dateInThePast);
     expect(newAction.time).toEqual(now);
