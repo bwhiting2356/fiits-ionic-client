@@ -55,7 +55,7 @@ describe('TripListPage trip list', () => {
   });
 
   it('should return the current time direction capitalized', () => {
-    expect(component.timeDirection).toBe('Past');
+    expect(component.timeDirectionUppercase).toBe('Past');
   });
 
   it('should render list of trips', () => {
@@ -117,7 +117,7 @@ describe('TripListPage no trips', () => {
         trips: []
       }
     });
-    expect(fixture.debugElement.query(By.css('ion-text')).nativeElement.innerText).toBe('No trips');
+    expect(fixture.debugElement.query(By.css('ion-text')).nativeElement.innerText).toBe('No upcoming trips');
     expect(fixture.debugElement.queryAll(By.css('app-trip-card')).length).toBe(0);
   });
 

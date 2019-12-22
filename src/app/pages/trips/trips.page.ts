@@ -13,13 +13,12 @@ import { State } from '../../reducers';
 export class TripsPage implements OnInit {
 
   constructor(
-    private store: Store<State>,
     private router: Router) { }
 
   ngOnInit() {
   }
 
-  get timeDirection(): string {
+  get timeDirectionCapitalized(): string {
     return capitalize(this.router.url.split('/').slice(-1)[0]);
   }
 
