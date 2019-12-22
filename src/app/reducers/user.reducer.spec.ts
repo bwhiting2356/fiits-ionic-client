@@ -17,6 +17,7 @@ import {
 } from '../actions/user.actions';
 import { mockTrips } from 'src/testing/mock-trips';
 import { mockAccountInfo } from 'src/testing/mock-account-info';
+import { bookTripSuccess } from '../actions/search.actions';
 
 describe('User Reducer', () => {
     describe('an unknown action', () => {
@@ -56,7 +57,8 @@ describe('User Reducer', () => {
                 ...initialUserState,
                 email: 'test@testy.com',
                 password: 'secret',
-                authFetching: true
+                authFetching: true,
+                newUser: false
             };
 
             const action = signUpSuccess({ uid: 'mock-uid' });
@@ -68,7 +70,8 @@ describe('User Reducer', () => {
                 email: 'test@testy.com',
                 password: '',
                 authFetching: false,
-                uid: 'mock-uid'
+                uid: 'mock-uid',
+                newUser: true
             });
         });
 
@@ -239,6 +242,22 @@ describe('User Reducer', () => {
                 ...initialUserState,
                 accountInfoFetching: false,
                 error: 'oops'
+            });
+        });
+
+        it('should set newUser to false after they\'ve successfully booked a trip', () => {
+            const initialStateWithNewUser = {
+                ...initialUserState,
+                newUser: true
+            };
+
+            const action = bookTripSuccess();
+
+            const result = userReducer(initialStateWithNewUser, action);
+
+            expect(result).toEqual({
+                ...initialUserState,
+                newUser: false
             });
         });
     });

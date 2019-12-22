@@ -106,6 +106,23 @@ describe('ConfirmBookingPage', () => {
     expect(component.canBook).toBeObservable(hot('a', { a: false }));
   });
 
+  it('canBook should be true if they don\t have enough funds but they\'re a new user', () => {
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        newUser: true,
+        accountInfo: { ...mockAccountInfo, balance: 0.00 }
+      },
+      search: {
+        ...initialSearchState,
+        trip: { ...mockTrips[0], totalPrice: -2.00, totalDistance: 0, totalDuration: 0, status: 'Upcoming' }
+      }
+    });
+    fixture.detectChanges();
+    expect(component.canBook).toBeObservable(hot('a', { a: true }));
+  });
+
   it('should show the spinner if accountInfoFetching is true', () => {
     store.setState({
       ...initialState,
@@ -165,4 +182,38 @@ describe('ConfirmBookingPage', () => {
       component.backToTripDetails();
       expect(navCtrl.navigateBack).toHaveBeenCalledWith('/trip-details');
   }));
+
+  it('should show the info section if they\'re a new user', () => {
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        newUser: true,
+        accountInfo: { ...mockAccountInfo, balance: 0.00 }
+      },
+      search: {
+        ...initialSearchState,
+        trip: { ...mockTrips[0], totalPrice: -2.00, totalDistance: 0, totalDuration: 0, status: 'Upcoming' }
+      }
+    });
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.info'))).toBeTruthy();
+  });
+
+  it('should not show the info section if they\'re not a new user', () => {
+    store.setState({
+      ...initialState,
+      user: {
+        ...initialUserState,
+        newUser: false,
+        accountInfo: { ...mockAccountInfo, balance: 0.00 }
+      },
+      search: {
+        ...initialSearchState,
+        trip: { ...mockTrips[0], totalPrice: -2.00, totalDistance: 0, totalDuration: 0, status: 'Upcoming' }
+      }
+    });
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('.info'))).toBeFalsy();
+  });
 });
