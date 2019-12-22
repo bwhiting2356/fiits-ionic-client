@@ -23,14 +23,18 @@ export class TripListPage {
   constructor(
     private store: Store<State>,
     private router: Router) {
-      console.log(`time direction ${this.timeDirection}`);
       this.trips = store.select(selectFilteredTrips, { direction: this.timeDirection });
       this.showNoTrips = store.select(selectShowNoTrips, { direction: this.timeDirection });
       this.showFetching = store.select(selectTripsFetching);
     }
 
   get timeDirection(): string {
-    return capitalize(this.router.url.split('/').slice(-1)[0]);
+    return this.router.url.split('/').slice(-1)[0];
+  }
+
+  get timeDirectionUppercase(): string {
+    return capitalize(this.timeDirection);
+
   }
 
 }

@@ -66,7 +66,7 @@ export const selectTrips = createSelector(
 export const selectFilteredTrips = createSelector(
     selectTrips,
     (trips, props) => {
-        if (props.direction === 'Upcoming') {
+        if (props.direction === 'upcoming') {
             return trips.filter(trip => trip.status !== 'Completed');
         } else {
             return trips.filter(trip => trip.status === 'Completed');
@@ -86,7 +86,7 @@ export const selectShowNoTrips = createSelector(
             return false;
         }
         let filteredTrips;
-        if (props.direction === 'Upcoming') {
+        if (props.direction === 'upcoming') {
             filteredTrips = trips.filter(trip => trip.status !== 'Completed');
         } else {
             filteredTrips = trips.filter(trip => trip.status === 'Completed');
