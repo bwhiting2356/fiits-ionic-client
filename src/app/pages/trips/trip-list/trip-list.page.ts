@@ -25,7 +25,7 @@ export class TripListPage {
     private router: Router) {
       console.log(`time direction ${this.timeDirection}`);
       this.trips = store.select(selectFilteredTrips, { direction: this.timeDirection });
-      this.showNoTrips = store.select(selectShowNoTrips);
+      this.showNoTrips = store.select(selectShowNoTrips, { direction: this.timeDirection });
       this.showFetching = store.select(selectTripsFetching);
     }
 
