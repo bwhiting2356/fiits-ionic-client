@@ -79,9 +79,21 @@ export const selectTripsFetching = createSelector(
     state => state.tripsFetching);
 
 export const selectShowNoTrips = createSelector(
-    selectTrips,
     selectTripsFetching,
-    (trips, fetching) => trips.length === 0 && !fetching);
+    selectTrips,
+    (fetching, trips, props) => {
+        if (fetching) {
+            return false;
+        }
+        let filteredTrips;
+        if (props.direction === 'Upcoming') {
+            filteredTrips = trips.filter(trip => trip.status !== 'Completed');
+        } else {
+            filteredTrips = trips.filter(trip => trip.status === 'Completed');
+        }
+        return filteredTrips.length === 0;
+    }
+);
 
 export const selectEmail = createSelector(
     selectUser,
