@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
-
-import * as firebase from 'firebase';
 import { from } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { State } from '../reducers';
 
 export class EmailPasswordCredentials {
     email: string;
