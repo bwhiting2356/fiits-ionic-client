@@ -1,8 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { capitalize } from '../../shared/util/util';
-import { Store } from '@ngrx/store';
-import { State } from '../../reducers';
 
 @Component({
   selector: 'app-trips',
