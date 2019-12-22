@@ -20,11 +20,13 @@ import {
     fetchAccountInfoSuccess,
     fetchAccountInfoError
 } from '../actions/user.actions';
+import { bookTripSuccess } from '../actions/search.actions';
 
 export interface UserState {
     email: string;
     password: string;
     uid: string;
+    newUser: boolean;
     displayName: string;
     authFetching: boolean;
     tripsFetching: boolean;
@@ -38,6 +40,7 @@ export const initialUserState: UserState = {
     email: '',
     password: '',
     uid: '',
+    newUser: false,
     displayName: '',
     authFetching: false,
     tripsFetching: false,
@@ -100,10 +103,16 @@ export const selectAccountInfo = createSelector(
     selectUser,
     state => state.accountInfo);
 
+export const selectNewUser = createSelector(
+    selectUser,
+    state => state.newUser);
+
 const userReducer = createReducer(
     initialUserState,
+    on(bookTripSuccess, state => ({ ...state, newUser: false })),
     on(logIn, signUp, state => ({ ...state, authFetching: true })),
-    on(logInSuccess, signUpSuccess, (state, { uid }) => ({ ...state, uid, authFetching: false, password: '' })),
+    on(logInSuccess, (state, { uid }) => ({ ...state, uid, authFetching: false, password: '' })),
+    on(signUpSuccess, (state, { uid }) => ({ ...state, uid, authFetching: false, password: '', newUser: true })),
     on(logInError, signUpError, (state, { error }) => ({ ...state, error, authFetching: false })),
     on(logOut, () => ({ ...initialUserState })),
     on(fetchTrips, state => ({ ...state, tripsFetching: true })),

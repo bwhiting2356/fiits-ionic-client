@@ -13,7 +13,8 @@
       <ion-spinner></ion-spinner>
     </div>
     <ng-template #booking>
-      <div id="can-book" *ngIf="canBook | async; else noBook">  
+      <div id="can-book" *ngIf="canBook | async; else noBook">
+          <div class="info" *ngIf="newUser | async">Thanks for signing up! As a new user, you've been given $10.00 in credit.</div>
           <ion-item *ngIf="(trip | async).totalPrice > 0; else charge">
             You will earn {{ (trip | async).totalPrice | currency }} by booking this trip.
           </ion-item>
