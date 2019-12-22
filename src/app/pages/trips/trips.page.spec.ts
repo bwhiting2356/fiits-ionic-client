@@ -38,6 +38,6 @@ describe('TripsPage', () => {
   });
 
   it('should return the current time direction capitalized', () => {
-    expect(component.timeDirection).toBe('Upcoming');
+    expect(component.timeDirectionCapitalized).toBe('Upcoming');
   });
 });
